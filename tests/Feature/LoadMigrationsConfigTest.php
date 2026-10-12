@@ -29,20 +29,4 @@ class LoadMigrationsConfigTest extends TestCase
     {
         $this->assertFalse(Schema::hasTable('table_views'));
     }
-
-    #[Test]
-    public function it_creates_the_preferences_table_by_default(): void
-    {
-        $this->assertTrue(Schema::hasTable('table_view_preferences'));
-        $this->assertTrue(Schema::hasColumns('table_view_preferences', [
-            'id', 'user_id', 'tenant_type', 'tenant_id', 'resource', 'view_type', 'view_key', 'is_favorite', 'is_hidden', 'sort', 'is_default', 'created_at', 'updated_at',
-        ]));
-    }
-
-    #[Test]
-    #[DefineEnvironment('skipPackageMigrations')]
-    public function it_leaves_the_preferences_migration_to_the_host_app_too(): void
-    {
-        $this->assertFalse(Schema::hasTable('table_view_preferences'));
-    }
 }

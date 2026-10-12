@@ -1,7 +1,6 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Livewire\Livewire;
 
 beforeEach(function () {
@@ -16,89 +15,54 @@ function defaultButton(string $html): string
     return $match[0] ?? '';
 }
 
-function presetButton(string $html, string $key): string
+function viewButton(string $html, int $id): string
 {
-    preg_match('/<button[^>]*wire:key="table-preset-'.preg_quote($key, '/').'"[^>]*>/', $html, $match);
+    preg_match('/<button[^>]*wire:key="table-view-'.$id.'"[^>]*>/', $html, $match);
 
     return $match[0] ?? '';
 }
 
 it('highlights the default button when no view is active', function () {
-    presets(fn () => ['a' => PresetTableView::make()->label('A')->favorite()->defaultSearch('ORD-01')]);
+    $view = storeView($this->user->id, ['search' => 'ORD-01']);
 
-    $html = Livewire::test(ListOrdersWithPresets::class)->html();
+    $html = Livewire::test(ListOrders::class)->html();
 
     expect(defaultButton($html))->toContain('aria-pressed="true"')->toContain('box-shadow')
-        ->and(presetButton($html, 'a'))->toContain('aria-pressed="false"')->not->toContain('box-shadow');
+        ->and(viewButton($html, $view->id))->toContain('aria-pressed="false"')->not->toContain('box-shadow');
 });
 
-it('highlights the default button and the preset when the developer default has any key', function (string $key, bool $favorite) {
-    presets(fn () => [
-        $key => PresetTableView::make()->label('Dev')->favorite($favorite)->default()->defaultSearch('ORD-01'),
-        'other' => PresetTableView::make()->label('Other')->favorite()->defaultSearch('ORD-02'),
-    ]);
+it('moves the highlight to the applied view and back on default', function () {
+    $view = storeView($this->user->id, ['search' => 'ORD-01']);
 
-    $component = Livewire::test(ListOrdersWithPresets::class)->assertSet('activeTablePresetKey', $key);
+    $component = Livewire::test(ListOrders::class)->call('applyTableView', $view->id);
     $html = $component->html();
 
-    expect(defaultButton($html))->toContain('aria-pressed="true"')->toContain('box-shadow')
-        ->and(presetButton($html, 'other'))->toContain('aria-pressed="false"');
-
-    if ($favorite && $key !== 'default') {
-        expect(presetButton($html, $key))->toContain('aria-pressed="true"')->toContain('data-active="true"')->toContain('box-shadow');
-    }
-
-    $html = $component->call('applyTablePresetView', 'other')->html();
-
     expect(defaultButton($html))->toContain('aria-pressed="false"')->not->toContain('box-shadow')
-        ->and(presetButton($html, 'other'))->toContain('aria-pressed="true"')->toContain('box-shadow');
-})->with([
-    'default key, favorite' => ['default', true],
-    'other key, favorite' => ['all', true],
-    'other key, not a favorite' => ['overdue', false],
-]);
+        ->and(viewButton($html, $view->id))->toContain('aria-pressed="true"')->toContain('data-active="true"')->toContain('box-shadow');
 
-it('gives an active gray preset a visible mark that does not depend on the color', function () {
-    presets(fn () => [
-        'all' => PresetTableView::make()->label('All')->color('gray')->favorite()->default(),
-        'x' => PresetTableView::make()->label('X')->color('gray')->favorite()->defaultSearch('ORD-02'),
-    ]);
+    $html = $component->call('applyDefaultTableView')->html();
 
-    $html = Livewire::test(ListOrdersWithPresets::class)->html();
-
-    expect(substr_count($html, 'box-shadow: 0 0 0 2px'))->toBe(2)
-        ->and(presetButton($html, 'x'))->not->toContain('box-shadow');
+    expect(defaultButton($html))->toContain('aria-pressed="true"')
+        ->and(viewButton($html, $view->id))->toContain('aria-pressed="false"');
 });
 
-it('keeps the default button off while a user view is active', function () {
-    $view = storeView($this->user->id, ['search' => 'ORD-03'], ['name' => 'Mine', 'resource' => ListOrdersWithPresets::class]);
-    presets(fn () => ['dev' => PresetTableView::make()->label('Dev')->default()->favorite()]);
+it('marks only the active view as modified, with text a screen reader can read', function () {
+    $view = storeView($this->user->id, ['search' => 'ORD-01']);
 
-    $html = Livewire::test(ListOrdersWithPresets::class)->call('applyTableView', $view->id)->html();
-
-    expect(defaultButton($html))->toContain('aria-pressed="false"')
-        ->and($html)->toContain('wire:key="table-view-'.$view->id.'"');
-});
-
-it('shows the modified mark on the default button when the developer default has another key', function () {
-    presets(fn () => ['overdue' => PresetTableView::make()->label('Overdue')->default()->defaultSearch('ORD-01')]);
-
-    $component = Livewire::test(ListOrdersWithPresets::class);
+    $component = Livewire::test(ListOrders::class)->call('applyTableView', $view->id);
 
     expect($component->html())->not->toContain(__('table-views::favorites-bar.modified'));
 
-    $component->set('tableSearch', 'ORD-02')->assertSee(__('table-views::favorites-bar.modified'));
+    $html = $component->set('tableSearch', 'ORD-02')->html();
+
+    expect($html)->toContain('<span class="sr-only">'.__('table-views::favorites-bar.modified').'</span>')
+        ->and(viewButton($html, $view->id))->toContain('title="'.__('table-views::favorites-bar.modified').'"');
 });
 
-it('agrees with the manager on which view is active', function () {
-    presets(fn () => ['all' => PresetTableView::make()->label('All orders')->color('gray')->favorite()->default()]);
+it('uses a color-independent ring, so an active gray view is still visible', function () {
+    $view = storeView($this->user->id, [], ['color' => 'gray']);
 
-    $component = Livewire::test(ListOrdersWithPresets::class)->call('openTableViewsManager');
-    $html = $component->html();
+    $html = Livewire::test(ListOrders::class)->call('applyTableView', $view->id)->html();
 
-    preg_match_all('/data-active="true"/', $html, $active);
-
-    // the bar button and the manager row of the same preset, nothing else
-    expect($active[0])->toHaveCount(2)
-        ->and(presetButton($html, 'all'))->toContain('data-active="true"');
+    expect(viewButton($html, $view->id))->toContain('box-shadow: 0 0 0 2px var(--primary-500)');
 });

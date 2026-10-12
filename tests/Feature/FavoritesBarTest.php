@@ -142,8 +142,8 @@ it('detects a change to every state part', function () {
         'search' => fn ($c) => $c->searchTable('ORD'),
         'column search' => fn ($c) => $c->searchTableColumns(['reference' => 'ORD']),
         'sort' => fn ($c) => $c->sortTable('amount'),
-        'toggle' => fn ($c) => $c->set('toggledTableColumns.notes', true),
-        'grouping' => fn ($c) => $c->set('tableGrouping', 'status'),
+        'toggle' => fn ($c) => setToggles($c, ['notes' => true]),
+        'grouping' => fn ($c) => $c->set('tableGrouping', 'status:asc'),
     ];
 
     foreach ($changes as $name => $change) {

@@ -8,6 +8,7 @@ use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Elite\TableViews\Tests\Fixtures\User;
 use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentIcon;
+use Filament\Support\Icons\Heroicon;
 use Filament\Support\Icons\IconManager;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\ServiceProvider;
@@ -26,7 +27,7 @@ function freshProviderDefaults(): void
 
 it('registers heroicon defaults for every alias', function () {
     foreach (['table-views::favorites-bar.default', 'table-views::quick-save', 'table-views::icons.star', 'table-views::icons.chart-bar', 'table-views::icons.inbox'] as $alias) {
-        expect(FilamentIcon::resolve($alias))->toBeString()->toStartWith('heroicon-');
+        expect(FilamentIcon::resolve($alias))->toBeInstanceOf(Heroicon::class);
     }
 
     foreach (config('table-views.icons') as $icon) {
@@ -43,7 +44,7 @@ it('does not overwrite an alias that is already registered', function () {
     freshProviderDefaults();
 
     expect(FilamentIcon::resolve('table-views::quick-save'))->toBe('tabler-bookmark')
-        ->and(FilamentIcon::resolve('table-views::icons.star'))->toBe('heroicon-m-star');
+        ->and(FilamentIcon::resolve('table-views::icons.star'))->toBe(Heroicon::Star);
 });
 
 it('uses the resolved alias in the favorites bar', function () {
@@ -62,9 +63,11 @@ it('uses the resolved alias in the favorites bar', function () {
 });
 
 it('never hard-codes a heroicon in the views', function () {
-    $view = file_get_contents(__DIR__.'/../../resources/views/favorites-bar.blade.php');
+    $files = [...glob(__DIR__.'/../../resources/views/*.blade.php'), ...glob(__DIR__.'/../../src/*.php'), ...glob(__DIR__.'/../../src/*/*.php')];
 
-    expect($view)->not->toContain('heroicon');
+    foreach ($files as $file) {
+        expect(file_get_contents($file))->not->toContain('heroicon-', basename($file));
+    }
 });
 
 it('resolves options from config when the panel has no plugin', function () {
@@ -110,11 +113,9 @@ it('is registered under its id', function () {
 it('publishes the migration under the documented tag', function () {
     $paths = ServiceProvider::pathsToPublish(TableViewsServiceProvider::class, 'table-views-migrations');
 
-    expect($paths)->toHaveCount(2)
+    expect($paths)->toHaveCount(1)
         ->and(array_key_first($paths))->toEndWith('create_table_views_table.php')
-        ->and(array_values($paths)[0])->toContain('_create_table_views_table.php')
-        ->and(array_keys($paths)[1])->toEndWith('create_table_view_preferences_table.php')
-        ->and(array_values($paths)[1])->toContain('_create_table_view_preferences_table.php');
+        ->and(array_values($paths)[0])->toContain('_create_table_views_table.php');
 });
 
 it('reads the table name from config only, like the migration', function () {

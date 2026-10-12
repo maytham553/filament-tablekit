@@ -73,7 +73,7 @@ it('renders arabic labels when the locale is ar', function () {
         ->and(__('table-views::quick-save.fields.name'))->toBe('الاسم');
 });
 
-it('uses every key of the sort, quick filter and column translations and every alias of those views', function () {
+it('uses every translation key and every icon alias', function () {
     $root = __DIR__.'/../..';
     $source = '';
 
@@ -81,21 +81,17 @@ it('uses every key of the sort, quick filter and column translations and every a
         $source .= file_get_contents($file);
     }
 
-    foreach (['sort', 'quick-filters', 'columns'] as $group) {
+    foreach (['favorites-bar', 'quick-save', 'validation'] as $group) {
         foreach (flattenKeys(require "{$root}/resources/lang/en/{$group}.php") as $key) {
-            $parent = str_contains($key, '.') ? substr($key, 0, strrpos($key, '.')) : null;
-            $used = str_contains($source, "table-views::{$group}.{$key}")
-                || ($parent !== null && (str_contains($source, "table-views::{$group}.{$parent}.'") || str_contains($source, "table-views::{$group}.{$parent}.\"")));
-
-            expect($used)->toBeTrue("{$group}.{$key} is never used");
+            expect(str_contains($source, "table-views::{$group}.{$key}"))->toBeTrue("{$group}.{$key} is never used");
         }
     }
 
-    preg_match_all("/'(table-views::(?:sort|quick-filters|columns)\\.[a-z-]+)' =>/", file_get_contents("{$root}/src/TableViewsServiceProvider.php"), $aliases);
+    preg_match_all("/'(table-views::(?!icons\\.)[a-z.-]+)' =>/", file_get_contents("{$root}/src/TableViewsServiceProvider.php"), $aliases);
 
     expect($aliases[1])->not->toBeEmpty();
 
     foreach ($aliases[1] as $alias) {
-        expect(str_contains(file_get_contents("{$root}/resources/views/sort-button.blade.php").file_get_contents("{$root}/resources/views/quick-filters.blade.php").file_get_contents("{$root}/resources/views/columns-list.blade.php").file_get_contents("{$root}/resources/views/columns-fallback.blade.php"), "'{$alias}'"))->toBeTrue("{$alias} is never resolved");
+        expect(substr_count($source, "'{$alias}'"))->toBeGreaterThan(1, "{$alias} is never resolved");
     }
 });

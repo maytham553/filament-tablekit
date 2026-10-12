@@ -1,19 +1,19 @@
 {
     "name": "elite/filament-table-views",
-    "description": "Saved table views (filters, search, sort, columns, grouping) with a favorites bar for Filament v3 tables.",
+    "description": "Saved table views (filters, search, sort, columns, grouping) with a favorites bar for Filament v4 tables.",
     "type": "library",
     "license": "proprietary",
     "require": {
         "php": "^8.2",
-        "filament/filament": "^3.3",
-        "illuminate/support": "^11.0",
+        "filament/filament": "^4.15",
+        "illuminate/support": "^11.28|^12.0|^13.0",
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
         "laravel/pint": "^1.13",
-        "orchestra/testbench": "^9.0",
-        "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "pestphp/pest": "^3.0|^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.0"
     },
     "autoload": {
         "psr-4": {

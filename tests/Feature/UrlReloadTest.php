@@ -1,15 +1,13 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
 use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
-use Illuminate\Database\Eloquent\Builder;
+use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
 
 function reloadOrders(array $query): Testable
 {
-    return Livewire::withQueryParams($query)->test(ListOrdersWithPresets::class);
+    return Livewire::withQueryParams($query)->test(ListOrders::class);
 }
 
 function shownReferences(Testable $component): array
@@ -19,274 +17,164 @@ function shownReferences(Testable $component): array
 
 function expectSameScreen(Testable $before, Testable $after): void
 {
-    expect($after->get('activeTableViewId'))->toBe($before->get('activeTableViewId'))
-        ->and($after->get('activeTablePresetKey'))->toBe($before->get('activeTablePresetKey'))
-        ->and($after->get('tableFilters'))->toEqual($before->get('tableFilters'))
+    expect($after->get('tableFilters'))->toEqual($before->get('tableFilters'))
         ->and($after->get('tableSearch'))->toBe($before->get('tableSearch'))
-        ->and($after->get('tableSortColumn'))->toBe($before->get('tableSortColumn'))
-        ->and($after->get('tableSortDirection'))->toBe($before->get('tableSortDirection'))
-        ->and(shownReferences($after))->toBe(shownReferences($before))
-        ->and(callProtected($after, 'isActiveTableViewModified'))->toBe(callProtected($before, 'isActiveTableViewModified'));
+        ->and($after->get('tableSort') ?: null)->toBe($before->get('tableSort') ?: null)
+        ->and($after->get('tableGrouping') ?: null)->toBe($before->get('tableGrouping') ?: null)
+        ->and(shownReferences($after))->toBe(shownReferences($before));
 }
 
 beforeEach(function () {
+    config(['table-views.persist_active_view_in_session' => true]);
+
     $this->user = $this->signIn();
     $this->seedOrders();
-
-    config(['table-views.managed_default_views' => true]);
-
-    presets(fn () => [
-        'high' => PresetTableView::make()
-            ->label('High value, unpaid')
-            ->favorite()
-            ->defaultSort('amount', 'desc')
-            ->defaultFilters(['big' => ['isActive' => false]])
-            ->modifyQueryUsing(fn (Builder $query) => $query->where('amount', '>=', 500)),
-        'plain' => PresetTableView::make()->label('Plain')->defaultSort('customer_name', 'asc'),
-    ]);
 
     $this->shipped = storeView($this->user->id, [
         'filters' => ['status' => ['value' => 'shipped'], 'big' => ['isActive' => true]],
         'sort' => ['column' => 'ordered_at', 'direction' => 'desc'],
-    ], ['name' => 'Shipped & big', 'resource' => ListOrdersWithPresets::class]);
+        'grouping' => ['column' => 'status', 'direction' => 'desc'],
+    ], ['name' => 'Shipped & big']);
 
-    $this->makeStartup = fn () => storePreference($this->user->id, 'user', (string) $this->shipped->id, ['is_default' => true]);
+    Livewire::test(ListOrders::class)->call('applyTableView', $this->shipped->id);
 });
 
-describe('reload reproduces what the user saw', function () {
-    it('A: keeps a search typed on top of the startup view', function () {
-        ($this->makeStartup)();
+describe('reload reproduces what the user saw after a remembered view was applied on load', function () {
+    it('writes what the view set to the url, and nothing it left alone', function () {
+        $mounted = Livewire::test(ListOrders::class)->assertSet('activeTableViewId', $this->shipped->id);
 
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
+        $always = collect($mounted->effects['url'])->filter(fn ($entry) => $entry['alwaysShow'])->keys()->sort()->values()->all();
+
+        expect($always)->toBe(['tableFilters', 'tableGrouping', 'tableSort'])
+            ->and(browserUrl($mounted)($mounted))->toMatchArray([
+                'filters' => ['status' => ['value' => 'shipped'], 'big' => ['isActive' => 'true']],
+                'sort' => 'ordered_at:desc',
+                'grouping' => 'status:desc',
+            ])->not->toHaveKey('search');
+    });
+
+    it('shows the same screen after reloading the untouched view', function () {
+        $mounted = Livewire::test(ListOrders::class);
+
+        expectSameScreen($mounted, reloadOrders(browserUrl($mounted)($mounted)));
+    });
+
+    it('keeps a search typed on top of the view', function () {
+        $mounted = Livewire::test(ListOrders::class);
         $url = browserUrl($mounted);
 
-        expect($url($mounted))->toMatchArray([
-            'tableFilters' => ['status' => ['value' => 'shipped'], 'big' => ['isActive' => 'true']],
-            'tableSortColumn' => 'ordered_at',
-            'tableSortDirection' => 'desc',
-            'view' => 'user:'.$this->shipped->id,
-        ])->not->toHaveKey('tableSearch');
-
-        $mounted->set('tableSearch', 'Alice');
+        $mounted->set('tableSearch', 'ORD-0');
         $query = $url($mounted);
 
-        expect($query)->toHaveKey('tableSearch', 'Alice')->toHaveKey('view', 'user:'.$this->shipped->id);
+        expect($query)->toHaveKey('search', 'ORD-0');
 
         $reloaded = reloadOrders($query);
 
         expectSameScreen($mounted, $reloaded);
-        expect($reloaded->get('activeTableViewId'))->toBe($this->shipped->id)
-            ->and($reloaded->get('tableFilters.status.value'))->toBe('shipped')
-            ->and(callProtected($reloaded, 'isActiveTableViewModified'))->toBeTrue();
+        expect($reloaded->get('tableSearch'))->toBe('ORD-0')->and($reloaded->get('tableFilters.status.value'))->toBe('shipped');
     });
 
-    it('A: reloading the untouched startup view shows the same screen and stays clean', function () {
-        ($this->makeStartup)();
-
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
-        $reloaded = reloadOrders(browserUrl($mounted)($mounted));
-
-        expectSameScreen($mounted, $reloaded);
-        expect(callProtected($reloaded, 'isActiveTableViewModified'))->toBeFalse();
-    });
-
-    it('B: keeps a preset with a hidden query and its sort direction, from the startup state', function () {
-        ($this->makeStartup)();
-
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
-        $url = browserUrl($mounted);
-
-        $mounted->call('applyTablePresetView', 'high');
-        $query = $url($mounted);
-
-        expect($query)->toMatchArray([
-            'tableSortColumn' => 'amount',
-            'tableSortDirection' => 'desc',
-            'view' => 'preset:high',
-        ]);
-
-        $reloaded = reloadOrders($query);
-
-        expectSameScreen($mounted, $reloaded);
-        expect($reloaded->get('tableSortDirection'))->toBe('desc')
-            ->and(callProtected($reloaded, 'isActiveTableViewModified'))->toBeFalse()
-            ->and(Order::whereIn('reference', shownReferences($reloaded))->where('amount', '<', 500)->count())->toBe(0);
-    });
-
-    it('keeps a preset picked on a table that started plain', function () {
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
-        $url = browserUrl($mounted);
-
-        expect($url($mounted))->toBe([]);
-
-        $mounted->call('applyTablePresetView', 'high');
-
-        $reloaded = reloadOrders($url($mounted));
-
-        expectSameScreen($mounted, $reloaded);
-        expect($reloaded->get('tableSortDirection'))->toBe('desc')->and($reloaded->get('activeTablePresetKey'))->toBe('high');
-    });
-
-    it('keeps a preset without a hidden query and one of the user\'s own views', function () {
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
-        $url = browserUrl($mounted);
-
-        foreach ([['applyTablePresetView', 'plain'], ['applyTableView', $this->shipped->id]] as [$method, $argument]) {
-            $mounted->call($method, $argument);
-
-            expectSameScreen($mounted, reloadOrders($url($mounted)));
-        }
-    });
-
-    it('keeps a filter the user cleared on top of the startup view', function () {
-        ($this->makeStartup)();
-
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
+    it('keeps a filter the user cleared on top of the view', function () {
+        $mounted = Livewire::test(ListOrders::class);
         $url = browserUrl($mounted);
 
         $mounted->set('tableFilters.status.value', null);
-        $query = $url($mounted);
-
-        expect($query['tableFilters'])->toBe(['big' => ['isActive' => 'true']])->and($query)->toHaveKey('view');
-
-        $reloaded = reloadOrders($query);
+        $reloaded = reloadOrders($url($mounted));
 
         expectSameScreen($mounted, $reloaded);
-        expect($reloaded->get('tableFilters.status.value'))->toBeNull()
-            ->and(callProtected($reloaded, 'isActiveTableViewModified'))->toBeTrue();
-
-        $mounted->set('tableFilters.big.isActive', false);
-        $reloadedAgain = reloadOrders($url($mounted));
-
-        expectSameScreen($mounted, $reloadedAgain);
-        expect($reloadedAgain->get('activeTableViewId'))->toBe($this->shipped->id);
+        expect($reloaded->get('tableFilters.status.value'))->toBeNull()->and($reloaded->get('tableFilters.big.isActive'))->toBeTrue();
     });
 
-    it('keeps a cleared sort and a sort changed to the same or another direction than the view', function () {
-        ($this->makeStartup)();
-
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
+    it('keeps a sort that was cleared, and one changed to a direction the view also has', function () {
+        $mounted = Livewire::test(ListOrders::class);
         $url = browserUrl($mounted);
-
-        $mounted->call('sortTable', 'amount')->call('sortTable', 'amount');
-        expect($mounted->get('tableSortDirection'))->toBe('desc');
-        expectSameScreen($mounted, reloadOrders($url($mounted)));
-
-        $mounted->call('sortTable', 'ordered_at', 'desc');
-        expect($url($mounted))->toMatchArray(['tableSortColumn' => 'ordered_at', 'tableSortDirection' => 'desc']);
-        expectSameScreen($mounted, reloadOrders($url($mounted)));
 
         $mounted->call('sortTable', 'ordered_at', 'asc');
         expectSameScreen($mounted, reloadOrders($url($mounted)));
-        expect(reloadOrders($url($mounted))->get('tableSortDirection'))->toBe('asc');
+        expect(reloadOrders($url($mounted))->get('tableSort'))->toBe('ordered_at:asc');
 
-        $mounted->set('tableSortColumn', null)->set('tableSortDirection', null);
+        $mounted->set('tableSort', null);
         $reloaded = reloadOrders($url($mounted));
 
-        expect($reloaded->get('tableSortColumn'))->toBeEmpty()->and($reloaded->get('activeTableViewId'))->toBe($this->shipped->id);
-    });
-
-    it('keeps a sort that equals the startup sort after switching to another view', function () {
-        ($this->makeStartup)();
-
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
-        $url = browserUrl($mounted);
-
-        $mounted->call('applyTablePresetView', 'plain')->call('sortTable', 'ordered_at', 'desc');
-
-        $reloaded = reloadOrders($url($mounted));
-
+        expect($reloaded->get('tableSort'))->toBeEmpty();
         expectSameScreen($mounted, $reloaded);
-        expect($reloaded->get('tableSortColumn'))->toBe('ordered_at')->and($reloaded->get('tableSortDirection'))->toBe('desc');
     });
 
-    it('stays on Default after Default is clicked and the page is reloaded', function () {
-        ($this->makeStartup)();
-
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
+    it('keeps a grouping that was removed', function () {
+        $mounted = Livewire::test(ListOrders::class);
         $url = browserUrl($mounted);
 
-        $mounted->call('applyDefaultTableView');
-        $query = $url($mounted);
+        $mounted->set('tableGrouping', null);
+        $reloaded = reloadOrders($url($mounted));
 
-        expect($query)->toHaveKey('view', '');
-
-        $reloaded = reloadOrders($query);
-
-        expect($reloaded->get('activeTableViewId'))->toBeNull()
-            ->and($reloaded->get('tableFilters.status.value'))->toBeNull()
-            ->and($reloaded->get('tableSortColumn'))->toBeEmpty()
-            ->and(shownReferences($reloaded))->toHaveCount(Order::count());
+        expect($reloaded->get('tableGrouping'))->toBeEmpty();
+        expectSameScreen($mounted, $reloaded);
     });
 
-    it('stays on Default when a developer default preset exists and Default is clicked', function () {
-        presets(fn () => [
-            'dev' => PresetTableView::make()->label('Dev')->default()->defaultSort('amount', 'asc'),
-            'high' => PresetTableView::make()->label('High')->defaultSort('amount', 'desc')->modifyQueryUsing(fn (Builder $query) => $query->where('amount', '>=', 500)),
+    it('does not apply the remembered view again when the url carries table state', function () {
+        $mounted = Livewire::test(ListOrders::class);
+        $reloaded = reloadOrders(browserUrl($mounted)($mounted));
+
+        expect($reloaded->get('activeTableViewId'))->toBeNull();
+    });
+});
+
+it('does not add anything to the url of a table that starts plain', function () {
+    session()->flush();
+    $this->actingAs($this->user);
+
+    $mounted = Livewire::test(ListOrders::class);
+
+    expect(collect($mounted->effects['url'])->where('alwaysShow', true)->all())->toBe([])
+        ->and(browserUrl($mounted)($mounted))->toBe([]);
+});
+
+it('asks the browser to always show only the parts a view touched', function () {
+    session()->flush();
+    $this->actingAs($this->user);
+
+    $search = storeView($this->user->id, ['search' => 'ORD-01'], ['name' => 'Search only']);
+
+    Livewire::test(ListOrders::class)->call('applyTableView', $search->id);
+
+    $always = collect(Livewire::test(ListOrders::class)->effects['url'])->filter(fn ($entry) => $entry['alwaysShow'])->keys()->all();
+
+    expect($always)->toContain('tableSearch')->not->toContain('tableSort')->not->toContain('tableGrouping')->not->toContain('activeTab');
+});
+
+it('reads the filters, search, sort, grouping and tab from the parameters Filament 4 uses', function () {
+    $effects = Livewire::test(ListOrders::class)->effects['url'];
+
+    expect(collect($effects)->map(fn ($entry) => $entry['as'])->only(['tableFilters', 'tableSearch', 'tableSort', 'tableGrouping', 'activeTab', 'isTableReordering'])->all())
+        ->toEqual([
+            'tableFilters' => 'filters',
+            'tableSearch' => 'search',
+            'tableSort' => 'sort',
+            'tableGrouping' => 'grouping',
+            'activeTab' => 'tab',
+            'isTableReordering' => 'reordering',
         ]);
+});
 
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
-        $url = browserUrl($mounted);
+it('lets every table parameter win over the remembered view', function (array $query) {
+    reloadOrders($query)->assertSet('activeTableViewId', null);
+})->with([
+    'filters' => [['filters' => ['status' => ['value' => 'paid']]]],
+    'search' => [['search' => 'ORD']],
+    'sort' => [['sort' => 'amount:asc']],
+    'grouping' => [['grouping' => 'status:asc']],
+    'reordering' => [['reordering' => '1']],
+]);
 
-        expect($mounted->get('activeTablePresetKey'))->toBe('dev');
+it('is not confused by the Filament 3 parameter names', function () {
+    reloadOrders(['tableSearch' => 'ORD', 'tableSortColumn' => 'amount'])->assertSet('activeTableViewId', $this->shipped->id);
+});
 
-        $mounted->call('applyTablePresetView', 'high')->call('applyDefaultTableView');
-        $reloaded = reloadOrders($url($mounted));
+it('applies the url state of a link into an untouched table', function () {
+    $component = reloadOrders(['filters' => ['status' => ['value' => 'paid']], 'sort' => 'amount:desc', 'search' => 'ORD-0']);
 
-        expectSameScreen($mounted, $reloaded);
-        expect($reloaded->get('activeTablePresetKey'))->toBe('dev')->and($reloaded->get('tableSortDirection'))->toBe('asc');
-    });
-
-    it('keeps the remembered view the session brings back on a fresh load', function () {
-        config(['table-views.persist_active_view_in_session' => true]);
-
-        Livewire::test(ListOrdersWithPresets::class)->call('applyTablePresetView', 'high');
-
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
-        $url = browserUrl($mounted);
-
-        expect($mounted->get('activeTablePresetKey'))->toBe('high');
-
-        $mounted->set('tableSearch', 'Alice')->call('sortTable', 'amount', 'desc');
-        expectSameScreen($mounted, reloadOrders($url($mounted)));
-    });
-
-    it('does not add anything to the url of a table that starts plain', function () {
-        $mounted = Livewire::test(ListOrdersWithPresets::class);
-
-        expect(collect($mounted->effects['url'])->where('alwaysShow', true)->all())->toBe([]);
-    });
-
-    it('asks the browser to always show only what the startup view changed', function () {
-        ($this->makeStartup)();
-
-        $always = collect(Livewire::test(ListOrdersWithPresets::class)->effects['url'])->filter(fn ($entry) => $entry['alwaysShow'])->keys()->sort()->values()->all();
-
-        expect($always)->toBe(['tableFilters', 'tableSortColumn', 'tableSortDirection', 'tableViewUrl']);
-    });
-
-    it('still ignores hostile view values and applies the url state', function (mixed $value) {
-        ($this->makeStartup)();
-
-        $reloaded = reloadOrders(['view' => $value, 'tableSearch' => 'Alice']);
-
-        expect($reloaded->get('activeTableViewId'))->toBeNull()
-            ->and($reloaded->get('activeTablePresetKey'))->toBeNull()
-            ->and($reloaded->get('tableViewUrl'))->toBeNull()
-            ->and($reloaded->get('tableSearch'))->toBe('Alice')
-            ->and($reloaded->get('tableFilters.status.value'))->toBeNull();
-    })->with([
-        'hidden-looking preset' => 'preset:nope',
-        'other user view' => 'user:99999',
-        'sql' => 'user:1 OR 1=1',
-        'null byte' => "preset:\0",
-        'long' => 'preset:'.str_repeat('a', 500),
-        'array' => [['preset:high']],
-    ]);
-
-    it('applies the startup view when the view in the url is invalid and nothing else is in the url', function () {
-        ($this->makeStartup)();
-
-        reloadOrders(['view' => 'preset:nope'])->assertSet('activeTableViewId', $this->shipped->id);
-    });
+    expect($component->get('tableFilters.status.value'))->toBe('paid')
+        ->and($component->get('tableSort'))->toBe('amount:desc')
+        ->and($component->get('tableSearch'))->toBe('ORD-0')
+        ->and(shownReferences($component))->toBe(Order::where('status', 'paid')->where('reference', 'like', '%ORD-0%')->orderByDesc('amount')->orderByDesc('id')->pluck('reference')->all());
 });

@@ -12,6 +12,7 @@ class ListOrdersPersistent extends ListOrders
             ->persistFiltersInSession()
             ->persistSearchInSession()
             ->persistColumnSearchesInSession()
-            ->persistSortInSession();
+            ->persistSortInSession()
+            ->persistGroupInSession();
     }
 }

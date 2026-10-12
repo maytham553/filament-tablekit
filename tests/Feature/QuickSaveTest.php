@@ -17,7 +17,7 @@ beforeEach(function () {
 
 function saveAttempt(Testable $component, array $data)
 {
-    return $component->callAction('quickSaveTableView', $data);
+    return closeOpenAction($component)->callAction('quickSaveTableView', $data);
 }
 
 it('requires a name', function () {
@@ -98,9 +98,9 @@ it('saves the current table state, not whatever the form posts', function () {
 it('defaults the form to the first color, no icon and favorite on', function () {
     Livewire::test(ListOrders::class)
         ->mountAction('quickSaveTableView')
-        ->assertSet('mountedActionsData.0.color', 'primary')
-        ->assertSet('mountedActionsData.0.icon', null)
-        ->assertSet('mountedActionsData.0.is_favorite', true);
+        ->assertSet('mountedActions.0.data.color', 'primary')
+        ->assertSet('mountedActions.0.data.icon', null)
+        ->assertSet('mountedActions.0.data.is_favorite', true);
 });
 
 it('saves favorite views by default and keeps non favorites out of the bar', function () {
@@ -176,7 +176,7 @@ it('offers only the configured colors and icons', function () {
 
     $component = Livewire::test(ListOrders::class);
 
-    $component->mountAction('quickSaveTableView')->assertSet('mountedActionsData.0.color', 'danger');
+    $component->mountAction('quickSaveTableView')->assertSet('mountedActions.0.data.color', 'danger');
 
     saveAttempt($component, ['name' => 'X', 'color' => 'primary'])->assertHasActionErrors(['color']);
     saveAttempt($component, ['name' => 'X', 'color' => 'info', 'icon' => 'heart'])->assertHasActionErrors(['icon']);

@@ -41,7 +41,7 @@ class OrderResource extends Resource
                     ->toggle()
                     ->query(fn (Builder $query): Builder => $query->where('amount', '>=', 500)),
                 Filter::make('ordered')
-                    ->form([
+                    ->schema([
                         DatePicker::make('from'),
                         DatePicker::make('until'),
                     ])

@@ -8,8 +8,8 @@ use Elite\TableViews\Support\TableViewsOptions;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
-use Filament\Support\Enums\ActionSize;
-use Filament\Support\Enums\MaxWidth;
+use Filament\Support\Enums\Size;
+use Filament\Support\Enums\Width;
 use Filament\Support\Facades\FilamentIcon;
 
 class QuickSaveTableViewAction
@@ -25,12 +25,12 @@ class QuickSaveTableViewAction
             ->label(__('table-views::quick-save.label'))
             ->icon(FilamentIcon::resolve('table-views::quick-save'))
             ->color('gray')
-            ->size(ActionSize::Small)
+            ->size(Size::Small)
             ->outlined()
             ->modalHeading(__('table-views::quick-save.heading'))
             ->modalDescription(__('table-views::quick-save.description'))
             ->modalSubmitActionLabel(__('table-views::quick-save.submit'))
-            ->modalWidth(MaxWidth::Medium)
+            ->modalWidth(Width::Medium)
             ->slideOver($options->isQuickSaveSlideOver())
             ->fillForm([
                 'name' => null,
@@ -38,7 +38,7 @@ class QuickSaveTableViewAction
                 'icon' => null,
                 'is_favorite' => true,
             ])
-            ->form([
+            ->schema([
                 ...TableViewForm::fields($resourceKey),
                 Toggle::make('is_favorite')
                     ->label(__('table-views::quick-save.fields.is_favorite')),
@@ -49,26 +49,6 @@ class QuickSaveTableViewAction
                 Notification::make()
                     ->title(__('table-views::quick-save.saved'))
                     ->success()
-                    ->send();
-            });
-    }
-
-    /**
-     * Shown instead of the real action while a preset with a hidden query is active: that query would not be part of the saved view.
-     */
-    public static function blocked(): Action
-    {
-        return Action::make('quickSaveTableView')
-            ->label(__('table-views::quick-save.label'))
-            ->icon(FilamentIcon::resolve('table-views::quick-save'))
-            ->color('gray')
-            ->size(ActionSize::Small)
-            ->outlined()
-            ->action(function (): void {
-                Notification::make()
-                    ->title(__('table-views::quick-save.preset_with_query_title'))
-                    ->body(__('table-views::quick-save.preset_with_query_body'))
-                    ->warning()
                     ->send();
             });
     }

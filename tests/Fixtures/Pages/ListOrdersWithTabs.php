@@ -2,7 +2,7 @@
 
 namespace Elite\TableViews\Tests\Fixtures\Pages;
 
-use Filament\Resources\Components\Tab;
+use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListOrdersWithTabs extends ListOrders

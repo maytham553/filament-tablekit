@@ -53,7 +53,7 @@ it('lets url state win over the remembered view', function () {
 
     Livewire::test(ListOrders::class)->call('applyTableView', $this->view->id);
 
-    Livewire::withQueryParams(['tableSearch' => 'ORD-05'])
+    Livewire::withQueryParams(['search' => 'ORD-05'])
         ->test(ListOrders::class)
         ->assertSet('activeTableViewId', null)
         ->assertSet('tableSearch', 'ORD-05')
@@ -100,7 +100,7 @@ it('lets a tab in the url win over the remembered view', function () {
 
     Livewire::test(ListOrdersWithTabs::class)->call('applyTableView', $view->id);
 
-    Livewire::withQueryParams(['activeTab' => 'paid'])
+    Livewire::withQueryParams(['tab' => 'paid'])
         ->test(ListOrdersWithTabs::class)
         ->assertSet('activeTableViewId', null)
         ->assertSet('tableFilters.status.value', null);

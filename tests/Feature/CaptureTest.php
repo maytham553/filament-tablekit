@@ -45,19 +45,25 @@ it('captures sort column and direction', function () {
 });
 
 it('captures toggled columns', function () {
-    $state = capturedState(fn ($c) => $c->set('toggledTableColumns.notes', true)->set('toggledTableColumns.ordered_at', false));
+    $state = capturedState(fn ($c) => setToggles($c, ['notes' => true, 'ordered_at' => false]));
 
     expect($state['toggledColumns'])->toBe(['notes' => true, 'ordered_at' => false]);
 });
 
 it('captures grouping', function () {
-    $state = capturedState(fn ($c) => $c->set('tableGrouping', 'customer_name')->set('tableGroupingDirection', 'desc'));
+    $state = capturedState(fn ($c) => $c->set('tableGrouping', 'customer_name:desc'));
 
     expect($state['grouping'])->toBe(['column' => 'customer_name', 'direction' => 'desc']);
 });
 
-it('drops the grouping direction when nothing is grouped', function () {
-    $state = capturedState(fn ($c) => $c->set('tableGroupingDirection', 'desc'));
+it('captures a grouping without a direction as ascending', function () {
+    $state = capturedState(fn ($c) => $c->set('tableGrouping', 'status'));
+
+    expect($state['grouping'])->toBe(['column' => 'status', 'direction' => 'asc']);
+});
+
+it('captures no grouping when nothing is grouped', function () {
+    $state = capturedState(fn ($c) => $c->set('tableGrouping', null));
 
     expect($state['grouping'])->toBe(['column' => null, 'direction' => null]);
 });
@@ -68,9 +74,9 @@ it('stores the exact expected json when everything is set', function () {
         ->searchTable('ORD')
         ->searchTableColumns(['reference' => 'ORD-0'])
         ->sortTable('amount', 'desc')
-        ->set('toggledTableColumns.notes', true)
-        ->set('tableGrouping', 'status')
-        ->set('tableGroupingDirection', 'asc');
+        ->set('tableGrouping', 'status:asc');
+
+    setToggles($component, ['notes' => true]);
 
     $view = quickSave($component, 'everything');
 

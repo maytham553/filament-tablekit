@@ -33,7 +33,7 @@ it('saves and applies a view on a table widget', function () {
     $source = Livewire::test(OrdersWidget::class)
         ->filterTable('status', 'paid')
         ->sortTable('amount', 'desc')
-        ->set('toggledTableColumns.amount', false);
+        ->tap(fn ($c) => setToggles($c, ['amount' => false]));
 
     $view = quickSave($source, 'Widget view');
 
@@ -46,8 +46,8 @@ it('saves and applies a view on a table widget', function () {
         ->assertSee('Widget view')
         ->call('applyTableView', $view->id)
         ->assertSet('tableFilters.status.value', 'paid')
-        ->assertSet('tableSortColumn', 'amount')
-        ->assertSet('toggledTableColumns', ['amount' => false])
+        ->assertSet('tableSort', 'amount:desc')
+        ->tap(fn ($c) => expect(toggles($c))->toBe(['amount' => false]))
         ->assertCountTableRecords(Order::where('status', 'paid')->count());
 });
 

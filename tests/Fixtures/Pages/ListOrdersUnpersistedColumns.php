@@ -4,10 +4,10 @@ namespace Elite\TableViews\Tests\Fixtures\Pages;
 
 use Filament\Tables\Table;
 
-class ListOrdersPhase3Deferred extends ListOrdersPhase3
+class ListOrdersUnpersistedColumns extends ListOrders
 {
     public function table(Table $table): Table
     {
-        return parent::table($table)->deferFilters();
+        return parent::table($table)->persistColumnsInSession(false);
     }
 }

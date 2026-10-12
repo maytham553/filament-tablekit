@@ -24,11 +24,17 @@ function customState(): array
     ];
 }
 
+function sessionToggles(string $key): array
+{
+    return collect(session($key))->where('isToggleable', true)->mapWithKeys(fn (array $item) => [$item['name'] => $item['isToggled']])->all();
+}
+
 it('starts from the table defaults', function () {
-    Livewire::test(ListOrdersWithDefaults::class)
+    $component = Livewire::test(ListOrdersWithDefaults::class)
         ->assertSet('tableFilters.hide_cancelled.isActive', true)
-        ->assertSet('tableGrouping', 'status')
-        ->assertSet('toggledTableColumns', ['notes' => false, 'ordered_at' => true]);
+        ->assertSet('tableGrouping', 'status:asc');
+
+    expect(toggles($component))->toBe(['notes' => false, 'ordered_at' => true]);
 });
 
 it('restores every part to the default state', function () {
@@ -39,8 +45,8 @@ it('restores every part to the default state', function () {
         ->assertSet('tableFilters.hide_cancelled.isActive', false)
         ->assertSet('tableFilters.big.isActive', true)
         ->assertSet('tableSearch', 'ORD')
-        ->assertSet('tableSortColumn', 'reference')
-        ->assertSet('tableGrouping', 'customer_name')
+        ->assertSet('tableSort', 'reference:asc')
+        ->assertSet('tableGrouping', 'customer_name:desc')
         ->assertSet('activeTableViewId', $view->id);
 
     $component->call('applyDefaultTableView')
@@ -48,14 +54,13 @@ it('restores every part to the default state', function () {
         ->assertSet('tableFilters.big.isActive', false)
         ->assertSet('tableSearch', '')
         ->assertSet('tableColumnSearches', [])
-        ->assertSet('tableSortColumn', null)
-        ->assertSet('tableSortDirection', null)
-        ->assertSet('toggledTableColumns', ['notes' => false, 'ordered_at' => true])
-        ->assertSet('tableGrouping', 'status')
-        ->assertSet('tableGroupingDirection', null)
+        ->assertSet('tableSort', null)
+        ->assertSet('tableGrouping', 'status:asc')
         ->assertSet('activeTableViewId', null)
         ->assertSet('activeTableViewHash', null)
         ->assertCanNotSeeTableRecords(Order::where('status', 'cancelled')->take(10)->get());
+
+    expect(toggles($component))->toBe(['notes' => false, 'ordered_at' => true]);
 });
 
 it('default is not the same as clearing filters', function () {
@@ -74,10 +79,9 @@ it('restores a default group that is not selectable', function () {
     $component = Livewire::test(ListOrdersHiddenDefaultGroup::class)
         ->assertSet('tableGrouping', null)
         ->call('applyTableView', $view->id)
-        ->assertSet('tableGrouping', 'customer_name')
+        ->assertSet('tableGrouping', 'customer_name:asc')
         ->call('applyDefaultTableView')
-        ->assertSet('tableGrouping', null)
-        ->assertSet('tableGroupingDirection', null);
+        ->assertSet('tableGrouping', null);
 
     expect($component->instance()->getTableGrouping()->getId())->toBe('status');
 });
@@ -97,17 +101,29 @@ it('writes the default state over the persisted session state', function () {
     expect(session($instance->getTableFiltersSessionKey())['status']['value'])->toBe('paid')
         ->and(session($instance->getTableSearchSessionKey()))->toBe('ORD-01')
         ->and(session($instance->getTableColumnSearchesSessionKey()))->toBe(['reference' => 'ORD-0'])
-        ->and(session($instance->getTableSortSessionKey()))->toBe(['column' => 'amount', 'direction' => 'desc'])
-        ->and(session($instance->getTableColumnToggleFormStateSessionKey()))->toBe(['notes' => true, 'ordered_at' => false]);
+        ->and(session($instance->getTableSortSessionKey()))->toBe('amount:desc')
+        ->and(sessionToggles($instance->getTableColumnsSessionKey()))->toBe(['notes' => true, 'ordered_at' => false]);
 
     $component->call('applyDefaultTableView');
 
     expect(session($instance->getTableFiltersSessionKey())['status']['value'])->toBeNull()
         ->and(session($instance->getTableSearchSessionKey()))->toBe('')
         ->and(session($instance->getTableColumnSearchesSessionKey()))->toBe([])
-        ->and(session($instance->getTableColumnToggleFormStateSessionKey()))->toBe(['notes' => false, 'ordered_at' => true]);
+        ->and(sessionToggles($instance->getTableColumnsSessionKey()))->toBe(['notes' => false, 'ordered_at' => true])
+        ->and(session($instance->getTableSortSessionKey()))->toBeNull();
+});
 
-    expect(session($instance->getTableSortSessionKey()))->toBe(['column' => null, 'direction' => null]);
+it('keeps a persisted grouping in the session in step with applying a view and Default', function () {
+    $view = storeView($this->user->id, ['grouping' => ['column' => 'customer_name', 'direction' => 'desc']], ['resource' => ListOrdersPersistent::class]);
+
+    $component = Livewire::test(ListOrdersPersistent::class)->call('applyTableView', $view->id);
+    $key = $component->instance()->getTableGroupingSessionKey();
+
+    expect(session($key))->toBe('customer_name:desc');
+
+    $component->call('applyDefaultTableView');
+
+    expect(session($key))->toBeNull();
 });
 
 it('puts the tab back to the default when tab tracking is on', function () {

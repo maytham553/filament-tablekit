@@ -56,25 +56,24 @@ it('applies column searches', function () {
 
 it('applies the sort', function () {
     applyStored(['sort' => ['column' => 'amount', 'direction' => 'desc']])
-        ->assertSet('tableSortColumn', 'amount')
-        ->assertSet('tableSortDirection', 'desc')
+        ->assertSet('tableSort', 'amount:desc')
         ->assertCanSeeTableRecords(Order::orderByDesc('amount')->take(25)->get(), inOrder: true);
 });
 
 it('defaults an invalid sort direction to asc', function () {
     applyStored(['sort' => ['column' => 'amount', 'direction' => 'sideways']])
-        ->assertSet('tableSortDirection', 'asc')
+        ->assertSet('tableSort', 'amount:asc')
         ->assertCanSeeTableRecords(Order::orderBy('amount')->take(25)->get(), inOrder: true);
 });
 
 it('applies toggled columns', function () {
-    applyStored(['toggledColumns' => ['notes' => true, 'ordered_at' => false]])
-        ->assertSet('toggledTableColumns', ['notes' => true, 'ordered_at' => false])
-        ->assertSee('note 7');
+    $component = applyStored(['toggledColumns' => ['notes' => true, 'ordered_at' => false]])->assertSee('note 7');
+
+    expect(toggles($component))->toBe(['notes' => true, 'ordered_at' => false]);
 });
 
 it('hides a column the view hides', function () {
-    $component = Livewire::test(ListOrders::class)->set('toggledTableColumns.notes', true)->assertSee('note 7');
+    $component = setToggles(Livewire::test(ListOrders::class), ['notes' => true])->assertSee('note 7');
 
     $view = storeView($this->user->id, ['toggledColumns' => ['notes' => false, 'ordered_at' => true]]);
 
@@ -83,8 +82,7 @@ it('hides a column the view hides', function () {
 
 it('applies grouping', function () {
     $component = applyStored(['grouping' => ['column' => 'status', 'direction' => 'desc']])
-        ->assertSet('tableGrouping', 'status')
-        ->assertSet('tableGroupingDirection', 'desc');
+        ->assertSet('tableGrouping', 'status:desc');
 
     expect($component->instance()->getTableRecords()->first()->status)->toBe('shipped');
 });
@@ -96,10 +94,9 @@ it('applies every part together and matches the saved component', function () {
         ->searchTable('ORD')
         ->searchTableColumns(['reference' => 'ORD-'])
         ->sortTable('amount', 'asc')
-        ->set('toggledTableColumns.notes', true)
-        ->set('toggledTableColumns.ordered_at', false)
-        ->set('tableGrouping', 'customer_name')
-        ->set('tableGroupingDirection', 'desc');
+        ->set('tableGrouping', 'customer_name:desc');
+
+    setToggles($source, ['notes' => true, 'ordered_at' => false]);
 
     $view = quickSave($source, 'round trip');
 
@@ -107,9 +104,11 @@ it('applies every part together and matches the saved component', function () {
 
     $target = Livewire::test(ListOrders::class)->call('applyTableView', $view->id);
 
-    foreach (['tableFilters', 'tableSearch', 'tableColumnSearches', 'tableSortColumn', 'tableSortDirection', 'toggledTableColumns', 'tableGrouping', 'tableGroupingDirection'] as $property) {
+    foreach (['tableFilters', 'tableSearch', 'tableColumnSearches', 'tableSort', 'tableGrouping'] as $property) {
         expect($target->get($property))->toEqual($source->get($property), $property);
     }
+
+    expect(toggles($target))->toBe(toggles($source));
 
     $target->assertCanSeeTableRecords(
         Order::where('status', 'paid')->where('amount', '>=', 500)->orderBy('amount')->get(),
@@ -157,22 +156,18 @@ it('ignores state that no longer matches the table', function () {
 
     expect($component->get('tableFilters'))->not->toHaveKey('removed')
         ->and($component->get('tableFilters.status.value'))->toBe('paid')
-        ->and($component->get('tableSortColumn'))->toBeNull()
-        ->and($component->get('tableSortDirection'))->toBeNull()
-        ->and($component->get('toggledTableColumns'))->toBe(['notes' => false, 'ordered_at' => true])
-        ->and($component->get('tableGrouping'))->toBeNull()
-        ->and($component->get('tableGroupingDirection'))->toBeNull();
+        ->and($component->get('tableSort'))->toBeNull()
+        ->and(toggles($component))->toBe(['notes' => false, 'ordered_at' => true])
+        ->and($component->get('tableGrouping'))->toBeNull();
 });
 
 it('ignores a sort on a column that is not sortable', function () {
     applyStored(['sort' => ['column' => 'notes', 'direction' => 'asc']])
-        ->assertSet('tableSortColumn', null)
-        ->assertSet('tableSortDirection', null);
+        ->assertSet('tableSort', null);
 });
 
 it('keeps new toggleable columns visible for a view saved before they existed', function () {
-    applyStored(['toggledColumns' => ['notes' => true]])
-        ->assertSet('toggledTableColumns', ['notes' => true, 'ordered_at' => true]);
+    expect(toggles(applyStored(['toggledColumns' => ['notes' => true]])))->toBe(['notes' => true, 'ordered_at' => true]);
 });
 
 it('turns reordering off when a view is applied', function () {

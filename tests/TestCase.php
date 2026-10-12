@@ -7,8 +7,6 @@ use BladeUI\Icons\BladeIconsServiceProvider;
 use Elite\TableViews\TableViewsServiceProvider;
 use Elite\TableViews\Tests\Fixtures\AdminPanelProvider;
 use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Elite\TableViews\Tests\Fixtures\TeamPanelProvider;
 use Elite\TableViews\Tests\Fixtures\User;
 use Filament\Actions\ActionsServiceProvider;
@@ -17,6 +15,7 @@ use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
 use Filament\Infolists\InfolistsServiceProvider;
 use Filament\Notifications\NotificationsServiceProvider;
+use Filament\Schemas\SchemasServiceProvider;
 use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
@@ -32,9 +31,6 @@ abstract class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
-
-        ListOrdersWithPresets::$presets = null;
-        ListOrdersPhase3Presets::$presets = null;
 
         Filament::setCurrentPanel(Filament::getPanel('admin'));
         Filament::bootCurrentPanel();
@@ -52,6 +48,7 @@ abstract class TestCase extends Orchestra
             FormsServiceProvider::class,
             InfolistsServiceProvider::class,
             NotificationsServiceProvider::class,
+            SchemasServiceProvider::class,
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
             FilamentServiceProvider::class,

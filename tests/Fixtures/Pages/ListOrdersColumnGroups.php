@@ -13,9 +13,10 @@ class ListOrdersColumnGroups extends ListOrders
         return parent::table($table)->columns([
             TextColumn::make('reference')->sortable(),
             ColumnGroup::make('Money', [
-                TextColumn::make('amount')->sortable(),
-                TextColumn::make('status')->sortable(),
+                TextColumn::make('amount')->sortable()->toggleable(),
+                TextColumn::make('status')->sortable()->toggleable(isToggledHiddenByDefault: true),
             ]),
+            TextColumn::make('notes')->toggleable(),
         ]);
     }
 }
