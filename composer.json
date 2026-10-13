@@ -2,7 +2,7 @@
     "name": "tablekit/filament-tablekit",
     "description": "Saved table views (filters, search, sort, columns, grouping) with a favorites bar for Filament v5 tables.",
     "type": "library",
-    "license": "proprietary",
+    "license": "MIT",
     "require": {
         "php": "^8.2",
         "filament/filament": "^5.8.4",
