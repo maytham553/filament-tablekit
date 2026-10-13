@@ -56,7 +56,7 @@
                             x-on:click="$wire.openTableViewQuickFilter({{ Js::from($chip['name']) }})"
                             x-on:keydown.enter.prevent="$wire.openTableViewQuickFilter({{ Js::from($chip['name']) }}); toggle($event)"
                             x-on:keydown.space.prevent="$wire.openTableViewQuickFilter({{ Js::from($chip['name']) }}); toggle($event)"
-                            :aria-label="__('table-views::quick-filters.edit', ['filter' => strip_tags((string) $chip['filter']->getLabel())])"
+                            :aria-label="__('table-views::quick-filters.edit', ['filter' => strip_tags((string) ($chip['active'] ? $chip['label'] : $chip['filter']->getLabel()))])"
                         >
                             {{ $chip['label'] }}
                             <x-filament::icon
@@ -90,9 +90,14 @@
                         </div>
 
                         @if ($form = $this->getTableViewQuickFilterForm($chip['name']))
-                            {{ $form }}
+                            <div wire:key="table-views-quick-filter-form-{{ $this->getId() }}-{{ $chip['name'] }}">
+                                {{ $form }}
+                            </div>
                         @else
-                            <div class="flex justify-center py-2">
+                            <div
+                                class="flex justify-center py-2"
+                                wire:key="table-views-quick-filter-loading-{{ $this->getId() }}-{{ $chip['name'] }}"
+                            >
                                 <x-filament::loading-indicator class="h-5 w-5 text-gray-400" />
                             </div>
                         @endif

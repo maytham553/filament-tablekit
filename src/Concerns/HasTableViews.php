@@ -2,6 +2,7 @@
 
 namespace Elite\TableViews\Concerns;
 
+use Closure;
 use Elite\TableViews\Actions\DeleteTableViewAction;
 use Elite\TableViews\Actions\EditTableViewAction;
 use Elite\TableViews\Actions\ManageTableViewsAction;
@@ -67,6 +68,30 @@ trait HasTableViews
     protected ?array $cachedTablePresets = null;
 
     protected ?TableViewCatalog $cachedTableViewCatalog = null;
+
+    /**
+     * Livewire lets the browser call any public method except a few lifecycle names, so the trait hooks, which must be public, are refused here.
+     */
+    public function callHasTableViews(string $methodName, array $params, Closure $returnEarly): void
+    {
+        if (in_array($methodName, ['mountHasTableViews', 'bootedHasTableViews', 'renderingHasTableViews', 'callHasTableViews'], true)) {
+            $returnEarly();
+        }
+    }
+
+    /** The table can be rebuilt in the middle of a request (`resetTable()`), so what this plugin changes on it is put back before it renders. */
+    public function renderingHasTableViews(): void
+    {
+        if (! isset($this->table)) {
+            return;
+        }
+
+        $this->installTableViewSortWrapper();
+
+        if ($this->isTableViewQuickFiltersEnabled()) {
+            $this->getTable()->hiddenFilterIndicators();
+        }
+    }
 
     public function mountHasTableViews(): void
     {
@@ -1095,9 +1120,9 @@ trait HasTableViews
     }
 
     /**
-     * @param  \Closure(TableViewPreferences): bool  $change
+     * @param  Closure(TableViewPreferences): bool  $change
      */
-    protected function changeTableViewPreferences(\Closure $change): void
+    protected function changeTableViewPreferences(Closure $change): void
     {
         $this->forgetCachedTableViews();
 

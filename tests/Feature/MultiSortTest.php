@@ -5,6 +5,7 @@ use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersColumnGroups;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersOneSortable;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3DefaultSort;
+use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3HiddenSortable;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Off;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Persistent;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Reorderable;
@@ -670,6 +671,13 @@ describe('switches', function () {
     });
 });
 
+function orderBySql($component): string
+{
+    $sql = $component->instance()->getFilteredSortedTableQuery()->toSql();
+
+    return substr($sql, strpos($sql, 'order by'));
+}
+
 describe('lifecycle hooks called from the browser', function () {
     it('keeps the sorts working when a client calls a boot hook', function (string $hook) {
         $component = Livewire::test(ListOrdersPhase3::class)
@@ -685,6 +693,33 @@ describe('lifecycle hooks called from the browser', function () {
             ->and(queryReferences($component))->toBe($expected)
             ->and($component->html())->not->toBeEmpty();
     })->with(['bootedHasTableViews', 'mountHasTableViews']);
+
+    it('keeps one wrapper and the same order when a client calls any trait hook', function (string $hook) {
+        $component = Livewire::test(ListOrdersPhase3::class)
+            ->call('addTableViewSort', 'reference')
+            ->call('addTableViewSort', 'customer_name')
+            ->call('addTableViewSort', 'amount');
+
+        $before = orderBySql($component);
+
+        $component->call($hook)->call('addTableViewSort', 'status')->call('removeTableViewSort', 'status');
+
+        expect(orderBySql($component))->toBe($before)
+            ->and($before)->toContain('order by "reference" asc, "customer_name" asc, "amount" asc')
+            ->and(queryReferences($component))->toBe(expectedReferences([['reference', 'asc'], ['customer_name', 'asc'], ['amount', 'asc']]));
+    })->with(['mountHasTableViews', 'bootedHasTableViews', 'renderingHasTableViews', 'callHasTableViews']);
+
+    it('keeps the extra sorts and the header priority after Filament rebuilds the table in resetTable()', function () {
+        $component = Livewire::test(ListOrdersPhase3::class)
+            ->call('addTableViewSort', 'reference')
+            ->call('addTableViewSort', 'customer_name')
+            ->call('addTableViewSort', 'amount');
+
+        $component->call('resetTable');
+
+        expect(queryReferences($component))->toBe(expectedReferences([['reference', 'asc'], ['customer_name', 'asc'], ['amount', 'asc']]))
+            ->and($component->instance()->getTable()->getColumn('reference')->getExtraHeaderAttributeBag()->get('data-sort-priority'))->toEqual(1);
+    });
 
     it('installs the sort wrapper once per table object', function () {
         $component = Livewire::test(ListOrdersPhase3::class)->call('addTableViewSort', 'customer_name');
@@ -711,4 +746,38 @@ it('ignores a client call of the mount hook once the component has booted', func
     $instance->bootedHasTableViews();
 
     expect($property->getValue($instance))->toBeFalse();
+});
+
+describe('a sortable column the user cannot see', function () {
+    it('never reaches the query', function () {
+        $component = Livewire::test(ListOrdersPhase3HiddenSortable::class);
+
+        expect(callProtected($component, 'getTableViewSortableColumns'))->not->toHaveKey('customer_id');
+
+        $component->call('addTableViewSort', 'customer_id');
+        expect(sortsOf($component))->toBe([])->and(orderBySql($component))->not->toContain('customer_id');
+
+        $component->call('addTableViewSort', 'reference')->call('addTableViewSort', 'customer_id');
+        expect(array_column(sortsOf($component), 'column'))->toBe(['reference'])->and(orderBySql($component))->not->toContain('customer_id');
+
+        $component->call('sortTable', 'customer_id');
+        expect(sortsOf($component))->toBe([])->and(orderBySql($component))->not->toContain('customer_id');
+    });
+
+    it('is dropped from an applied view and from the url', function () {
+        $view = storeView(auth()->id(), ['sorts' => [
+            ['column' => 'customer_id', 'direction' => 'asc'],
+            ['column' => 'reference', 'direction' => 'asc'],
+            ['column' => 'amount', 'direction' => 'desc'],
+        ]], ['resource' => ListOrdersPhase3HiddenSortable::class]);
+
+        $component = Livewire::test(ListOrdersPhase3HiddenSortable::class)->call('applyTableView', $view->id);
+
+        expect(array_column(sortsOf($component), 'column'))->toBe(['reference', 'amount'])
+            ->and(orderBySql($component))->not->toContain('customer_id');
+
+        $reloaded = Livewire::withQueryParams(['sort' => 'customer_id:asc', 'sorts' => 'customer_id:asc,amount:asc'])->test(ListOrdersPhase3HiddenSortable::class);
+
+        expect(orderBySql($reloaded))->not->toContain('customer_id');
+    });
 });

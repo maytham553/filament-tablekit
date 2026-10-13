@@ -314,13 +314,46 @@ trait HasQuickFilterTableViews
     }
 
     /**
-     * Filters that define no indicator (a plain `form()` filter) still count as active while their applied state holds a value.
+     * Filters that define no indicator (a plain `form()` filter) still count as active while their applied state holds a value that is not the field's own
+     * default: Filament fills the defaults on the first load, and that alone is not something the user applied.
      */
     protected function hasTableViewFilterState(string $name): bool
     {
         $state = $this->getTableFilterState($name);
 
-        return is_array($state) && array_filter(Arr::flatten($state), fn (mixed $value): bool => filled($value) && $value !== false) !== [];
+        if (! is_array($state)) {
+            return false;
+        }
+
+        $defaults = Arr::dot($this->getTableViewFilterDefaultState($name));
+
+        foreach (Arr::dot($state) as $key => $value) {
+            if (blank($value) || $value === false) {
+                continue;
+            }
+
+            $default = $defaults[$key] ?? null;
+
+            if (! (is_scalar($value) && is_scalar($default) && (string) $value === (string) $default)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array<string, mixed> the defaults of the filter's own form fields
+     */
+    protected function getTableViewFilterDefaultState(string $name): array
+    {
+        $defaults = [];
+
+        foreach ($this->getTableFiltersForm()->getComponent($name)?->getChildComponentContainer()->getFlatFields(withHidden: true) ?? [] as $key => $field) {
+            Arr::set($defaults, (string) $key, $field->getDefaultState());
+        }
+
+        return $defaults;
     }
 
     /**

@@ -7,6 +7,7 @@ use Elite\TableViews\Tests\Fixtures\Order;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersNoToggles;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
+use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3DefaultedFilter;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Deferred;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Indicators;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Off;
@@ -439,6 +440,47 @@ describe('indicators', function () {
         expect(chipHtml($component->html(), 'noind'))->toContain('data-active="true"');
     });
 
+    it('does not draw a filter as active only because its field has a default', function () {
+        $component = Livewire::test(ListOrdersPhase3DefaultedFilter::class);
+
+        expect($component->get('tableFilters.period.p'))->toBe('all')
+            ->and(chipNames($component->html()))->not->toContain('period');
+
+        $component->set('tableFilters.period.p', 'week');
+
+        expect(chipHtml($component->html(), 'period'))->toContain('data-active="true"');
+
+        $component->set('tableFilters.period.p', 'all');
+
+        expect(chipNames($component->html()))->not->toContain('period');
+    });
+
+    it('names the indicator in the chip\'s accessible label', function () {
+        $component = Livewire::test(ListOrdersPhase3::class)->set('tableFilters.status.value', 'paid');
+
+        expect(chipHtml($component->html(), 'status'))->toMatch('/aria-label="Edit Status: [^"]*Paid[^"]*"/');
+
+        app()->setLocale('ar');
+
+        $arabic = Livewire::test(ListOrdersPhase3::class)->set('tableFilters.status.value', 'paid');
+
+        expect(chipHtml($arabic->html(), 'status'))->toMatch('/aria-label="تعديل Status: [^"]*Paid[^"]*"/');
+    });
+
+    it('keeps the loading line and the form under different wire keys', function () {
+        $component = Livewire::test(ListOrdersPhase3::class);
+
+        $closed = chipHtml($component->html(), 'status');
+
+        expect($closed)->toMatch('/wire:key="table-views-quick-filter-loading-[^"]+-status"/')
+            ->and($closed)->not->toContain('table-views-quick-filter-form-');
+
+        $opened = chipHtml($component->call('openTableViewQuickFilter', 'status')->html(), 'status');
+
+        expect($opened)->toMatch('/wire:key="table-views-quick-filter-form-[^"]+-status"/')
+            ->and($opened)->not->toContain('table-views-quick-filter-loading-');
+    });
+
     it('does not treat an off toggle as active', function () {
         $component = Livewire::test(ListOrdersPhase3::class)->set('tableFilters.big.isActive', false);
 
@@ -447,6 +489,12 @@ describe('indicators', function () {
 });
 
 describe('Filament\'s own bar', function () {
+    it('stays hidden after resetTable() rebuilds the table', function () {
+        $table = Livewire::test(ListOrdersPhase3::class)->call('resetTable')->instance()->getTable();
+
+        expect((fn () => $this->areFilterIndicatorsHidden)->call($table))->toBeTrue();
+    });
+
     it('stays hidden when the table calls hiddenFilterIndicators(false)', function () {
         ListOrdersPhase3ShowsIndicators::$hide = false;
 

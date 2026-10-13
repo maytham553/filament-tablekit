@@ -54,6 +54,8 @@ trait HasMultiSortTableViews
      */
     protected function getTableViewSortableColumns(): array
     {
+        $this->installTableViewSortWrapper();
+
         return $this->cachedTableViewSortableColumns ??= array_filter(
             $this->getTable()->getColumns(),
             fn (Column $column): bool => $column->isSortable() && ! $column->isHidden(),
@@ -62,11 +64,23 @@ trait HasMultiSortTableViews
 
     protected function bootTableViewSorts(): void
     {
-        if ($this->tableViewSortsTable === $this->getTable()) {
+        $this->installTableViewSortWrapper();
+
+        if ($this->isTableViewMultiSortEnabled()) {
+            $this->restoreTableViewSortsFromSession();
+        }
+    }
+
+    /**
+     * Idempotent per `Table` object: a rebuilt table (Filament's `resetTable()`) gets its own wrapper, the same table never gets a second one.
+     */
+    protected function installTableViewSortWrapper(): void
+    {
+        if (! isset($this->table) || $this->tableViewSortsTable === $this->table) {
             return;
         }
 
-        $this->tableViewSortsTable = $this->getTable();
+        $this->tableViewSortsTable = $this->table;
         $this->tableViewOriginalSortColumns = [];
         $this->cachedTableViewSortableColumns = null;
 
@@ -88,8 +102,6 @@ trait HasMultiSortTableViews
 
             $column->extraHeaderAttributes(fn (): array => $this->getTableViewSortHeaderAttributes($name), merge: true);
         }
-
-        $this->restoreTableViewSortsFromSession();
     }
 
     /**
