@@ -72,11 +72,47 @@ return [
         'max_name_length' => 100,
     ],
 
-    'colors' => ['primary', 'gray', 'success', 'warning', 'danger', 'info'],
+    // Swatches offered in the color picker, in this order. Filament's own names plus Tailwind palettes the plugin registers
+    // (unless the app already registered the same name). A color Filament does not know is not offered.
+    // The stored value is the name, so views saved with any of these keep working.
+    'colors' => [
+        'primary', 'gray', 'success', 'warning', 'danger', 'info',
+        'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo',
+        'violet', 'purple', 'fuchsia', 'pink', 'rose', 'slate',
+    ],
 
+    // Icon keys offered in the icon picker, in this order. Each key is the Filament icon alias `table-views::icons.<key>`
+    // (heroicon default, remappable); a key without an alias is not offered. Add your own with
+    // FilamentIcon::register(['table-views::icons.rocket' => '...']) plus the label in table-views::icons.rocket.
     'icons' => [
-        'star', 'heart', 'bookmark', 'flag', 'bolt', 'fire', 'funnel', 'clock', 'user', 'users',
-        'tag', 'eye', 'chart-bar', 'currency', 'check-circle', 'warning', 'folder', 'inbox',
+        // status and highlights
+        'star', 'heart', 'flag', 'bookmark', 'fire', 'bolt', 'sparkles', 'trophy', 'rocket', 'light-bulb', 'thumb-up',
+        'thumb-down', 'smile', 'check-circle', 'x-circle', 'warning', 'exclamation-circle', 'info', 'question',
+        'no-symbol', 'shield-check', 'shield-exclamation', 'lock', 'unlock',
+        // people
+        'user', 'users', 'user-circle', 'user-group', 'user-plus', 'identification', 'academic-cap',
+        // commerce and finance
+        'currency', 'currency-dollar', 'credit-card', 'wallet', 'receipt', 'shopping-cart', 'shopping-bag', 'store',
+        'gift', 'ticket', 'scale', 'calculator', 'briefcase', 'bank', 'cube', 'truck',
+        // time
+        'clock', 'calendar', 'calendar-days', 'bell', 'bell-alert', 'refresh', 'play',
+        // documents
+        'document', 'document-duplicate', 'document-check', 'document-search', 'clipboard', 'clipboard-list',
+        'clipboard-check', 'newspaper', 'book', 'paperclip', 'pencil', 'edit', 'folder', 'archive', 'inbox',
+        'printer',
+        // communication
+        'envelope', 'chat', 'chat-bubbles', 'phone', 'paper-airplane', 'megaphone', 'share', 'link',
+        // places
+        'map-pin', 'map', 'globe', 'globe-region', 'building-office', 'building-office-2', 'home',
+        // charts and data
+        'chart-bar', 'chart-pie', 'chart-line', 'trending-up', 'trending-down', 'table',
+        // organize
+        'tag', 'funnel', 'search', 'eye', 'eye-slash', 'list', 'queue', 'squares', 'stack', 'adjustments',
+        // arrows
+        'arrow-up', 'arrow-down', 'arrow-left', 'arrow-right', 'swap', 'undo', 'download', 'upload',
+        // tools and misc
+        'cog', 'wrench', 'key', 'cloud', 'code', 'sun', 'moon', 'camera', 'photo', 'language', 'fingerprint',
+        'plus-circle', 'minus-circle', 'trash',
     ],
 
     'persist_active_view_in_session' => false,

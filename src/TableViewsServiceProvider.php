@@ -4,7 +4,9 @@ namespace Elite\TableViews;
 
 use Closure;
 use Elite\TableViews\Concerns\HasTableViews;
+use Elite\TableViews\Support\ColorPalette;
 use Elite\TableViews\Support\FavoriteFilters;
+use Elite\TableViews\Support\IconCatalog;
 use Elite\TableViews\Support\TableViewsOptions;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Support\Facades\FilamentView;
@@ -32,6 +34,11 @@ class TableViewsServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews('table-views')
             ->hasTranslations();
+    }
+
+    public function packageRegistered(): void
+    {
+        $this->app->isBooted() ? ColorPalette::register() : $this->app->booting(ColorPalette::register(...));
     }
 
     public function packageBooted(): void
@@ -193,36 +200,10 @@ class TableViewsServiceProvider extends PackageServiceProvider
             'table-views::quick-filters.clear' => 'heroicon-m-x-mark',
             'table-views::columns.open' => 'heroicon-m-view-columns',
             'table-views::columns.reset' => 'heroicon-m-arrow-uturn-left',
-            'table-views::icons.star' => 'heroicon-m-star',
-            'table-views::icons.heart' => 'heroicon-m-heart',
-            'table-views::icons.bookmark' => 'heroicon-m-bookmark',
-            'table-views::icons.flag' => 'heroicon-m-flag',
-            'table-views::icons.bolt' => 'heroicon-m-bolt',
-            'table-views::icons.fire' => 'heroicon-m-fire',
-            'table-views::icons.funnel' => 'heroicon-m-funnel',
-            'table-views::icons.clock' => 'heroicon-m-clock',
-            'table-views::icons.user' => 'heroicon-m-user',
-            'table-views::icons.users' => 'heroicon-m-users',
-            'table-views::icons.tag' => 'heroicon-m-tag',
-            'table-views::icons.eye' => 'heroicon-m-eye',
-            'table-views::icons.chart-bar' => 'heroicon-m-chart-bar',
-            'table-views::icons.currency' => 'heroicon-m-banknotes',
-            'table-views::icons.check-circle' => 'heroicon-m-check-circle',
-            'table-views::icons.warning' => 'heroicon-m-exclamation-triangle',
-            'table-views::icons.folder' => 'heroicon-m-folder',
-            'table-views::icons.inbox' => 'heroicon-m-inbox',
-            'table-views::icons.truck' => 'heroicon-m-truck',
-            'table-views::icons.calendar' => 'heroicon-m-calendar',
-            'table-views::icons.shopping-cart' => 'heroicon-m-shopping-cart',
-            'table-views::icons.archive' => 'heroicon-m-archive-box',
-            'table-views::icons.document' => 'heroicon-m-document-text',
-            'table-views::icons.bell' => 'heroicon-m-bell',
-            'table-views::icons.home' => 'heroicon-m-home',
-            'table-views::icons.globe' => 'heroicon-m-globe-alt',
         ];
 
         FilamentIcon::register(array_filter(
-            $defaults,
+            [...$defaults, ...IconCatalog::aliases()],
             fn (string $icon, string $alias): bool => FilamentIcon::resolve($alias) === null,
             ARRAY_FILTER_USE_BOTH,
         ));

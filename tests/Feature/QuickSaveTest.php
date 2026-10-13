@@ -127,7 +127,7 @@ it('rejects colors and icons that are not offered', function () {
     $component = Livewire::test(ListOrders::class);
 
     saveAttempt($component, ['name' => 'X', 'color' => 'hotpink'])->assertHasActionErrors(['color']);
-    saveAttempt($component, ['name' => 'X', 'color' => 'primary', 'icon' => 'rocket'])->assertHasActionErrors(['icon']);
+    saveAttempt($component, ['name' => 'X', 'color' => 'primary', 'icon' => 'not-an-icon'])->assertHasActionErrors(['icon']);
 
     expect(TableView::count())->toBe(0);
 });

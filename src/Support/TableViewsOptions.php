@@ -2,8 +2,11 @@
 
 namespace Elite\TableViews\Support;
 
+use Closure;
 use Elite\TableViews\TableViewsPlugin;
 use Filament\Facades\Filament;
+use Filament\Support\Facades\FilamentColor;
+use Filament\Support\Facades\FilamentIcon;
 
 class TableViewsOptions
 {
@@ -36,16 +39,37 @@ class TableViewsOptions
         return $this->plugin?->isQuickSaveSlideOver() ?? (bool) config('table-views.quick_save.slide_over', false);
     }
 
-    /** @return array<string> */
+    /**
+     * The colors the picker offers and validation accepts: the configured list, minus names Filament has no color for.
+     *
+     * @return array<string>
+     */
     public function colors(): array
     {
-        return $this->plugin?->getColors() ?? array_values(config('table-views.colors', []));
+        $known = FilamentColor::getColors();
+
+        return $this->onlyStrings($this->plugin?->getColors() ?? config('table-views.colors', []), fn (string $color): bool => array_key_exists($color, $known));
     }
 
-    /** @return array<string> */
+    /**
+     * The icon keys the picker offers and validation accepts: the configured list, minus keys without an alias.
+     *
+     * @return array<string>
+     */
     public function icons(): array
     {
-        return $this->plugin?->getIcons() ?? array_values(config('table-views.icons', []));
+        return $this->onlyStrings($this->plugin?->getIcons() ?? config('table-views.icons', []), fn (string $icon): bool => FilamentIcon::resolve("table-views::icons.{$icon}") !== null);
+    }
+
+    /**
+     * @return array<string>
+     */
+    protected function onlyStrings(mixed $values, Closure $keep): array
+    {
+        return array_values(array_unique(array_filter(
+            is_array($values) ? $values : [],
+            fn (mixed $value): bool => is_string($value) && $value !== '' && $keep($value),
+        )));
     }
 
     public function persistActiveViewInSession(): bool

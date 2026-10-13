@@ -1,5 +1,7 @@
 <?php
 
+use Elite\TableViews\Support\IconCatalog;
+
 function flattenKeys(array $array, string $prefix = ''): array
 {
     $keys = [];
@@ -64,6 +66,19 @@ it('covers every configured color and icon', function () {
 
     expect(array_diff($config['colors'], array_keys($colors)))->toBe([])
         ->and(array_diff($config['icons'], array_keys($icons)))->toBe([]);
+});
+
+it('translates every catalog icon, its keywords and every color in en and ar', function () {
+    foreach (['en', 'ar'] as $locale) {
+        $icons = require __DIR__."/../../resources/lang/{$locale}/icons.php";
+        $keywords = require __DIR__."/../../resources/lang/{$locale}/icon-keywords.php";
+        $colors = require __DIR__."/../../resources/lang/{$locale}/colors.php";
+
+        expect(array_diff(array_keys(IconCatalog::ICONS), array_keys($icons)))->toBe([], "{$locale} icon labels")
+            ->and(array_diff(array_keys(IconCatalog::ICONS), array_keys($keywords)))->toBe([], "{$locale} icon keywords")
+            ->and(array_diff(array_keys($icons), array_keys(IconCatalog::ICONS)))->toBe([], "{$locale} stray icon labels")
+            ->and(array_diff(config('table-views.colors'), array_keys($colors)))->toBe([], "{$locale} colors");
+    }
 });
 
 it('renders arabic labels when the locale is ar', function () {
