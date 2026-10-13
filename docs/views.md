@@ -136,7 +136,7 @@ The marker is written by the server and locked against Livewire updates.
 
 On a fresh load the marker is read back through the same checks as applying a view. Only visible presets and the user's own views count. Anything else is ignored and the normal start view applies.
 
-Then the table state in the URL (filters, sort, search, grouping, tab) is put back on top of the view. So the URL state wins, and only the active marker and a preset's hidden query come back. A link with `view` but no other table state restores the view, and it beats the startup default. Absent table parameters mean the table's own defaults.
+Then the table state in the URL (filters, sort, search, grouping, tab) is put back on top of the view. So the URL state wins, and only the active marker and a preset's hidden query come back. A link with only `?view=` marks the view (and a preset's hidden query) as active. The table shows what the URL says, or its defaults. The view's own filters and search are not applied from a bare marker. The marker still beats the startup default.
 
 Relation managers and table widgets have no URL for the marker. A reload there starts from the usual start view.
 

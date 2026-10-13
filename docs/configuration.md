@@ -15,9 +15,10 @@ php artisan vendor:publish --tag=tablekit-config
 
 ## Plugin options
 
-All options are optional. Options marked `bool|Closure` also accept a closure that returns a boolean.
+All options are optional. Options marked `bool|Closure` also accept a closure that returns a boolean. The chain below shows many options at once. Use only the ones you need. `connection()` is commented out because it throws an error when the connection you name does not exist.
 
 ```php
+use App\Models\User;
 use TableKit\TableKitPlugin;
 
 $panel->plugin(
@@ -26,9 +27,9 @@ $panel->plugin(
         ->quickSaveSlideOver()
         ->colors(['primary', 'success', 'rose'])
         ->icons(['star', 'flag'])
-        ->userModel(App\Models\User::class)
+        ->userModel(User::class)
         ->persistActiveViewInSession()
-        ->connection('reporting')
+        // ->connection('reporting')   // only if a "reporting" connection exists in config/database.php
         ->maxViewsPerTable(100)
         ->viewManager(enabled: true, slideOver: false, position: 'end')
         ->presetViewsManageable(true)
@@ -104,7 +105,7 @@ These keys are in `config/tablekit.php`.
 
 ## Turn features off for one table
 
-Override a static method on the page, relation manager or widget that uses the trait:
+Override a static method on the page, relation manager or widget that uses the trait. These methods can only turn a feature **off** for that table. They default to `true`, and the result is combined with the global setting: a feature runs only when both say yes. Returning `true` does not turn a feature on when the config or plugin has it off.
 
 ```php
 public static function multiSortTableViews(): bool
@@ -114,7 +115,7 @@ public static function multiSortTableViews(): bool
 
 public static function quickFiltersTableViews(): bool
 {
-    return true;
+    return false;
 }
 
 public static function columnOrderTableViews(): bool
@@ -125,9 +126,11 @@ public static function columnOrderTableViews(): bool
 
 | Method | What it controls |
 | --- | --- |
-| `multiSortTableViews()` | The Sort button. Default: the global setting. |
-| `quickFiltersTableViews()` | The quick filter chips. Default: the global setting. |
-| `columnOrderTableViews()` | Saving and applying column order. Default: the global setting. |
+| `multiSortTableViews()` | The Sort button. `false` turns it off for this table. |
+| `quickFiltersTableViews()` | The quick filter chips. `false` keeps Filament's own indicator bar for this table. |
+| `columnOrderTableViews()` | Saving and applying column order. `false` turns it off for this table. |
+
+To use a feature on only some tables, turn it on globally and return `false` on the others.
 
 ## Other hooks on the component
 
@@ -139,4 +142,26 @@ public static function columnOrderTableViews(): bool
 ## Table-wide notes
 
 - Views are stored per user, per tenant (`Filament::getTenant()`) and per component class.
-- Declare `InteractsWithTable` before `HasTableKit` in a custom Livewire class. `ListRecords`, relation managers and `TableWidget` already include it. The remembered-view restore is skipped when the table is not ready yet.
+- `ListRecords`, relation managers and `TableWidget` already have everything TableKit needs.
+- A custom Livewire component needs the table, actions and schemas contracts and traits (the example below).
+- Without the actions contract and trait, Quick Save and the other modal actions fail with a "property not found" error.
+- Declare `InteractsWithTable` before `HasTableKit`. This is advice: it has not been proven to matter, but the remembered-view restore is skipped when the table is not ready yet.
+
+```php
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Contracts\HasSchemas;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Livewire\Component;
+use TableKit\Concerns\HasTableKit;
+
+class OrdersTable extends Component implements HasActions, HasSchemas, HasTable
+{
+    use InteractsWithActions;
+    use InteractsWithSchemas;
+    use InteractsWithTable;
+    use HasTableKit;
+}
+```

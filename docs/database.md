@@ -29,17 +29,27 @@ Run the `tablekit_preferences` migration before you deploy code that defines pre
 
 ### Publish the migrations
 
-If your app owns its migrations, turn off the automatic loading and publish them:
+If your app owns its migrations, do these three steps **in this order**:
 
-```php
-// config/tablekit.php
-'load_migrations' => false,
-```
+1. Turn off the automatic loading. Publish the config first if you have not (`php artisan vendor:publish --tag=tablekit-config`), then set it in `config/tablekit.php`:
 
-```bash
-php artisan vendor:publish --tag=tablekit-migrations   # both migration files
-php artisan vendor:publish --tag=tablekit-config       # optional
-```
+   ```php
+   'load_migrations' => false,
+   ```
+
+2. Publish the migrations:
+
+   ```bash
+   php artisan vendor:publish --tag=tablekit-migrations   # both migration files
+   ```
+
+3. Run them:
+
+   ```bash
+   php artisan migrate
+   ```
+
+If you publish while loading is still on, `php artisan migrate` sees two copies of each migration (the package's and yours) and fails with "table already exists" on the second one. The same happens if you already ran `php artisan migrate` and publish afterwards. In both cases, set `load_migrations` to `false` and either delete the published copies, or rename the rows in your `migrations` table to the published file names. Do not run the copies on top of existing tables.
 
 ## Database connection
 
@@ -53,13 +63,15 @@ php artisan vendor:publish --tag=tablekit-config       # optional
 TableKitPlugin::make()->connection('reporting')
 ```
 
-The migration uses `config('tablekit.connection')`, or the default connection when it is `null`. For a per-panel connection, run it against that connection:
+The migration uses `config('tablekit.connection')`, or the default connection when it is `null`. For a per-panel connection, run only the TableKit migrations against that connection. `--database` alone would run **all** of your app's migrations there, so add `--path`:
 
 ```bash
-php artisan migrate --database=reporting
+php artisan migrate --database=reporting --path=vendor/tablekit/filament-tablekit/database/migrations
 ```
 
 Each connection that serves a panel with the plugin needs its own TableKit tables.
+
+`TableView::user()` reads the user from the pinned connection too. If your users live on another connection, set `$connection` on the user model.
 
 ## Tenancy
 
@@ -105,9 +117,10 @@ Deleting a user view also deletes its preference rows.
 The `state` column holds JSON like this:
 
 ```json
-{"v":1,"filters":{},"search":"","columnSearches":{},"sort":{"column":null,"direction":null},"toggledColumns":{},"grouping":{"column":null,"direction":null}}
+{"v":1,"filters":{"status":{"value":null}},"search":"","columnSearches":{},"sort":{"column":null,"direction":null},"toggledColumns":{},"grouping":{"column":null,"direction":null}}
 ```
 
+- `filters` holds each filter's own state, under the filter's name. Its shape depends on the filter, for example `{"status":{"value":"shipped"}}` or `{"ordered":{"from":null,"until":null}}`.
 - Empty maps are stored as `{}`.
 - Readers ignore unknown keys and treat missing keys as empty.
 - `v` is the format version. It stays at 1.

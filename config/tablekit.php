@@ -50,20 +50,20 @@ return [
     // Let each user mark one view per table as their default.
     'managed_default_views' => false,
 
-    // Sort by several columns. Per table: override `multiSortTableViews()` on the component.
+    // Sort by several columns. Per table: `multiSortTableViews()` can only turn it off (return false); it cannot turn it on.
     'multi_sort' => [
         'enabled' => true,
         'max' => 5,
     ],
 
-    // Clickable filter chips (replaces Filament's indicator bar). Per table: `quickFiltersTableViews()`.
+    // Clickable filter chips (replaces Filament's indicator bar). Per table: `quickFiltersTableViews()` can only turn it off (return false).
     'quick_filters' => [
         'enabled' => false,
         // A multi-select chip shows this many values, then "& N more". 0 = show all.
         'limit_labels' => 2,
     ],
 
-    // Save and apply the column order (made in Filament's column manager, `reorderableColumns()`) in views and presets. Per table: `columnOrderTableViews()`.
+    // Save and apply the column order (made in Filament's column manager, `reorderableColumns()`) in views and presets. Per table: `columnOrderTableViews()` can only turn it off (return false).
     'column_reordering' => [
         'enabled' => true,
     ],

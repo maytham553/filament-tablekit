@@ -4,7 +4,7 @@ These are the known limits of TableKit for Filament 4.
 
 ## What a view can hold
 
-- Records per page and the reordering switch (`isTableReordering`) are not saved. Applying a view turns reordering off.
+- Records per page are not saved in a view. Row reordering mode (`isTableReordering`, dragging records to change their position) is not saved either: applying a view turns it off. This is about rows, not columns: column order **is** saved in views (see [Columns](columns.md)).
 - A saved view never contains a preset's hidden query.
 - Each view can hold up to `state.max_bytes` (64 KB by default).
 - A column added after a view was saved is shown or hidden by its own default. Names that are no longer toggleable columns are dropped.
