@@ -17,7 +17,7 @@ function columnNames(array $items): array
     return collect($items)->flatMap(fn (array $item) => $item['type'] === 'group' ? [$item['name'] => collect($item['columns'])->pluck('name')->all()] : [$item['name']])->all();
 }
 
-describe('toggled columns in the Filament 4 column manager', function () {
+describe('toggled columns in the Filament 4 and 5 column manager', function () {
     it('saves and applies toggles of columns inside a column group', function () {
         $source = Livewire::test(ListOrdersColumnGroups::class);
 

@@ -142,7 +142,7 @@ it('asks the browser to always show only the parts a view touched', function () 
     expect($always)->toContain('tableSearch')->not->toContain('tableSort')->not->toContain('tableGrouping')->not->toContain('activeTab');
 });
 
-it('reads the filters, search, sort, grouping and tab from the parameters Filament 4 uses', function () {
+it('reads the filters, search, sort, grouping and tab from the parameters Filament 4 and 5 use', function () {
     $effects = Livewire::test(ListOrders::class)->effects['url'];
 
     expect(collect($effects)->map(fn ($entry) => $entry['as'])->only(['tableFilters', 'tableSearch', 'tableSort', 'tableGrouping', 'activeTab', 'isTableReordering'])->all())

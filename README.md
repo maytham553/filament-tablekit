@@ -1,10 +1,12 @@
 # elite/filament-table-views
 
-Saved table views for Filament v4: save the current filters, search, column searches, sort, toggled columns and grouping as a named view, and reload it in one click from a favorites bar above the table.
+Saved table views for Filament v5: save the current filters, search, column searches, sort, toggled columns and grouping as a named view, and reload it in one click from a favorites bar above the table.
 
-This branch (`filament-v4`) is **Phase 1 only**: user views, Quick Save, favorites bar, Default reset, active/modified marker, optional remembered view. Preset views, the view manager, managed defaults, multi-sort, quick filters and column reordering from the Filament v3 plugin are not ported yet.
+This branch (`filament-v5`) is **Phase 1 only**: user views, Quick Save, favorites bar, Default reset, active/modified marker, optional remembered view. Preset views, the view manager, managed defaults, multi-sort, quick filters and column reordering from the Filament v3 plugin are not ported yet.
 
-Requires PHP 8.2+, Laravel 11.28+ / 12 / 13, Filament 4 (tested with 4.15, Livewire 3.8).
+Requires PHP 8.2+, Laravel 11.28+ / 12 / 13, Filament 5.8.4+ (tested with 5.10.1) and Livewire 4 (tested with 4.4.7). Filament 5.0.0, 5.5.0, 5.7.0 and 5.8.0 were tried and fail in the package suite before reaching plugin code (a Livewire error-bag `TypeError`), so they are excluded. The Filament 4 / Livewire 3 version of this plugin lives on the `filament-v4` branch.
+
+The plugin needs no Livewire 4 specific setup. The reload behavior relies on Livewire's `#[Url(keep: true)]` (`alwaysShow`), which Livewire 4 still has with the same browser rules.
 
 ## Install
 
@@ -84,7 +86,7 @@ Declare `InteractsWithTable` (already part of `ListRecords`, relation managers a
 
 Filters, global search, column searches, sort, which toggleable columns are shown, grouping, and (with `state.tab`) the `ListRecords` tab.
 
-Filament 4 keeps column order and visibility in one state (the column manager). A view saves and applies **visibility only**: applying a view keeps the column order the user chose. The Default button resets both visibility and order, because that is Filament's own column state reset.
+Filament 4 and 5 keep column order and visibility in one state (the column manager). A view saves and applies **visibility only**: applying a view keeps the column order the user chose. The Default button resets both visibility and order, because that is Filament's own column state reset.
 
 ## Favorites bar and Quick Save
 
@@ -94,7 +96,7 @@ On table widgets the bar sits below the heading; elsewhere above the header cont
 
 ## Remembered view and reload
 
-With `persistActiveViewInSession` the view the user last applied or saved is applied again on the next fresh load of that table. It is not applied when the URL already carries table state (`filters`, `search`, `sort`, `grouping`, `tab`, `reordering`: the Filament 4 names are read from the component's `#[Url]` attributes). A deleted view is forgotten.
+With `persistActiveViewInSession` the view the user last applied or saved is applied again on the next fresh load of that table. It is not applied when the URL already carries table state (`filters`, `search`, `sort`, `grouping`, `tab`, `reordering`: the Filament 4 and 5 names are read from the component's `#[Url]` attributes). A deleted view is forgotten.
 
 When the remembered view is applied on load, the plugin asks the browser to always write the table state that the view changed, so a reload shows the same screen even after edits that land back on the view's values or clear them (Livewire drops a URL parameter equal to its value after mount). What Filament itself persisted in the session (column visibility when it differs from the default, the sort with `persistSortInSession`) is put back on top of the view. The active marker is not part of the URL: a reload with table state in the URL shows that state without a highlighted view.
 
@@ -124,7 +126,7 @@ The `icon` column stores the key (`star`, `chart-bar`, ...), resolved through th
 {"v":1,"filters":{},"search":"","columnSearches":{},"sort":{"column":null,"direction":null},"toggledColumns":{},"grouping":{"column":null,"direction":null}}
 ```
 
-Empty maps are stored as `{}`. Readers ignore unknown keys and treat missing keys as empty. The shape is the same as the Filament v3 plugin's, so views saved there load here: a nested `toggledColumns` map (v3 stored dotted column names as nested arrays) is flattened, and sort and grouping are converted to Filament 4's `column:direction` properties on apply.
+Empty maps are stored as `{}`. Readers ignore unknown keys and treat missing keys as empty. The shape is the same as the Filament v3 plugin's, so views saved there load here: a nested `toggledColumns` map (v3 stored dotted column names as nested arrays) is flattened, and sort and grouping are converted to Filament 4 and 5's `column:direction` properties on apply.
 
 ## Limits
 

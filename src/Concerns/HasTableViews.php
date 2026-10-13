@@ -153,7 +153,7 @@ trait HasTableViews
 
     /**
      * Only a component whose own table state is URL-bound (ListRecords, ManageRelatedRecords) can have table state in the URL.
-     * The parameter names are read from the #[Url] attributes, because Filament 4 renamed them (filters, search, sort, grouping, tab, reordering).
+     * The parameter names are read from the #[Url] attributes, because Filament 4 and 5 renamed them (filters, search, sort, grouping, tab, reordering).
      */
     protected function requestHasTableViewsQueryState(): bool
     {
