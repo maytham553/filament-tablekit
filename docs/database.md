@@ -47,16 +47,16 @@ php artisan vendor:publish --tag=tablekit-config       # optional
 
 ```php
 // config/tablekit.php
-'connection' => 'kyc',
+'connection' => 'reporting',
 
 // or per panel
-TableKitPlugin::make()->connection('kyc')
+TableKitPlugin::make()->connection('reporting')
 ```
 
 The migration uses `config('tablekit.connection')`, or the default connection when it is `null`. For a per-panel connection, run it against that connection:
 
 ```bash
-php artisan migrate --database=kyc
+php artisan migrate --database=reporting
 ```
 
 Each connection that serves a panel with the plugin needs its own TableKit tables.
