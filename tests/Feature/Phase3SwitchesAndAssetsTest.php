@@ -1,14 +1,14 @@
 <?php
 
-use Elite\TableViews\Support\TableViewsOptions;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Off;
 use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Support\HtmlString;
 use Livewire\Exceptions\MethodNotFoundException;
 use Livewire\Livewire;
+use TableKit\Support\TableKitOptions;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Off;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -17,7 +17,7 @@ beforeEach(function () {
 
 describe('options', function () {
     it('has the documented defaults in config', function () {
-        $options = TableViewsOptions::resolve();
+        $options = TableKitOptions::resolve();
 
         expect($options->multiSortEnabled())->toBeTrue()
             ->and($options->maxSorts())->toBe(5)
@@ -28,20 +28,20 @@ describe('options', function () {
 
     it('resolves from config when the panel has no plugin', function () {
         Filament::setCurrentPanel(Filament::getPanel('team'));
-        config(['table-views.quick_filters.enabled' => true, 'table-views.multi_sort.max' => 3]);
+        config(['tablekit.quick_filters.enabled' => true, 'tablekit.multi_sort.max' => 3]);
 
-        expect(TableViewsOptions::resolve()->quickFiltersEnabled())->toBeTrue()
-            ->and(TableViewsOptions::resolve()->maxSorts())->toBe(3);
+        expect(TableKitOptions::resolve()->quickFiltersEnabled())->toBeTrue()
+            ->and(TableKitOptions::resolve()->maxSorts())->toBe(3);
     });
 
     it('lets the plugin override every Phase 3 option, closures included', function () {
-        TableViewsPlugin::get()
+        TableKitPlugin::get()
             ->multiSort(fn (): bool => false, max: 4)
             ->quickFilters(fn (): bool => true)
             ->limitIndicatorLabels(3)
             ->columnReordering(false);
 
-        $options = TableViewsOptions::resolve();
+        $options = TableKitOptions::resolve();
 
         expect($options->multiSortEnabled())->toBeFalse()
             ->and($options->maxSorts())->toBe(4)
@@ -51,40 +51,40 @@ describe('options', function () {
     });
 
     it('keeps the config maximum when the plugin gives none and clamps odd values', function () {
-        config(['table-views.multi_sort.max' => 7]);
-        TableViewsPlugin::get()->multiSort();
+        config(['tablekit.multi_sort.max' => 7]);
+        TableKitPlugin::get()->multiSort();
 
-        expect(TableViewsOptions::resolve()->maxSorts())->toBe(7);
+        expect(TableKitOptions::resolve()->maxSorts())->toBe(7);
 
-        TableViewsPlugin::get()->multiSort(true, 500);
+        TableKitPlugin::get()->multiSort(true, 500);
 
-        expect(TableViewsOptions::resolve()->maxSorts())->toBe(20);
+        expect(TableKitOptions::resolve()->maxSorts())->toBe(20);
 
-        TableViewsPlugin::get()->multiSort(true, 1);
+        TableKitPlugin::get()->multiSort(true, 1);
 
-        expect(TableViewsOptions::resolve()->maxSorts())->toBe(2);
+        expect(TableKitOptions::resolve()->maxSorts())->toBe(2);
     });
 
     it('turns multi-sort off by the plugin', function () {
-        TableViewsPlugin::get()->multiSort(false);
+        TableKitPlugin::get()->multiSort(false);
 
-        $component = Livewire::test(ListOrdersPhase3::class)->assertDontSeeHtml('data-table-views-sort-trigger')->call('addTableViewSort', 'amount');
+        $component = Livewire::test(ListOrdersPhase3::class)->assertDontSeeHtml('data-tablekit-sort-trigger')->call('addTableViewSort', 'amount');
 
         expect($component->get('tableSortColumn'))->toBeNull();
     });
 
     it('lets each table opt out on its own, whatever the global switches say', function () {
-        TableViewsPlugin::get()->multiSort()->quickFilters()->columnReordering();
+        TableKitPlugin::get()->multiSort()->quickFilters()->columnReordering();
 
         $off = Livewire::test(ListOrdersPhase3Off::class)->html();
 
-        expect($off)->not->toContain('data-table-views-sort-trigger')
-            ->and($off)->not->toContain('fi-table-views-quick-filters')
+        expect($off)->not->toContain('data-tablekit-sort-trigger')
+            ->and($off)->not->toContain('fi-tablekit-quick-filters')
             ->and($off)->not->toContain('data-column-row');
 
         $on = Livewire::test(ListOrdersPhase3::class)->html();
 
-        expect($on)->toContain('data-table-views-sort-trigger')->and($on)->toContain('data-column-row');
+        expect($on)->toContain('data-tablekit-sort-trigger')->and($on)->toContain('data-column-row');
     });
 
     it('does not expose the switches to the browser', function () {
@@ -104,9 +104,9 @@ describe('options', function () {
 
 describe('icons', function () {
     $aliases = [
-        'table-views::sort.open', 'table-views::sort.asc', 'table-views::sort.desc', 'table-views::sort.remove',
-        'table-views::quick-filters.chevron', 'table-views::quick-filters.favorite', 'table-views::quick-filters.unfavorite', 'table-views::quick-filters.clear',
-        'table-views::reorder.handle', 'table-views::columns.open', 'table-views::columns.reset',
+        'tablekit::sort.open', 'tablekit::sort.asc', 'tablekit::sort.desc', 'tablekit::sort.remove',
+        'tablekit::quick-filters.chevron', 'tablekit::quick-filters.favorite', 'tablekit::quick-filters.unfavorite', 'tablekit::quick-filters.clear',
+        'tablekit::reorder.handle', 'tablekit::columns.open', 'tablekit::columns.reset',
     ];
 
     it('registers a heroicon default for every new alias', function (string $alias) {
@@ -123,12 +123,12 @@ describe('icons', function () {
 
     it('renders a remapped alias', function () {
         FilamentIcon::register([
-            'table-views::sort.open' => new HtmlString('<svg data-test="remapped-sort"></svg>'),
-            'table-views::quick-filters.chevron' => new HtmlString('<svg data-test="remapped-chevron"></svg>'),
-            'table-views::reorder.handle' => new HtmlString('<svg data-test="remapped-up"></svg>'),
+            'tablekit::sort.open' => new HtmlString('<svg data-test="remapped-sort"></svg>'),
+            'tablekit::quick-filters.chevron' => new HtmlString('<svg data-test="remapped-chevron"></svg>'),
+            'tablekit::reorder.handle' => new HtmlString('<svg data-test="remapped-up"></svg>'),
         ]);
 
-        config(['table-views.quick_filters.enabled' => true]);
+        config(['tablekit.quick_filters.enabled' => true]);
 
         Livewire::test(ListOrdersPhase3::class)
             ->assertSeeHtml('data-test="remapped-sort"')
@@ -147,7 +147,7 @@ describe('translations', function () {
                     continue;
                 }
 
-                preg_match_all('/table-views::([a-z-]+)\.([a-z_.]+)[\'"]/', $line, $matches, PREG_SET_ORDER);
+                preg_match_all('/tablekit::([a-z-]+)\.([a-z_.]+)[\'"]/', $line, $matches, PREG_SET_ORDER);
 
                 foreach ($matches as $match) {
                     if (! str_ends_with($match[2], '.')) {
@@ -170,12 +170,12 @@ describe('translations', function () {
 
     it('renders the Phase 3 labels in arabic', function () {
         app()->setLocale('ar');
-        config(['table-views.quick_filters.enabled' => true]);
+        config(['tablekit.quick_filters.enabled' => true]);
 
         $html = Livewire::test(ListOrdersPhase3::class)->html();
 
-        expect($html)->toContain(__('table-views::sort.label'))
-            ->and($html)->toContain(__('table-views::columns.always_shown'))
-            ->and(__('table-views::quick-filters.more', ['count' => 3]))->toContain('3');
+        expect($html)->toContain(__('tablekit::sort.label'))
+            ->and($html)->toContain(__('tablekit::columns.always_shown'))
+            ->and(__('tablekit::quick-filters.more', ['count' => 3]))->toContain('3');
     });
 });

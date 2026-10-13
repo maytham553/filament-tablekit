@@ -1,9 +1,9 @@
 @php
-    use Elite\TableViews\Support\TableViewsOptions;
+    use TableKit\Support\TableKitOptions;
     use Filament\Support\Facades\FilamentIcon;
     use Illuminate\Support\Js;
 
-    $options = TableViewsOptions::resolve();
+    $options = TableKitOptions::resolve();
     $catalog = $this->getTableViewsCatalog();
     $activeId = $this->activeTableViewId;
     $activePreset = $this->activeTablePresetKey;
@@ -17,22 +17,22 @@
     $developerDefault = $this->resolveDeveloperDefaultPreset();
     $defaultActive = $activeId === null && ($activePreset === null || $activePreset === $developerDefault?->getKey());
     $activeRing = 'box-shadow: 0 0 0 2px rgb(var(--primary-500))';
-    $defaultIcon = FilamentIcon::resolve('table-views::favorites-bar.default');
+    $defaultIcon = FilamentIcon::resolve('tablekit::favorites-bar.default');
 
     $defaultBadge = $defaultPreset?->getBadge();
     $defaultTooltip = $defaultPreset?->getTooltip();
 
     if ($defaultPreset?->getIcon()) {
-        $defaultIcon = FilamentIcon::resolve('table-views::icons.' . $defaultPreset->getIcon()) ?? $defaultIcon;
+        $defaultIcon = FilamentIcon::resolve('tablekit::icons.' . $defaultPreset->getIcon()) ?? $defaultIcon;
     }
 @endphp
 
 <div
-    wire:key="table-views-bar-{{ $this->getId() }}"
-    class="fi-table-views-bar flex flex-wrap items-center gap-2 px-4 py-3 sm:px-6"
+    wire:key="tablekit-bar-{{ $this->getId() }}"
+    class="fi-tablekit-bar flex flex-wrap items-center gap-2 px-4 py-3 sm:px-6"
 >
     @if ($managerAtStart)
-        @include('table-views::manager')
+        @include('tablekit::manager')
     @endif
 
     <x-filament::button
@@ -48,7 +48,7 @@
         data-default="true"
         wire:click="applyDefaultTableView"
     >
-        {{ $defaultPreset ? $defaultPreset->getLabel() : __('table-views::favorites-bar.default') }}@if ($defaultActive && $modified)<span aria-hidden="true"> *</span><span class="sr-only">{{ __('table-views::favorites-bar.modified') }}</span>@endif
+        {{ $defaultPreset ? $defaultPreset->getLabel() : __('tablekit::favorites-bar.default') }}@if ($defaultActive && $modified)<span aria-hidden="true"> *</span><span class="sr-only">{{ __('tablekit::favorites-bar.modified') }}</span>@endif
     </x-filament::button>
 
     @foreach ($favoritePresets as $item)
@@ -62,10 +62,10 @@
             size="sm"
             :color="$item->color"
             :outlined="! $isActive"
-            :icon="$item->icon ? FilamentIcon::resolve('table-views::icons.' . $item->icon) : null"
+            :icon="$item->icon ? FilamentIcon::resolve('tablekit::icons.' . $item->icon) : null"
             :badge="$badge"
             :badge-color="$item->preset->getBadgeColor()"
-            :tooltip="$isActive && $modified ? __('table-views::favorites-bar.modified') : $tooltip"
+            :tooltip="$isActive && $modified ? __('tablekit::favorites-bar.modified') : $tooltip"
             :style="$isActive ? $activeRing : null"
             :aria-pressed="$isActive ? 'true' : 'false'"
             :data-active="$isActive ? 'true' : 'false'"
@@ -73,12 +73,12 @@
             wire:key="table-preset-{{ $item->key }}"
             wire:click="applyTablePresetView({{ Js::from($item->key) }})"
         >
-            {{ $item->label }}@if ($isActive && $modified)<span aria-hidden="true"> *</span><span class="sr-only">{{ __('table-views::favorites-bar.modified') }}</span>@endif
+            {{ $item->label }}@if ($isActive && $modified)<span aria-hidden="true"> *</span><span class="sr-only">{{ __('tablekit::favorites-bar.modified') }}</span>@endif
         </x-filament::button>
     @endforeach
 
     @if ($options->favoritesBarDivider() && $favoritePresets->isNotEmpty() && $views->isNotEmpty())
-        <div aria-hidden="true" class="fi-table-views-divider h-6 w-px bg-gray-200 dark:bg-white/20"></div>
+        <div aria-hidden="true" class="fi-tablekit-divider h-6 w-px bg-gray-200 dark:bg-white/20"></div>
     @endif
 
     @foreach ($views as $view)
@@ -90,21 +90,21 @@
             size="sm"
             :color="$view->resolvedColor()"
             :outlined="! $isActive"
-            :icon="$view->icon ? FilamentIcon::resolve('table-views::icons.' . $view->icon) : null"
-            :title="$isActive && $modified ? __('table-views::favorites-bar.modified') : null"
+            :icon="$view->icon ? FilamentIcon::resolve('tablekit::icons.' . $view->icon) : null"
+            :title="$isActive && $modified ? __('tablekit::favorites-bar.modified') : null"
             :style="$isActive ? $activeRing : null"
             :aria-pressed="$isActive ? 'true' : 'false'"
             :data-active="$isActive ? 'true' : 'false'"
             wire:key="table-view-{{ $view->getKey() }}"
             wire:click="applyTableView({{ $view->getKey() }})"
         >
-            {{ $view->name }}@if ($isActive && $modified)<span aria-hidden="true"> *</span><span class="sr-only">{{ __('table-views::favorites-bar.modified') }}</span>@endif
+            {{ $view->name }}@if ($isActive && $modified)<span aria-hidden="true"> *</span><span class="sr-only">{{ __('tablekit::favorites-bar.modified') }}</span>@endif
         </x-filament::button>
     @endforeach
 
     {{ $this->quickSaveTableViewAction }}
 
     @if ($managerAtEnd)
-        @include('table-views::manager')
+        @include('tablekit::manager')
     @endif
 </div>

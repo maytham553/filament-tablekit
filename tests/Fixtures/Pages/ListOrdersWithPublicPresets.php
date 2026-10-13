@@ -1,8 +1,8 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\Pages;
+namespace TableKit\Tests\Fixtures\Pages;
 
-use Elite\TableViews\Presets\PresetTableView;
+use TableKit\Presets\PresetTableView;
 
 class ListOrdersWithPublicPresets extends ListOrders
 {

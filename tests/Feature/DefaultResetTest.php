@@ -1,11 +1,11 @@
 <?php
 
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersHiddenDefaultGroup;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPersistent;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithDefaults;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithTabs;
 use Livewire\Livewire;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrdersHiddenDefaultGroup;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPersistent;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithDefaults;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithTabs;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -111,7 +111,7 @@ it('writes the default state over the persisted session state', function () {
 });
 
 it('puts the tab back to the default when tab tracking is on', function () {
-    config(['table-views.state.tab' => true]);
+    config(['tablekit.state.tab' => true]);
 
     $component = Livewire::test(ListOrdersWithTabs::class);
     $default = $component->get('activeTab');

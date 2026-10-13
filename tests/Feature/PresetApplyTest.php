@@ -1,15 +1,15 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithoutViews;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresetsAndDefaults;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithoutViews;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresetsAndDefaults;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -188,7 +188,7 @@ it('flags a preset as modified like a user view', function () {
 
     expect(callProtected($component, 'isActiveTableViewModified'))->toBeTrue();
 
-    $component->assertSee(__('table-views::favorites-bar.modified'));
+    $component->assertSee(__('tablekit::favorites-bar.modified'));
 });
 
 it('resets the page when a preset is applied', function () {
@@ -474,13 +474,13 @@ describe('quick save on a preset', function () {
         Livewire::test(ListOrdersWithPresets::class)
             ->call('applyTablePresetView', 'big')
             ->callAction('quickSaveTableView')
-            ->assertNotified(__('table-views::quick-save.preset_with_query_title'));
+            ->assertNotified(__('tablekit::quick-save.preset_with_query_title'));
 
         expect(TableView::count())->toBe(0);
     });
 
     it('saves when the config allows it, without the hidden query', function () {
-        config(['table-views.preset_views.create_from_preset_with_query' => true]);
+        config(['tablekit.preset_views.create_from_preset_with_query' => true]);
         presets(fn () => ['big' => bigOrdersPreset()->defaultFilters(['status' => ['value' => 'paid']])]);
 
         $component = Livewire::test(ListOrdersWithPresets::class)->call('applyTablePresetView', 'big');
@@ -493,7 +493,7 @@ describe('quick save on a preset', function () {
     });
 
     it('can be allowed on the plugin', function () {
-        TableViewsPlugin::get()->createFromPresetWithQuery();
+        TableKitPlugin::get()->createFromPresetWithQuery();
         presets(fn () => ['big' => bigOrdersPreset()]);
 
         $component = Livewire::test(ListOrdersWithPresets::class)->call('applyTablePresetView', 'big');
@@ -563,21 +563,21 @@ describe('bar rendering', function () {
         Livewire::test(ListOrdersWithPresets::class)
             ->assertSeeInOrder(['Default', 'Alpha preset', 'Beta preset', 'My own view', 'Save view'])
             ->assertDontSee('Gamma preset')
-            ->assertSeeHtml('fi-table-views-divider');
+            ->assertSeeHtml('fi-tablekit-divider');
     });
 
     it('can drop the divider on config and plugin', function () {
         presets(fn () => ['a' => preset('Alpha preset')]);
         storeView($this->user->id, [], ['name' => 'My own view', 'resource' => ListOrdersWithPresets::class]);
 
-        config(['table-views.favorites_bar.divider' => false]);
+        config(['tablekit.favorites_bar.divider' => false]);
 
-        Livewire::test(ListOrdersWithPresets::class)->assertDontSeeHtml('fi-table-views-divider');
+        Livewire::test(ListOrdersWithPresets::class)->assertDontSeeHtml('fi-tablekit-divider');
 
-        config(['table-views.favorites_bar.divider' => true]);
-        TableViewsPlugin::get()->favoritesBarDivider(false);
+        config(['tablekit.favorites_bar.divider' => true]);
+        TableKitPlugin::get()->favoritesBarDivider(false);
 
-        Livewire::test(ListOrdersWithPresets::class)->assertDontSeeHtml('fi-table-views-divider');
+        Livewire::test(ListOrdersWithPresets::class)->assertDontSeeHtml('fi-tablekit-divider');
     });
 
     it('rejects a preset list with a wrong value or key', function (array $presets) {

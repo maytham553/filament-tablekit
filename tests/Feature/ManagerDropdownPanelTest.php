@@ -1,7 +1,7 @@
 <?php
 
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Livewire\Livewire;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -19,7 +19,7 @@ it('renders the dropdown panel with a fixed position so the table card cannot cl
 
     preg_match('/<div[^>]*x-float[^>]*fi-dropdown-panel[^>]*>|<div[^>]*fi-dropdown-panel[^>]*x-float[^>]*>/s', $html, $matches);
 
-    expect($html)->toContain('fi-table-views-manager"')
+    expect($html)->toContain('fi-tablekit-manager"')
         ->and($matches)->not->toBeEmpty()
         ->and($matches[0])->toContain('.teleport')
         ->and($matches[0])->toContain('.flip')
@@ -43,7 +43,7 @@ it('keeps the rows and the close-on-click handlers inside the panel', function (
 });
 
 it('does not use the teleported dropdown in slide-over mode', function () {
-    config(['table-views.view_manager.slide_over' => true]);
+    config(['tablekit.view_manager.slide_over' => true]);
 
-    expect(Livewire::test(ListOrders::class)->html())->not->toContain('fi-table-views-manager"');
+    expect(Livewire::test(ListOrders::class)->html())->not->toContain('fi-tablekit-manager"');
 });

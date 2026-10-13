@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Support;
+namespace TableKit\Support;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;

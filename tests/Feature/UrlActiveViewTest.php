@@ -1,14 +1,14 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Customer;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\EditCustomer;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
-use Elite\TableViews\Tests\Fixtures\RelationManagers\OrdersWithPresetsRelationManager;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Customer;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\EditCustomer;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\RelationManagers\OrdersWithPresetsRelationManager;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -123,11 +123,11 @@ describe('the active view in the url', function () {
     });
 
     it('does not remember a restored view in the session', function () {
-        config(['table-views.persist_active_view_in_session' => true]);
+        config(['tablekit.persist_active_view_in_session' => true]);
 
         Livewire::withQueryParams(['view' => 'preset:big'])->test(ListOrdersWithPresets::class);
 
-        expect(collect(session()->all())->keys()->filter(fn ($key) => str_starts_with($key, 'table-views.')))->toBeEmpty();
+        expect(collect(session()->all())->keys()->filter(fn ($key) => str_starts_with($key, 'tablekit.')))->toBeEmpty();
     });
 
     it('ignores a hidden, unknown or malformed view and falls back to the normal start', function (mixed $value) {

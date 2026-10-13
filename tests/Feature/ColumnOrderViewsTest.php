@@ -1,12 +1,12 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Off;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Off;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -45,7 +45,7 @@ describe('saving and applying', function () {
 
     it('stores valid json', function () {
         $view = quickSave(Livewire::test(ListOrdersPhase3::class)->call('reorderTableViewColumn', 'amount', 'up'), 'Json');
-        $raw = json_decode(DB::table('table_views')->where('id', $view->id)->value('state'), true);
+        $raw = json_decode(DB::table('tablekit_views')->where('id', $view->id)->value('state'), true);
 
         expect($raw['columnOrder'])->toHaveCount(9)->and($raw['v'])->toBe(1);
     });

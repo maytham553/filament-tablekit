@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Forms;
+namespace TableKit\Forms;
 
 use Closure;
 use Filament\Forms\Components\Field;
@@ -12,7 +12,7 @@ use Filament\Forms\Components\Field;
 abstract class GridPicker extends Field
 {
     /** @var view-string */
-    protected string $view = 'table-views::forms.grid-picker';
+    protected string $view = 'tablekit::forms.grid-picker';
 
     /** @var array<int, string>|Closure */
     protected array|Closure $keys = [];

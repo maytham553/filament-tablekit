@@ -1,14 +1,14 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersDeferred;
-use Elite\TableViews\Tests\Fixtures\Team;
-use Elite\TableViews\Tests\Fixtures\User;
 use Filament\Facades\Filament;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersDeferred;
+use TableKit\Tests\Fixtures\Team;
+use TableKit\Tests\Fixtures\User;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -156,23 +156,23 @@ it('refuses to save when the session has ended', function () {
 it('opens as a modal by default and as a slide over when configured', function () {
     expect(Livewire::test(ListOrders::class)->mountAction('quickSaveTableView')->instance()->getMountedAction()->isModalSlideOver())->toBeFalse();
 
-    config(['table-views.quick_save.slide_over' => true]);
+    config(['tablekit.quick_save.slide_over' => true]);
 
     expect(Livewire::test(ListOrders::class)->mountAction('quickSaveTableView')->instance()->getMountedAction()->isModalSlideOver())->toBeTrue();
 });
 
 it('lets the plugin override the slide over setting', function () {
-    TableViewsPlugin::get()->quickSaveSlideOver();
+    TableKitPlugin::get()->quickSaveSlideOver();
 
     expect(Livewire::test(ListOrders::class)->mountAction('quickSaveTableView')->instance()->getMountedAction()->isModalSlideOver())->toBeTrue();
 
-    TableViewsPlugin::get()->quickSaveSlideOver(fn () => false);
+    TableKitPlugin::get()->quickSaveSlideOver(fn () => false);
 
     expect(Livewire::test(ListOrders::class)->mountAction('quickSaveTableView')->instance()->getMountedAction()->isModalSlideOver())->toBeFalse();
 });
 
 it('offers only the configured colors and icons', function () {
-    TableViewsPlugin::get()->colors(['danger', 'info'])->icons(['star']);
+    TableKitPlugin::get()->colors(['danger', 'info'])->icons(['star']);
 
     $component = Livewire::test(ListOrders::class);
 
@@ -185,7 +185,7 @@ it('offers only the configured colors and icons', function () {
 });
 
 it('refuses a state that is too large', function () {
-    config(['table-views.state.max_bytes' => 50]);
+    config(['tablekit.state.max_bytes' => 50]);
 
     saveAttempt(Livewire::test(ListOrders::class)->searchTable(str_repeat('x', 200)), ['name' => 'Big', 'color' => 'primary'])
         ->assertHasActionErrors(['name']);
@@ -194,16 +194,16 @@ it('refuses a state that is too large', function () {
 });
 
 it('measures the state size in stored bytes, not escaped json', function () {
-    config(['table-views.state.max_bytes' => 100000]);
+    config(['tablekit.state.max_bytes' => 100000]);
 
     $component = Livewire::test(ListOrders::class)->searchTable(str_repeat('ع', 100));
 
     $stored = strlen(quickSave($component, 'Measure')->getRawOriginal('state'));
 
-    config(['table-views.state.max_bytes' => $stored]);
+    config(['tablekit.state.max_bytes' => $stored]);
     quickSave($component, 'Exactly fits');
 
-    config(['table-views.state.max_bytes' => $stored - 1]);
+    config(['tablekit.state.max_bytes' => $stored - 1]);
     saveAttempt($component, ['name' => 'One byte over', 'color' => 'primary'])->assertHasActionErrors(['name']);
 
     expect(TableView::count())->toBe(2);

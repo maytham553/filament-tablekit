@@ -1,20 +1,5 @@
 <?php
 
-use Elite\TableViews\Support\FavoriteFilters;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\TableViewsServiceProvider;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersNoToggles;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3DefaultedFilter;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Deferred;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Indicators;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Off;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Preload;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3ShowsIndicators;
-use Elite\TableViews\Tests\Fixtures\Team;
-use Elite\TableViews\Tests\Fixtures\Widgets\OrdersWidget;
 use Filament\Tables\Filters\BaseFilter;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -22,21 +7,36 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
+use TableKit\Support\FavoriteFilters;
+use TableKit\TableKitPlugin;
+use TableKit\TableKitServiceProvider;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersNoToggles;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3DefaultedFilter;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Deferred;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Indicators;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Off;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Preload;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3ShowsIndicators;
+use TableKit\Tests\Fixtures\Team;
+use TableKit\Tests\Fixtures\Widgets\OrdersWidget;
 
 beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
-    config(['table-views.quick_filters.enabled' => true]);
+    config(['tablekit.quick_filters.enabled' => true]);
 });
 
 describe('the bar', function () {
     it('is off by default and leaves Filament\'s own indicators alone', function () {
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
 
         $html = Livewire::test(ListOrdersPhase3::class)->set('tableFilters.status.value', 'paid')->html();
 
         expect($html)->toContain('fi-ta-filter-indicators')
-            ->and($html)->not->toContain('fi-table-views-quick-filters')
+            ->and($html)->not->toContain('fi-tablekit-quick-filters')
             ->and($html)->not->toContain('data-quick-filter');
     });
 
@@ -44,7 +44,7 @@ describe('the bar', function () {
         $html = Livewire::test(ListOrdersPhase3::class)->set('tableFilters.status.value', 'paid')->html();
 
         expect($html)->not->toContain('fi-ta-filter-indicators')
-            ->and($html)->toContain('fi-table-views-quick-filters')
+            ->and($html)->toContain('fi-tablekit-quick-filters')
             ->and(chipNames($html))->toBe(['status']);
     });
 
@@ -83,7 +83,7 @@ describe('the bar', function () {
         $component = Livewire::test(ListOrdersPhase3::class)->call('togglePinnedTableViewFilter', 'status');
 
         expect($component->get('tableViewFavoriteFilters'))->toBe([])
-            ->and($component->html())->not->toContain('fi-table-views-quick-filters');
+            ->and($component->html())->not->toContain('fi-tablekit-quick-filters');
     });
 
     it('draws one chip for a filter with several fields and edits all of them in its popover', function () {
@@ -114,13 +114,13 @@ describe('the bar', function () {
     it('also works on a relation manager and a table widget', function () {
         $widget = Livewire::test(OrdersWidget::class)->set('tableFilters.status.value', 'paid')->html();
 
-        expect($widget)->toContain('fi-table-views-quick-filters')->toContain('data-quick-filter="status"');
+        expect($widget)->toContain('fi-tablekit-quick-filters')->toContain('data-quick-filter="status"');
     });
 
     it('leaves a table without filters alone', function () {
         $html = Livewire::test(ListOrdersNoToggles::class)->html();
 
-        expect($html)->not->toContain('fi-table-views-quick-filters');
+        expect($html)->not->toContain('fi-tablekit-quick-filters');
     });
 });
 
@@ -204,7 +204,7 @@ describe('the popover', function () {
     it('ignores a change when quick filters are off', function () {
         $component = Livewire::test(ListOrdersPhase3::class)->call('openTableViewQuickFilter', 'status');
 
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
 
         $component->set('tableViewQuickFilterState.status.value', 'paid');
 
@@ -223,7 +223,7 @@ describe('the popover', function () {
     });
 
     it('does nothing when quick filters are off', function () {
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
 
         expect(Livewire::test(ListOrdersPhase3::class)->call('openTableViewQuickFilter', 'status')->get('tableViewOpenQuickFilter'))->toBeNull();
     });
@@ -412,7 +412,7 @@ describe('indicators', function () {
 
         expect($component->get('tableFilters.mixed.a'))->toBe('hello');
 
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
 
         expect($component->call('removeTableViewQuickFilter', 'mixed')->get('tableFilters.mixed.a'))->toBe('hello');
     });
@@ -472,13 +472,13 @@ describe('indicators', function () {
 
         $closed = chipHtml($component->html(), 'status');
 
-        expect($closed)->toMatch('/wire:key="table-views-quick-filter-loading-[^"]+-status"/')
-            ->and($closed)->not->toContain('table-views-quick-filter-form-');
+        expect($closed)->toMatch('/wire:key="tablekit-quick-filter-loading-[^"]+-status"/')
+            ->and($closed)->not->toContain('tablekit-quick-filter-form-');
 
         $opened = chipHtml($component->call('openTableViewQuickFilter', 'status')->html(), 'status');
 
-        expect($opened)->toMatch('/wire:key="table-views-quick-filter-form-[^"]+-status"/')
-            ->and($opened)->not->toContain('table-views-quick-filter-loading-');
+        expect($opened)->toMatch('/wire:key="tablekit-quick-filter-form-[^"]+-status"/')
+            ->and($opened)->not->toContain('tablekit-quick-filter-loading-');
     });
 
     it('does not treat an off toggle as active', function () {
@@ -500,7 +500,7 @@ describe('Filament\'s own bar', function () {
 
         $html = Livewire::test(ListOrdersPhase3ShowsIndicators::class)->set('tableFilters.status.value', 'paid')->html();
 
-        expect($html)->not->toContain('fi-ta-filter-indicators')->and($html)->toContain('fi-table-views-quick-filters');
+        expect($html)->not->toContain('fi-ta-filter-indicators')->and($html)->toContain('fi-tablekit-quick-filters');
     });
 
     it('stays hidden when the table calls hiddenFilterIndicators(true)', function () {
@@ -510,16 +510,16 @@ describe('Filament\'s own bar', function () {
 
         ListOrdersPhase3ShowsIndicators::$hide = false;
 
-        expect($html)->not->toContain('fi-ta-filter-indicators')->and($html)->toContain('fi-table-views-quick-filters');
+        expect($html)->not->toContain('fi-ta-filter-indicators')->and($html)->toContain('fi-tablekit-quick-filters');
     });
 
     it('is the table\'s own again when quick filters are off', function () {
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
         ListOrdersPhase3ShowsIndicators::$hide = false;
 
         $html = Livewire::test(ListOrdersPhase3ShowsIndicators::class)->set('tableFilters.status.value', 'paid')->html();
 
-        expect($html)->toContain('fi-ta-filter-indicators')->and($html)->not->toContain('fi-table-views-quick-filters');
+        expect($html)->toContain('fi-ta-filter-indicators')->and($html)->not->toContain('fi-tablekit-quick-filters');
     });
 });
 
@@ -551,17 +551,17 @@ describe('cost', function () {
     });
 
     it('adds no query to a search request with the chips closed', function () {
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
         $off = searchQueryCount(ListOrdersPhase3Preload::class);
 
-        config(['table-views.quick_filters.enabled' => true]);
+        config(['tablekit.quick_filters.enabled' => true]);
         $on = searchQueryCount(ListOrdersPhase3Preload::class);
 
         expect($on)->toBe($off);
     });
 
     it('adds no query to a filter request with the chips closed', function () {
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
         $component = Livewire::test(ListOrdersPhase3Preload::class);
         DB::flushQueryLog();
         DB::enableQueryLog();
@@ -569,7 +569,7 @@ describe('cost', function () {
         $off = count(DB::getQueryLog());
         DB::disableQueryLog();
 
-        config(['table-views.quick_filters.enabled' => true]);
+        config(['tablekit.quick_filters.enabled' => true]);
         $component = Livewire::test(ListOrdersPhase3Preload::class);
         DB::flushQueryLog();
         DB::enableQueryLog();
@@ -617,18 +617,18 @@ describe('long labels', function () {
     });
 
     it('can be switched off in config and by the plugin', function () {
-        config(['table-views.quick_filters.limit_labels' => 0]);
+        config(['tablekit.quick_filters.limit_labels' => 0]);
 
         $component = Livewire::test(ListOrdersPhase3::class)->set('tableFilters.multi.values', ['pending', 'paid', 'shipped']);
 
         expect(chipHtml($component->html(), 'multi'))->toContain('Pending, Paid &amp; Shipped');
 
-        config(['table-views.quick_filters.limit_labels' => 1]);
-        TableViewsPlugin::get()->limitIndicatorLabels(null);
+        config(['tablekit.quick_filters.limit_labels' => 1]);
+        TableKitPlugin::get()->limitIndicatorLabels(null);
 
         expect(chipHtml($component->call('$refresh')->html(), 'multi'))->toContain('Pending, Paid &amp; Shipped');
 
-        TableViewsPlugin::get()->limitIndicatorLabels(1);
+        TableKitPlugin::get()->limitIndicatorLabels(1);
 
         expect(chipHtml($component->call('$refresh')->html(), 'multi'))->toContain('Pending &amp; 2 more');
     });
@@ -701,7 +701,7 @@ describe('pinning', function () {
     });
 
     it('does nothing when quick filters are off', function () {
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
 
         $component = Livewire::test(ListOrdersPhase3::class)->call('togglePinnedTableViewFilter', 'big');
 
@@ -776,10 +776,10 @@ describe('the favorite macro', function () {
     describe('when another package owns favorite()', function () {
         function registerFavoriteMacro(bool $forgetOwnership = true): void
         {
-            $provider = app()->getProvider(TableViewsServiceProvider::class);
+            $provider = app()->getProvider(TableKitServiceProvider::class);
 
             if ($forgetOwnership) {
-                (new ReflectionProperty(TableViewsServiceProvider::class, 'favoriteMacroRegistered'))->setValue(null, false);
+                (new ReflectionProperty(TableKitServiceProvider::class, 'favoriteMacroRegistered'))->setValue(null, false);
             }
 
             (new ReflectionMethod($provider, 'registerFavoriteFilterMacro'))->invoke($provider);
@@ -820,20 +820,20 @@ describe('switches', function () {
     it('is off per table', function () {
         $html = Livewire::test(ListOrdersPhase3Off::class)->set('tableFilters.status.value', 'paid')->html();
 
-        expect($html)->toContain('fi-ta-filter-indicators')->not->toContain('fi-table-views-quick-filters');
+        expect($html)->toContain('fi-ta-filter-indicators')->not->toContain('fi-tablekit-quick-filters');
     });
 
     it('can be turned on by the plugin', function () {
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
 
-        TableViewsPlugin::get()->quickFilters();
+        TableKitPlugin::get()->quickFilters();
 
-        expect(Livewire::test(ListOrders::class)->set('tableFilters.status.value', 'paid')->html())->toContain('fi-table-views-quick-filters');
+        expect(Livewire::test(ListOrders::class)->set('tableFilters.status.value', 'paid')->html())->toContain('fi-tablekit-quick-filters');
     });
 
     it('can be turned off by the plugin though config says on', function () {
-        TableViewsPlugin::get()->quickFilters(false);
+        TableKitPlugin::get()->quickFilters(false);
 
-        expect(Livewire::test(ListOrders::class)->set('tableFilters.status.value', 'paid')->html())->not->toContain('fi-table-views-quick-filters');
+        expect(Livewire::test(ListOrders::class)->set('tableFilters.status.value', 'paid')->html())->not->toContain('fi-tablekit-quick-filters');
     });
 });

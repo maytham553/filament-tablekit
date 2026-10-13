@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Forms;
+namespace TableKit\Forms;
 
 use Closure;
 use Filament\Support\Facades\FilamentIcon;
@@ -26,7 +26,7 @@ class IconGridPicker extends GridPicker
 
     public function getNoneLabel(): string
     {
-        return (string) ($this->evaluate($this->noneLabel) ?? __('table-views::quick-save.fields.no_icon'));
+        return (string) ($this->evaluate($this->noneLabel) ?? __('tablekit::quick-save.fields.no_icon'));
     }
 
     public function getKind(): string
@@ -53,7 +53,7 @@ class IconGridPicker extends GridPicker
         ]];
 
         foreach ($this->getKeys() as $key) {
-            $icon = FilamentIcon::resolve("table-views::icons.{$key}");
+            $icon = FilamentIcon::resolve("tablekit::icons.{$key}");
 
             if ($icon === null) {
                 continue;
@@ -76,7 +76,7 @@ class IconGridPicker extends GridPicker
 
     public static function labelFor(string $key): string
     {
-        $translationKey = "table-views::icons.{$key}";
+        $translationKey = "tablekit::icons.{$key}";
         $label = __($translationKey);
 
         return $label === $translationKey ? ucfirst(str_replace('-', ' ', $key)) : $label;
@@ -90,7 +90,7 @@ class IconGridPicker extends GridPicker
         $parts = [str_replace('-', ' ', $key), $label];
 
         foreach (array_unique([app()->getLocale(), 'en']) as $locale) {
-            foreach (["table-views::icons.{$key}", "table-views::icon-keywords.{$key}"] as $translationKey) {
+            foreach (["tablekit::icons.{$key}", "tablekit::icon-keywords.{$key}"] as $translationKey) {
                 $text = __($translationKey, [], $locale);
 
                 if ($text !== $translationKey) {

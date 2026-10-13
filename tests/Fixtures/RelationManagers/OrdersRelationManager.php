@@ -1,16 +1,16 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\RelationManagers;
+namespace TableKit\Tests\Fixtures\RelationManagers;
 
-use Elite\TableViews\Concerns\HasTableViews;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use TableKit\Concerns\HasTableKit;
 
 class OrdersRelationManager extends RelationManager
 {
-    use HasTableViews;
+    use HasTableKit;
 
     protected static string $relationship = 'orders';
 

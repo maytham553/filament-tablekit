@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Support;
+namespace TableKit\Support;
 
 use Closure;
 use Filament\Tables\Filters\BaseFilter;

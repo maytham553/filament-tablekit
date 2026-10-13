@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Actions;
+namespace TableKit\Actions;
 
 use Filament\Actions\Action;
 use Filament\Support\Enums\ActionSize;
@@ -19,24 +19,24 @@ class ManageTableViewsAction
     public static function make(Action $edit, Action $delete): Action
     {
         return Action::make(self::NAME)
-            ->label(__('table-views::manager.label'))
-            ->icon(FilamentIcon::resolve('table-views::manager.open'))
+            ->label(__('tablekit::manager.label'))
+            ->icon(FilamentIcon::resolve('tablekit::manager.open'))
             ->iconButton()
             ->color('gray')
             ->size(ActionSize::Small)
-            ->tooltip(__('table-views::manager.label'))
+            ->tooltip(__('tablekit::manager.label'))
             ->slideOver()
             ->modalWidth(MaxWidth::Large)
-            ->modalHeading(__('table-views::manager.heading'))
-            ->modalDescription(__('table-views::manager.description'))
+            ->modalHeading(__('tablekit::manager.heading'))
+            ->modalDescription(__('tablekit::manager.description'))
             ->modalSubmitAction(false)
-            ->modalCancelActionLabel(__('table-views::manager.close'))
+            ->modalCancelActionLabel(__('tablekit::manager.close'))
             ->modalFooterActions(fn (Action $action): array => [
                 $action->getModalCancelAction(),
                 static::unrendered($edit),
                 static::unrendered($delete),
             ])
-            ->modalContent(fn () => view('table-views::manager-list'));
+            ->modalContent(fn () => view('tablekit::manager-list'));
     }
 
     protected static function unrendered(Action $action): Action

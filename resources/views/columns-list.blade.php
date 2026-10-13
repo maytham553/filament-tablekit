@@ -6,8 +6,8 @@
     $grid = is_array($grid) ? $grid : ['lg' => $grid];
 @endphp
 
-<div wire:key="table-views-columns-{{ $this->getId() }}">
-    <x-table-views::sortable tag="div" method="reorderTableViewColumns" scope-only>
+<div wire:key="tablekit-columns-{{ $this->getId() }}">
+    <x-tablekit::sortable tag="div" method="reorderTableViewColumns" scope-only>
         <x-filament::grid
             :default="$grid['default'] ?? null"
             :sm="$grid['sm'] ?? null"
@@ -15,7 +15,7 @@
             :lg="$grid['lg'] ?? null"
             :xl="$grid['xl'] ?? null"
             :two-xl="$grid['2xl'] ?? null"
-            class="fi-table-views-columns gap-x-6 gap-y-1"
+            class="fi-tablekit-columns gap-x-6 gap-y-1"
             x-sortable
             x-on:end.stop="$event.oldIndex !== $event.newIndex && saveOrder($el.sortable.toArray())"
         >
@@ -26,11 +26,11 @@
 
                 <div
                     class="flex items-center gap-x-1"
-                    wire:key="table-views-column-{{ $name }}"
+                    wire:key="tablekit-column-{{ $name }}"
                     data-column-row="{{ $name }}"
                     x-sortable-item="{{ $name }}"
                 >
-                    <x-table-views::sortable-handle :name="$column->getLabel()" />
+                    <x-tablekit::sortable-handle :name="$column->getLabel()" />
 
                     @if ($column->isToggleable())
                         <label class="flex min-w-0 flex-1 items-center gap-x-3 text-sm text-gray-950 dark:text-white">
@@ -39,17 +39,17 @@
                             <span class="truncate">{{ $column->getLabel() }}</span>
                         </label>
                     @else
-                        <span class="min-w-0 flex-1 truncate ps-7 text-sm text-gray-500 dark:text-gray-400" title="{{ __('table-views::columns.always_shown') }}">{{ $column->getLabel() }}</span>
+                        <span class="min-w-0 flex-1 truncate ps-7 text-sm text-gray-500 dark:text-gray-400" title="{{ __('tablekit::columns.always_shown') }}">{{ $column->getLabel() }}</span>
                     @endif
                 </div>
             @endforeach
         </x-filament::grid>
-    </x-table-views::sortable>
+    </x-tablekit::sortable>
 
     @if ($this->tableViewColumnOrder !== [])
         <div class="pt-2">
-            <x-filament::link tag="button" color="gray" size="sm" :icon="FilamentIcon::resolve('table-views::columns.reset')" wire:click="resetTableViewColumnOrder">
-                {{ __('table-views::columns.reset') }}
+            <x-filament::link tag="button" color="gray" size="sm" :icon="FilamentIcon::resolve('tablekit::columns.reset')" wire:click="resetTableViewColumnOrder">
+                {{ __('tablekit::columns.reset') }}
             </x-filament::link>
         </div>
     @endif

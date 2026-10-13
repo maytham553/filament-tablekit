@@ -1,10 +1,10 @@
 <?php
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Persistent;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
+use TableKit\Models\TablePreference;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Persistent;
 
 function reloadWithUrl(Testable $mounted, Closure $url, string $page = ListOrdersPhase3::class): Testable
 {
@@ -20,7 +20,7 @@ beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
 
-    config(['table-views.quick_filters.enabled' => true]);
+    config(['tablekit.quick_filters.enabled' => true]);
 
     $this->view = storeView($this->user->id, [
         'filters' => ['status' => ['value' => 'shipped']],
@@ -116,7 +116,7 @@ describe('a url reload keeps what the session persisted on top of the view', fun
 describe('a fresh load that applies a view by itself keeps the session state', function () {
     it('keeps order, toggles and pins over the managed default view', function () {
         ($this->makeDefault)($this->richView->id);
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $first = startWithoutUrl();
 
@@ -137,7 +137,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
     });
 
     it('keeps order, toggles and pins over the remembered view', function () {
-        config(['table-views.persist_active_view_in_session' => true]);
+        config(['tablekit.persist_active_view_in_session' => true]);
 
         $first = startWithoutUrl()->call('applyTableView', $this->richView->id);
         $first->call('reorderTableViewColumn', 'amount', 'up')
@@ -153,7 +153,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
     });
 
     it('keeps the persisted sorts over the startup view', function () {
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
         $default = storeView($this->user->id, ['sort' => ['column' => 'reference', 'direction' => 'asc']], ['resource' => ListOrdersPhase3Persistent::class]);
         TablePreference::create(['user_id' => $this->user->id, 'resource' => ListOrdersPhase3Persistent::class, 'view_type' => 'user', 'view_key' => (string) $default->id, 'is_default' => true]);
 
@@ -172,7 +172,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
 
     it('applies the startup view in full when the session stored nothing', function () {
         ($this->makeDefault)($this->richView->id);
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $mounted = startWithoutUrl();
 

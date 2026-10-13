@@ -1,12 +1,12 @@
 <?php
 
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersDeferred;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithoutViews;
-use Elite\TableViews\Tests\Fixtures\User;
 use Livewire\Exceptions\MethodNotFoundException;
 use Livewire\Livewire;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersDeferred;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithoutViews;
+use TableKit\Tests\Fixtures\User;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -56,25 +56,25 @@ it('shows the new view in the bar right after saving', function () {
 });
 
 it('can be disabled in config', function () {
-    config(['table-views.favorites_bar.enabled' => false]);
+    config(['tablekit.favorites_bar.enabled' => false]);
 
     Livewire::test(ListOrders::class)->assertDontSee('Save view');
 });
 
 it('can be disabled on the plugin, also with a closure', function () {
-    TableViewsPlugin::get()->favoritesBar(false);
+    TableKitPlugin::get()->favoritesBar(false);
 
     Livewire::test(ListOrders::class)->assertDontSee('Save view');
 
-    TableViewsPlugin::get()->favoritesBar(fn () => true);
+    TableKitPlugin::get()->favoritesBar(fn () => true);
 
     Livewire::test(ListOrders::class)->assertSee('Save view');
 });
 
 it('lets the plugin win over config', function () {
-    config(['table-views.favorites_bar.enabled' => false]);
+    config(['tablekit.favorites_bar.enabled' => false]);
 
-    TableViewsPlugin::get()->favoritesBar();
+    TableKitPlugin::get()->favoritesBar();
 
     Livewire::test(ListOrders::class)->assertSee('Save view');
 });
@@ -111,13 +111,13 @@ it('marks the active view as modified once the table changes', function () {
 
     expect(callProtected($component, 'isActiveTableViewModified'))->toBeFalse();
 
-    $component->assertDontSee(__('table-views::favorites-bar.modified'));
+    $component->assertDontSee(__('tablekit::favorites-bar.modified'));
 
     $component->filterTable('status', 'pending');
 
     expect(callProtected($component, 'isActiveTableViewModified'))->toBeTrue();
 
-    $component->assertSee(__('table-views::favorites-bar.modified'));
+    $component->assertSee(__('tablekit::favorites-bar.modified'));
 
     $component->filterTable('status', 'paid');
 

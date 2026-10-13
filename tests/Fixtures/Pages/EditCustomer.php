@@ -1,9 +1,9 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\Pages;
+namespace TableKit\Tests\Fixtures\Pages;
 
-use Elite\TableViews\Tests\Fixtures\CustomerResource;
 use Filament\Resources\Pages\EditRecord;
+use TableKit\Tests\Fixtures\CustomerResource;
 
 class EditCustomer extends EditRecord
 {

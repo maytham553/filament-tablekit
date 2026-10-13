@@ -1,16 +1,9 @@
 <?php
 
-namespace Elite\TableViews\Tests;
+namespace TableKit\Tests;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
-use Elite\TableViews\TableViewsServiceProvider;
-use Elite\TableViews\Tests\Fixtures\AdminPanelProvider;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
-use Elite\TableViews\Tests\Fixtures\TeamPanelProvider;
-use Elite\TableViews\Tests\Fixtures\User;
 use Filament\Actions\ActionsServiceProvider;
 use Filament\Facades\Filament;
 use Filament\FilamentServiceProvider;
@@ -24,6 +17,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
+use TableKit\TableKitServiceProvider;
+use TableKit\Tests\Fixtures\AdminPanelProvider;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\TeamPanelProvider;
+use TableKit\Tests\Fixtures\User;
 
 abstract class TestCase extends Orchestra
 {
@@ -55,7 +55,7 @@ abstract class TestCase extends Orchestra
             TablesServiceProvider::class,
             WidgetsServiceProvider::class,
             FilamentServiceProvider::class,
-            TableViewsServiceProvider::class,
+            TableKitServiceProvider::class,
             AdminPanelProvider::class,
             TeamPanelProvider::class,
         ];

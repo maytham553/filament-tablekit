@@ -1,5 +1,5 @@
 {
-    "name": "elite/filament-table-views",
+    "name": "tablekit/filament-tablekit",
     "description": "Saved table views (filters, search, sort, columns, grouping) with a favorites bar for Filament v3 tables.",
     "type": "library",
     "license": "proprietary",
@@ -17,12 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Elite\\TableViews\\": "src/"
+            "TableKit\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Elite\\TableViews\\Tests\\": "tests/"
+            "TableKit\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -32,7 +32,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Elite\\TableViews\\TableViewsServiceProvider"
+                "TableKit\\TableKitServiceProvider"
             ]
         }
     },

@@ -1,12 +1,12 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures;
+namespace TableKit\Tests\Fixtures;
 
-use Elite\TableViews\Tests\Fixtures\Pages\EditCustomer;
-use Elite\TableViews\Tests\Fixtures\RelationManagers\OrdersRelationManager;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use TableKit\Tests\Fixtures\Pages\EditCustomer;
+use TableKit\Tests\Fixtures\RelationManagers\OrdersRelationManager;
 
 class CustomerResource extends Resource
 {

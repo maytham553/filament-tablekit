@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Support;
+namespace TableKit\Support;
 
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;

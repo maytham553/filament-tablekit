@@ -1,8 +1,8 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -85,9 +85,9 @@ it('shows the modified mark on the default button when the developer default has
 
     $component = Livewire::test(ListOrdersWithPresets::class);
 
-    expect($component->html())->not->toContain(__('table-views::favorites-bar.modified'));
+    expect($component->html())->not->toContain(__('tablekit::favorites-bar.modified'));
 
-    $component->set('tableSearch', 'ORD-02')->assertSee(__('table-views::favorites-bar.modified'));
+    $component->set('tableSearch', 'ORD-02')->assertSee(__('tablekit::favorites-bar.modified'));
 });
 
 it('agrees with the manager on which view is active', function () {

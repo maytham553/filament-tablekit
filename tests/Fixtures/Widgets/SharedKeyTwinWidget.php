@@ -1,5 +1,5 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\Widgets;
+namespace TableKit\Tests\Fixtures\Widgets;
 
 class SharedKeyTwinWidget extends SharedKeyWidget {}

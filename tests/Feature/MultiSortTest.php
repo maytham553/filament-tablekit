@@ -1,17 +1,17 @@
 <?php
 
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersColumnGroups;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersOneSortable;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3DefaultSort;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3HiddenSortable;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Off;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Persistent;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Reorderable;
-use Elite\TableViews\Tests\Fixtures\Team;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrdersColumnGroups;
+use TableKit\Tests\Fixtures\Pages\ListOrdersOneSortable;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3DefaultSort;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3HiddenSortable;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Off;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Persistent;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Reorderable;
+use TableKit\Tests\Fixtures\Team;
 
 beforeEach(function () {
     $this->signIn();
@@ -25,7 +25,7 @@ function sortsOf($component): array
 
 function sortTriggerHtml(string $html): string
 {
-    $start = strpos($html, 'data-table-views-sort-trigger');
+    $start = strpos($html, 'data-tablekit-sort-trigger');
 
     $open = strrpos(substr($html, 0, $start), '<button');
 
@@ -213,7 +213,7 @@ describe('building the sort list', function () {
 
 describe('limits and hostile input', function () {
     it('caps the list at the configured maximum', function () {
-        config(['table-views.multi_sort.max' => 3]);
+        config(['tablekit.multi_sort.max' => 3]);
 
         $component = Livewire::test(ListOrdersPhase3::class);
 
@@ -225,7 +225,7 @@ describe('limits and hostile input', function () {
     });
 
     it('never goes below two as the maximum', function () {
-        config(['table-views.multi_sort.max' => 0]);
+        config(['tablekit.multi_sort.max' => 0]);
 
         $component = Livewire::test(ListOrdersPhase3::class)->call('addTableViewSort', 'reference')->call('addTableViewSort', 'amount')->call('addTableViewSort', 'status');
 
@@ -381,7 +381,7 @@ describe('header clicks', function () {
 describe('the Sort button', function () {
     it('renders in the toolbar with the list', function () {
         Livewire::test(ListOrdersPhase3::class)
-            ->assertSeeHtml('data-table-views-sort-trigger')
+            ->assertSeeHtml('data-tablekit-sort-trigger')
             ->call('addTableViewSort', 'amount')
             ->assertSeeHtml('data-sort-row="amount"')
             ->assertSee('Sort by');
@@ -397,8 +397,8 @@ describe('the Sort button', function () {
     });
 
     it('is shown only with two sortable columns', function () {
-        Livewire::test(ListOrdersOneSortable::class)->assertDontSeeHtml('data-table-views-sort-trigger');
-        Livewire::test(ListOrdersPhase3::class)->assertSeeHtml('data-table-views-sort-trigger');
+        Livewire::test(ListOrdersOneSortable::class)->assertDontSeeHtml('data-tablekit-sort-trigger');
+        Livewire::test(ListOrdersPhase3::class)->assertSeeHtml('data-tablekit-sort-trigger');
     });
 
     it('works with column groups', function () {
@@ -499,7 +499,7 @@ describe('drag reorder', function () {
             ->and($html)->toMatch('/data-sort-row="customer_name"\s+x-sortable-item="customer_name"/')
             ->and($html)->toMatch('/data-sort-row="amount"\s+x-sortable-item="amount"/')
             ->and($html)->toMatch('/data-sort-row="reference"\s+x-sortable-item="reference"/')
-            ->and($html)->toContain(__('table-views::reorder.handle', ['name' => 'Customer name']))
+            ->and($html)->toContain(__('tablekit::reorder.handle', ['name' => 'Customer name']))
             ->and($html)->toContain('x-on:keydown.arrow-down.prevent')
             ->and($html)->not->toContain('reorderTableViewSort(');
     });
@@ -619,35 +619,35 @@ describe('while records are reordered', function () {
 
 describe('the sort limit', function () {
     it('tells the user when the maximum is reached', function () {
-        config(['table-views.multi_sort.max' => 2]);
+        config(['tablekit.multi_sort.max' => 2]);
 
         $component = Livewire::test(ListOrdersPhase3::class)->call('addTableViewSort', 'amount');
 
-        expect($component->html())->not->toContain(__('table-views::sort.limit', ['count' => 2]));
+        expect($component->html())->not->toContain(__('tablekit::sort.limit', ['count' => 2]));
 
         $component->call('addTableViewSort', 'reference');
 
-        expect($component->html())->toContain(__('table-views::sort.limit', ['count' => 2]));
+        expect($component->html())->toContain(__('tablekit::sort.limit', ['count' => 2]));
 
         $component->call('removeTableViewSort', 'reference');
 
-        expect($component->html())->not->toContain(__('table-views::sort.limit', ['count' => 2]));
+        expect($component->html())->not->toContain(__('tablekit::sort.limit', ['count' => 2]));
     });
 
     it('says it in Arabic too', function () {
-        config(['table-views.multi_sort.max' => 2]);
+        config(['tablekit.multi_sort.max' => 2]);
         app()->setLocale('ar');
 
         $html = Livewire::test(ListOrdersPhase3::class)->call('addTableViewSort', 'amount')->call('addTableViewSort', 'reference')->html();
 
-        expect($html)->toContain(__('table-views::sort.limit', ['count' => 2], 'ar'))->and(__('table-views::sort.limit', ['count' => 2], 'ar'))->not->toBe(__('table-views::sort.limit', ['count' => 2], 'en'));
+        expect($html)->toContain(__('tablekit::sort.limit', ['count' => 2], 'ar'))->and(__('tablekit::sort.limit', ['count' => 2], 'ar'))->not->toBe(__('tablekit::sort.limit', ['count' => 2], 'en'));
     });
 });
 
 describe('switches', function () {
     it('is off per table', function () {
         $component = Livewire::test(ListOrdersPhase3Off::class)
-            ->assertDontSeeHtml('data-table-views-sort-trigger')
+            ->assertDontSeeHtml('data-tablekit-sort-trigger')
             ->call('addTableViewSort', 'amount')
             ->call('addTableViewSort', 'reference');
 
@@ -655,10 +655,10 @@ describe('switches', function () {
     });
 
     it('is off globally in config', function () {
-        config(['table-views.multi_sort.enabled' => false]);
+        config(['tablekit.multi_sort.enabled' => false]);
 
         $component = Livewire::test(ListOrdersPhase3::class)
-            ->assertDontSeeHtml('data-table-views-sort-trigger')
+            ->assertDontSeeHtml('data-tablekit-sort-trigger')
             ->call('addTableViewSort', 'amount');
 
         expect($component->get('tableSortColumn'))->toBeNull();
@@ -692,7 +692,7 @@ describe('lifecycle hooks called from the browser', function () {
         expect(sortsOf($component))->toHaveCount(2)
             ->and(queryReferences($component))->toBe($expected)
             ->and($component->html())->not->toBeEmpty();
-    })->with(['bootedHasTableViews', 'mountHasTableViews']);
+    })->with(['bootedHasTableKit', 'mountHasTableKit']);
 
     it('keeps one wrapper and the same order when a client calls any trait hook', function (string $hook) {
         $component = Livewire::test(ListOrdersPhase3::class)
@@ -707,7 +707,7 @@ describe('lifecycle hooks called from the browser', function () {
         expect(orderBySql($component))->toBe($before)
             ->and($before)->toContain('order by "reference" asc, "customer_name" asc, "amount" asc')
             ->and(queryReferences($component))->toBe(expectedReferences([['reference', 'asc'], ['customer_name', 'asc'], ['amount', 'asc']]));
-    })->with(['mountHasTableViews', 'bootedHasTableViews', 'renderingHasTableViews', 'callHasTableViews']);
+    })->with(['mountHasTableKit', 'bootedHasTableKit', 'renderingHasTableKit', 'callHasTableKit']);
 
     it('keeps the extra sorts and the header priority after Filament rebuilds the table in resetTable()', function () {
         $component = Livewire::test(ListOrdersPhase3::class)
@@ -737,13 +737,13 @@ describe('lifecycle hooks called from the browser', function () {
 
 it('ignores a client call of the mount hook once the component has booted', function () {
     $instance = Livewire::test(ListOrdersPhase3::class)->instance();
-    $property = new ReflectionProperty($instance, 'shouldMountHasTableViews');
+    $property = new ReflectionProperty($instance, 'shouldMountHasTableKit');
 
-    $instance->mountHasTableViews();
+    $instance->mountHasTableKit();
 
     expect($property->getValue($instance))->toBeFalse();
 
-    $instance->bootedHasTableViews();
+    $instance->bootedHasTableKit();
 
     expect($property->getValue($instance))->toBeFalse();
 });

@@ -1,13 +1,14 @@
 <?php
 
-namespace Elite\TableViews\Concerns;
+namespace TableKit\Concerns;
 
-use Elite\TableViews\Support\ReorderedKeys;
-use Elite\TableViews\Support\TableViewsOptions;
 use Filament\Forms\Components\View;
 use Filament\Forms\Form;
 use Filament\Tables\Columns\Column;
+use Filament\Tables\Table;
 use Livewire\Attributes\Locked;
+use TableKit\Support\ReorderedKeys;
+use TableKit\Support\TableKitOptions;
 
 /**
  * Column order. Filament rebuilds the table on every request and renders headers, cells and summaries from `Table::getColumns()`,
@@ -22,6 +23,9 @@ trait HasColumnOrderTableViews
     /** @var array<string, Column>|null the columns as the developer defined them, in code order */
     protected ?array $tableViewCodeColumns = null;
 
+    /** The `Table` object the code columns and the order were taken from and applied to. */
+    protected ?Table $tableViewColumnOrderTable = null;
+
     /** Return false from a component to turn column reordering off for its table. */
     public static function columnOrderTableViews(): bool
     {
@@ -31,7 +35,7 @@ trait HasColumnOrderTableViews
     protected function isTableViewColumnOrderEnabled(): bool
     {
         return static::columnOrderTableViews()
-            && TableViewsOptions::resolve()->columnReorderingEnabled()
+            && TableKitOptions::resolve()->columnReorderingEnabled()
             && $this->supportsTableViewColumnOrder()
             && count($this->getTableViewOrderableColumnNames()) >= 2;
     }
@@ -72,15 +76,43 @@ trait HasColumnOrderTableViews
         return $names;
     }
 
+    /**
+     * The code columns belong to one `Table` object. Filament's `resetTable()` builds a new one (new Column objects, code order, and a fresh
+     * column toggle form), so the order is applied again on it before it renders.
+     */
+    protected function syncTableViewCodeColumns(): bool
+    {
+        $table = $this->getTable();
+
+        if ($this->tableViewColumnOrderTable === $table) {
+            return false;
+        }
+
+        $this->tableViewColumnOrderTable = $table;
+        $this->tableViewCodeColumns = $table->getColumns();
+
+        return true;
+    }
+
+    protected function restoreTableViewColumnOrder(): void
+    {
+        if (! $this->syncTableViewCodeColumns() || ! $this->isTableViewColumnOrderEnabled()) {
+            return;
+        }
+
+        $this->applyTableViewColumnOrder();
+        $this->cacheForm('toggleTableColumnForm', fn () => $this->makeTableViewColumnToggleForm());
+    }
+
     protected function bootTableViewColumnOrder(): void
     {
-        $this->tableViewCodeColumns ??= $this->getTable()->getColumns();
+        $this->syncTableViewCodeColumns();
 
         if (! $this->isTableViewColumnOrderEnabled()) {
             return;
         }
 
-        if ($this->shouldMountHasTableViews) {
+        if ($this->shouldMountHasTableKit) {
             $saved = session()->get($this->getTableViewSessionKey('column_order'));
 
             $this->tableViewColumnOrder = is_array($saved) ? $this->normalizeTableViewColumnOrder($saved) : [];
@@ -139,6 +171,8 @@ trait HasColumnOrderTableViews
      */
     protected function setTableViewColumnOrder(array $names): void
     {
+        $this->restoreTableViewColumnOrder();
+
         $this->tableViewColumnOrder = $this->normalizeTableViewColumnOrder($names);
 
         if ($this->tableViewColumnOrder === []) {
@@ -155,6 +189,8 @@ trait HasColumnOrderTableViews
      */
     public function reorderTableViewColumns(mixed $names): void
     {
+        $this->restoreTableViewColumnOrder();
+
         if (! $this->isTableViewColumnOrderEnabled()) {
             return;
         }
@@ -175,6 +211,8 @@ trait HasColumnOrderTableViews
 
     public function reorderTableViewColumn(mixed $name, mixed $direction): void
     {
+        $this->restoreTableViewColumnOrder();
+
         if (! $this->isTableViewColumnOrderEnabled() || ! is_string($name) || ! in_array($direction, ['up', 'down'], true)) {
             return;
         }
@@ -205,7 +243,7 @@ trait HasColumnOrderTableViews
     protected function makeTableViewColumnToggleForm(): Form
     {
         return $this->makeForm()
-            ->schema([View::make('table-views::columns-list')])
+            ->schema([View::make('tablekit::columns-list')])
             ->statePath('toggledTableColumns');
     }
 }

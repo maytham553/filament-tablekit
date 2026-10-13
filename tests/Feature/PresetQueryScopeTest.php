@@ -1,16 +1,16 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Customer;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\EditCustomer;
-use Elite\TableViews\Tests\Fixtures\Pages\ListTeamOrders;
-use Elite\TableViews\Tests\Fixtures\RelationManagers\OrdersWithPresetsRelationManager;
-use Elite\TableViews\Tests\Fixtures\ScopedOrder;
-use Elite\TableViews\Tests\Fixtures\Team;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Customer;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\EditCustomer;
+use TableKit\Tests\Fixtures\Pages\ListTeamOrders;
+use TableKit\Tests\Fixtures\RelationManagers\OrdersWithPresetsRelationManager;
+use TableKit\Tests\Fixtures\ScopedOrder;
+use TableKit\Tests\Fixtures\Team;
 
 beforeEach(function () {
     $this->user = $this->signIn();

@@ -1,21 +1,21 @@
 <?php
 
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Customer;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\EditCustomer;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersColumnGroups;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersNoToggles;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersOneColumn;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Off;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3ToggleGrid;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersRich;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersSplit;
-use Elite\TableViews\Tests\Fixtures\RelationManagers\OrdersRelationManager;
-use Elite\TableViews\Tests\Fixtures\Widgets\OrdersWidget;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Customer;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\EditCustomer;
+use TableKit\Tests\Fixtures\Pages\ListOrdersColumnGroups;
+use TableKit\Tests\Fixtures\Pages\ListOrdersNoToggles;
+use TableKit\Tests\Fixtures\Pages\ListOrdersOneColumn;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Off;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3ToggleGrid;
+use TableKit\Tests\Fixtures\Pages\ListOrdersRich;
+use TableKit\Tests\Fixtures\Pages\ListOrdersSplit;
+use TableKit\Tests\Fixtures\RelationManagers\OrdersRelationManager;
+use TableKit\Tests\Fixtures\Widgets\OrdersWidget;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -274,8 +274,8 @@ describe('the column list', function () {
         $html = Livewire::test(ListOrdersPhase3::class)->html();
 
         expect($html)->toContain('fi-ta-col-toggle')
-            ->and($html)->toContain('fi-table-views-columns')
-            ->and($html)->not->toContain('fi-table-views-columns-fallback');
+            ->and($html)->toContain('fi-tablekit-columns')
+            ->and($html)->not->toContain('fi-tablekit-columns-fallback');
 
         foreach (['reference', 'customer_name', 'status', 'amount', 'team.name', 'notes', 'ordered_at', 'plain'] as $name) {
             expect($html)->toContain('data-column-row="'.$name.'"');
@@ -287,7 +287,7 @@ describe('the column list', function () {
     it('follows the table\'s columnToggleFormColumns()', function () {
         $html = Livewire::test(ListOrdersPhase3ToggleGrid::class)->html();
 
-        preg_match('/<div[^>]*fi-table-views-columns[^>]*>/', $html, $grid);
+        preg_match('/<div[^>]*fi-tablekit-columns[^>]*>/', $html, $grid);
 
         expect($grid[0] ?? '')->toContain('grid-cols-[--cols-default]')
             ->and($grid[0])->toContain('md:grid-cols-[--cols-md]')
@@ -297,7 +297,7 @@ describe('the column list', function () {
     });
 
     it('keeps one column when the table sets none', function () {
-        preg_match('/<div[^>]*fi-table-views-columns[^>]*>/', Livewire::test(ListOrdersPhase3::class)->html(), $grid);
+        preg_match('/<div[^>]*fi-tablekit-columns[^>]*>/', Livewire::test(ListOrdersPhase3::class)->html(), $grid);
 
         expect($grid[0] ?? '')->toContain('--cols-lg: repeat(1, minmax(0, 1fr))')->not->toContain('--cols-md');
     });
@@ -332,8 +332,8 @@ describe('the column list', function () {
 
         expect($items[1])->toBe($rows[1])
             ->and($html)->toContain("\$call('reorderTableViewColumns'")
-            ->and(substr_count($html, 'data-table-views-reorder-handle'))->toBeGreaterThanOrEqual(count($rows[1]))
-            ->and($html)->toContain(__('table-views::reorder.handle', ['name' => 'Reference']))
+            ->and(substr_count($html, 'data-tablekit-reorder-handle'))->toBeGreaterThanOrEqual(count($rows[1]))
+            ->and($html)->toContain(__('tablekit::reorder.handle', ['name' => 'Reference']))
             ->and($html)->toContain('x-on:keydown.arrow-up.prevent')
             ->and($html)->not->toContain('wire:click="reorderTableViewColumn(');
     });
@@ -347,7 +347,7 @@ describe('the column list', function () {
     it('renders a fallback dropdown when no column is toggleable', function () {
         $html = Livewire::test(ListOrdersNoToggles::class)->html();
 
-        expect($html)->toContain('fi-table-views-columns-fallback')
+        expect($html)->toContain('fi-tablekit-columns-fallback')
             ->and($html)->toContain('data-column-row="status"')
             ->and($html)->not->toContain('fi-ta-col-toggle');
     });
@@ -361,7 +361,7 @@ describe('the column list', function () {
     it('is not rendered for fewer than two columns', function () {
         $html = Livewire::test(ListOrdersOneColumn::class)->html();
 
-        expect($html)->not->toContain('data-column-row')->and($html)->not->toContain('fi-table-views-columns-fallback')->and($html)->toContain('fi-ta-col-toggle');
+        expect($html)->not->toContain('data-column-row')->and($html)->not->toContain('fi-tablekit-columns-fallback')->and($html)->toContain('fi-ta-col-toggle');
     });
 });
 
@@ -464,7 +464,7 @@ describe('switches', function () {
     });
 
     it('is off globally in config', function () {
-        config(['table-views.column_reordering.enabled' => false]);
+        config(['tablekit.column_reordering.enabled' => false]);
 
         $component = Livewire::test(ListOrdersPhase3::class)->call('reorderTableViewColumn', 'amount', 'up');
 
@@ -472,7 +472,7 @@ describe('switches', function () {
     });
 
     it('is off by the plugin', function () {
-        TableViewsPlugin::get()->columnReordering(false);
+        TableKitPlugin::get()->columnReordering(false);
 
         expect(Livewire::test(ListOrdersPhase3::class)->html())->not->toContain('data-column-row');
     });
@@ -480,8 +480,62 @@ describe('switches', function () {
     it('ignores a stored order while off', function () {
         Livewire::test(ListOrdersPhase3::class)->call('reorderTableViewColumn', 'amount', 'up');
 
-        config(['table-views.column_reordering.enabled' => false]);
+        config(['tablekit.column_reordering.enabled' => false]);
 
         expect(headerOrder(Livewire::test(ListOrdersPhase3::class)->html()))->toBe(CODE_HEADERS);
+    });
+});
+
+describe('after Filament rebuilds the table in resetTable()', function () {
+    it('keeps a moved column in the headers and the cells', function () {
+        $component = Livewire::test(ListOrdersPhase3::class)->call('reorderTableViewColumn', 'amount', 'up');
+        $expected = ['reference', 'customer-name', 'amount', 'status', 'team', 'ordered-at', 'plain'];
+
+        expect(headerOrder($component->html()))->toBe($expected);
+
+        $component->call('resetTable');
+
+        expect(headerOrder($component->html()))->toBe($expected)
+            ->and($component->get('tableViewColumnOrder'))->not->toBe([]);
+    });
+
+    it('keeps the order of an applied saved view', function () {
+        $view = storeView($this->user->id, ['columnOrder' => ['plain', 'reference']], ['resource' => ListOrdersPhase3::class]);
+
+        $component = Livewire::test(ListOrdersPhase3::class)->call('applyTableView', $view->id);
+        $expected = headerOrder($component->html());
+
+        $component->call('resetTable');
+
+        expect($expected[0])->toBe('plain')
+            ->and(headerOrder($component->html()))->toBe($expected)
+            ->and(callProtected($component, 'isActiveTableViewModified'))->toBeFalse();
+    });
+
+    it('keeps the order controls in the column toggle dropdown', function () {
+        $component = Livewire::test(ListOrdersPhase3::class)->call('reorderTableViewColumn', 'amount', 'up');
+
+        $component->call('resetTable');
+
+        expect($component->html())->toContain('data-column-row');
+    });
+
+    it('can still move a column afterwards', function () {
+        $component = Livewire::test(ListOrdersPhase3::class)->call('reorderTableViewColumn', 'amount', 'up')->call('resetTable');
+
+        $component->call('reorderTableViewColumn', 'amount', 'up');
+
+        expect(headerOrder($component->html()))->toBe(['reference', 'amount', 'customer-name', 'status', 'team', 'ordered-at', 'plain']);
+    });
+
+    it('moves a column on the rebuilt table when it is called in the same request', function () {
+        $component = Livewire::test(ListOrdersPhase3::class)->call('reorderTableViewColumn', 'amount', 'up');
+        $instance = $component->instance();
+
+        $instance->resetTable();
+        $instance->reorderTableViewColumn('plain', 'up');
+
+        expect(visibleOrderOf($component))->toBe(['reference', 'customer_name', 'amount', 'status', 'team.name', 'notes', 'plain', 'ordered_at'])
+            ->and($instance->getTable()->getColumns()['plain']->getTable())->toBe($instance->getTable());
     });
 });

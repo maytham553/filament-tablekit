@@ -1,14 +1,14 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Tests\Fixtures\Customer;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\EditCustomer;
-use Elite\TableViews\Tests\Fixtures\RelationManagers\OrdersRelationManager;
-use Elite\TableViews\Tests\Fixtures\Widgets\OrdersWidget;
-use Elite\TableViews\Tests\Fixtures\Widgets\SharedKeyTwinWidget;
-use Elite\TableViews\Tests\Fixtures\Widgets\SharedKeyWidget;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Tests\Fixtures\Customer;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\EditCustomer;
+use TableKit\Tests\Fixtures\RelationManagers\OrdersRelationManager;
+use TableKit\Tests\Fixtures\Widgets\OrdersWidget;
+use TableKit\Tests\Fixtures\Widgets\SharedKeyTwinWidget;
+use TableKit\Tests\Fixtures\Widgets\SharedKeyWidget;
 
 beforeEach(function () {
     $this->user = $this->signIn();

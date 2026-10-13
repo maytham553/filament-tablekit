@@ -1,8 +1,8 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\RelationManagers;
+namespace TableKit\Tests\Fixtures\RelationManagers;
 
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
 
 class OrdersWithPresetsRelationManager extends OrdersRelationManager
 {

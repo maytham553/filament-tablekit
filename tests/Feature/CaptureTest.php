@@ -1,9 +1,9 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithTabs;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithTabs;
 
 function capturedState(Closure $setup): array
 {
@@ -116,7 +116,7 @@ it('captures the active tab only when the flag is on', function () {
 
     expect(quickSave($component, 'no-tab')->state->tab)->toBeNull();
 
-    config(['table-views.state.tab' => true]);
+    config(['tablekit.state.tab' => true]);
 
     expect(quickSave($component, 'with-tab')->state->tab)->toBe('paid');
 });

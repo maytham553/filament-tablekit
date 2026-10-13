@@ -1,17 +1,17 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Support\TableViewsOptions;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\TableViewsServiceProvider;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\User;
 use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Support\Icons\IconManager;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Support\TableKitOptions;
+use TableKit\TableKitPlugin;
+use TableKit\TableKitServiceProvider;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\User;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -19,18 +19,18 @@ beforeEach(function () {
 
 function freshProviderDefaults(): void
 {
-    $provider = new TableViewsServiceProvider(app());
+    $provider = new TableKitServiceProvider(app());
     $method = new ReflectionMethod($provider, 'registerIconDefaults');
     $method->invoke($provider);
 }
 
 it('registers heroicon defaults for every alias', function () {
-    foreach (['table-views::favorites-bar.default', 'table-views::quick-save', 'table-views::icons.star', 'table-views::icons.chart-bar', 'table-views::icons.inbox'] as $alias) {
+    foreach (['tablekit::favorites-bar.default', 'tablekit::quick-save', 'tablekit::icons.star', 'tablekit::icons.chart-bar', 'tablekit::icons.inbox'] as $alias) {
         expect(FilamentIcon::resolve($alias))->toBeString()->toStartWith('heroicon-');
     }
 
-    foreach (config('table-views.icons') as $icon) {
-        expect(FilamentIcon::resolve("table-views::icons.{$icon}"))->not->toBeNull($icon);
+    foreach (config('tablekit.icons') as $icon) {
+        expect(FilamentIcon::resolve("tablekit::icons.{$icon}"))->not->toBeNull($icon);
     }
 });
 
@@ -38,20 +38,20 @@ it('does not overwrite an alias that is already registered', function () {
     app()->singleton(IconManager::class, fn () => new IconManager);
     FilamentIcon::clearResolvedInstances();
 
-    FilamentIcon::register(['table-views::quick-save' => 'tabler-bookmark']);
+    FilamentIcon::register(['tablekit::quick-save' => 'tabler-bookmark']);
 
     freshProviderDefaults();
 
-    expect(FilamentIcon::resolve('table-views::quick-save'))->toBe('tabler-bookmark')
-        ->and(FilamentIcon::resolve('table-views::icons.star'))->toBe('heroicon-m-star');
+    expect(FilamentIcon::resolve('tablekit::quick-save'))->toBe('tabler-bookmark')
+        ->and(FilamentIcon::resolve('tablekit::icons.star'))->toBe('heroicon-m-star');
 });
 
 it('uses the resolved alias in the favorites bar', function () {
     $this->seedOrders();
 
     FilamentIcon::register([
-        'table-views::favorites-bar.default' => new HtmlString('<svg data-test="remapped-default"></svg>'),
-        'table-views::icons.star' => new HtmlString('<svg data-test="remapped-star"></svg>'),
+        'tablekit::favorites-bar.default' => new HtmlString('<svg data-test="remapped-default"></svg>'),
+        'tablekit::icons.star' => new HtmlString('<svg data-test="remapped-star"></svg>'),
     ]);
 
     storeView($this->user->id, [], ['name' => 'Starred', 'icon' => 'star']);
@@ -70,15 +70,15 @@ it('never hard-codes a heroicon in the views', function () {
 it('resolves options from config when the panel has no plugin', function () {
     Filament::setCurrentPanel(Filament::getPanel('team'));
 
-    $options = TableViewsOptions::resolve();
+    $options = TableKitOptions::resolve();
 
-    expect($options->colors())->toBe(config('table-views.colors'))
+    expect($options->colors())->toBe(config('tablekit.colors'))
         ->and($options->favoritesBarEnabled())->toBeTrue()
         ->and($options->persistActiveViewInSession())->toBeFalse();
 });
 
 it('lets the plugin override every option', function () {
-    TableViewsPlugin::get()
+    TableKitPlugin::get()
         ->favoritesBar(false)
         ->quickSaveSlideOver()
         ->colors(['danger'])
@@ -87,7 +87,7 @@ it('lets the plugin override every option', function () {
         ->persistActiveViewInSession()
         ->connection('views');
 
-    $options = TableViewsOptions::resolve();
+    $options = TableKitOptions::resolve();
 
     expect($options->favoritesBarEnabled())->toBeFalse()
         ->and($options->isQuickSaveSlideOver())->toBeTrue()
@@ -99,31 +99,31 @@ it('lets the plugin override every option', function () {
 });
 
 it('falls back to the auth provider user model', function () {
-    expect(TableViewsOptions::resolve()->userModel())->toBe(User::class);
+    expect(TableKitOptions::resolve()->userModel())->toBe(User::class);
 });
 
 it('is registered under its id', function () {
-    expect(TableViewsPlugin::get()->getId())->toBe('table-views')
-        ->and(Filament::getPanel('admin')->hasPlugin('table-views'))->toBeTrue();
+    expect(TableKitPlugin::get()->getId())->toBe('tablekit')
+        ->and(Filament::getPanel('admin')->hasPlugin('tablekit'))->toBeTrue();
 });
 
 it('publishes the migration under the documented tag', function () {
-    $paths = ServiceProvider::pathsToPublish(TableViewsServiceProvider::class, 'table-views-migrations');
+    $paths = ServiceProvider::pathsToPublish(TableKitServiceProvider::class, 'tablekit-migrations');
 
     expect($paths)->toHaveCount(2)
-        ->and(array_key_first($paths))->toEndWith('create_table_views_table.php')
-        ->and(array_values($paths)[0])->toContain('_create_table_views_table.php')
-        ->and(array_keys($paths)[1])->toEndWith('create_table_view_preferences_table.php')
-        ->and(array_values($paths)[1])->toContain('_create_table_view_preferences_table.php');
+        ->and(array_key_first($paths))->toEndWith('create_tablekit_views_table.php')
+        ->and(array_values($paths)[0])->toContain('_create_tablekit_views_table.php')
+        ->and(array_keys($paths)[1])->toEndWith('create_tablekit_preferences_table.php')
+        ->and(array_values($paths)[1])->toContain('_create_tablekit_preferences_table.php');
 });
 
 it('reads the table name from config only, like the migration', function () {
-    expect((new TableView)->getTable())->toBe('table_views');
+    expect((new TableView)->getTable())->toBe('tablekit_views');
 
-    config(['table-views.table' => 'custom_views']);
+    config(['tablekit.table' => 'custom_views']);
 
     expect((new TableView)->getTable())->toBe('custom_views')
-        ->and(method_exists(TableViewsPlugin::class, 'tableName'))->toBeFalse()
-        ->and(method_exists(TableViewsPlugin::class, 'userKey'))->toBeFalse()
-        ->and(method_exists(TableViewsPlugin::class, 'userTable'))->toBeFalse();
+        ->and(method_exists(TableKitPlugin::class, 'tableName'))->toBeFalse()
+        ->and(method_exists(TableKitPlugin::class, 'userKey'))->toBeFalse()
+        ->and(method_exists(TableKitPlugin::class, 'userTable'))->toBeFalse();
 });

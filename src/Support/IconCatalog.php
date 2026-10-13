@@ -1,10 +1,10 @@
 <?php
 
-namespace Elite\TableViews\Support;
+namespace TableKit\Support;
 
 /**
  * Every icon key the plugin knows, with its default heroicon. The stored value is the key; the alias
- * `table-views::icons.<key>` resolves it at render time, so an app can remap any of them (for example to Tabler).
+ * `tablekit::icons.<key>` resolves it at render time, so an app can remap any of them (for example to Tabler).
  */
 class IconCatalog
 {
@@ -143,7 +143,7 @@ class IconCatalog
         $aliases = [];
 
         foreach (static::ICONS as $key => $icon) {
-            $aliases["table-views::icons.{$key}"] = $icon;
+            $aliases["tablekit::icons.{$key}"] = $icon;
         }
 
         return $aliases;

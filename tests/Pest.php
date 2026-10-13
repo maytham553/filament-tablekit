@@ -1,14 +1,14 @@
 <?php
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Support\TableViewState;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
-use Elite\TableViews\Tests\TestCase;
 use Livewire\Features\SupportTesting\Testable;
+use TableKit\Models\TablePreference;
+use TableKit\Models\TableView;
+use TableKit\Support\TableViewState;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\TestCase;
 
 uses(TestCase::class)->in('Unit', 'Feature');
 

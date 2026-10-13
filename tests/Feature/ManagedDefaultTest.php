@@ -1,23 +1,23 @@
 <?php
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
-use Elite\TableViews\Tests\Fixtures\Team;
-use Elite\TableViews\Tests\Fixtures\User;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
+use TableKit\Models\TablePreference;
+use TableKit\Presets\PresetTableView;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\Team;
+use TableKit\Tests\Fixtures\User;
 
 beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
 
-    config(['table-views.managed_default_views' => true]);
+    config(['tablekit.managed_default_views' => true]);
 
     presets(fn () => [
         'shipped' => PresetTableView::make()->label('Shipped')->favorite()->defaultFilters(['status' => ['value' => 'shipped']]),
@@ -78,7 +78,7 @@ it('is skipped when the url has table state', function () {
 });
 
 it('is ignored while the feature is off, the developer default still applies', function () {
-    config(['table-views.managed_default_views' => false]);
+    config(['tablekit.managed_default_views' => false]);
     makeDefault('user', $this->view->id);
 
     Livewire::test(ListOrdersWithPresets::class)
@@ -87,8 +87,8 @@ it('is ignored while the feature is off, the developer default still applies', f
 });
 
 it('can be switched on with the plugin', function () {
-    config(['table-views.managed_default_views' => false]);
-    TableViewsPlugin::get()->managedDefaultViews();
+    config(['tablekit.managed_default_views' => false]);
+    TableKitPlugin::get()->managedDefaultViews();
     makeDefault('user', $this->view->id);
 
     Livewire::test(ListOrdersWithPresets::class)->assertSet('activeTableViewId', $this->view->id);
@@ -98,7 +98,7 @@ describe('fallbacks', function () {
     it('falls back to the developer default when the default view was deleted', function () {
         makeDefault('user', $this->view->id);
 
-        DB::table('table_views')->where('id', $this->view->id)->delete();
+        DB::table('tablekit_views')->where('id', $this->view->id)->delete();
 
         expect(TablePreference::query()->where('is_default', true)->count())->toBe(1);
 
@@ -185,7 +185,7 @@ describe('fallbacks', function () {
 });
 
 describe('session persistence', function () {
-    beforeEach(fn () => config(['table-views.persist_active_view_in_session' => true]));
+    beforeEach(fn () => config(['tablekit.persist_active_view_in_session' => true]));
 
     it('prefers the view remembered in the session over the managed default', function () {
         makeDefault('user', $this->view->id);
@@ -273,7 +273,7 @@ describe('session persistence', function () {
     });
 
     it('forgets the remembered view on default when managed defaults are off', function () {
-        config(['table-views.managed_default_views' => false]);
+        config(['tablekit.managed_default_views' => false]);
         presets(fn () => ['shipped' => PresetTableView::make()->favorite()]);
 
         Livewire::test(ListOrdersWithPresets::class)->call('applyTablePresetView', 'shipped')->call('applyDefaultTableView');
@@ -334,7 +334,7 @@ describe('session persistence', function () {
         it('stores none when Default is pressed and starts plain on the next visit', function () {
             Livewire::test(ListOrdersWithPresets::class)->assertSet('activeTableViewId', $this->view->id)->call('applyDefaultTableView');
 
-            expect(session('table-views.'.md5(ListOrdersWithPresets::class.'||').'.active'))->toBe('none');
+            expect(session('tablekit.'.md5(ListOrdersWithPresets::class.'||').'.active'))->toBe('none');
 
             Livewire::test(ListOrdersWithPresets::class)
                 ->assertSet('activeTableViewId', null)
@@ -377,17 +377,17 @@ describe('session persistence', function () {
         });
 
         it('is not written when managed defaults are off', function () {
-            config(['table-views.managed_default_views' => false]);
+            config(['tablekit.managed_default_views' => false]);
 
             Livewire::test(ListOrdersWithPresets::class)->call('applyDefaultTableView');
 
-            expect(session()->has('table-views.'.md5(ListOrdersWithPresets::class.'||').'.active'))->toBeFalse();
+            expect(session()->has('tablekit.'.md5(ListOrdersWithPresets::class.'||').'.active'))->toBeFalse();
         });
     });
 
     it('does not restore remembered garbage', function (mixed $value) {
         $component = Livewire::test(ListOrdersWithPresets::class)->call('applyTableView', $this->view->id);
-        $key = 'table-views.'.md5(ListOrdersWithPresets::class.'||').'.active';
+        $key = 'tablekit.'.md5(ListOrdersWithPresets::class.'||').'.active';
 
         session()->put($key, $value);
 

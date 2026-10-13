@@ -1,19 +1,19 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3PersistentPresets;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3PersistentPresets;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
 
 beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
 
     config([
-        'table-views.managed_default_views' => true,
-        'table-views.persist_active_view_in_session' => false,
-        'table-views.quick_filters.enabled' => true,
+        'tablekit.managed_default_views' => true,
+        'tablekit.persist_active_view_in_session' => false,
+        'tablekit.quick_filters.enabled' => true,
     ]);
 
     $this->page = ListOrdersPhase3Presets::class;
@@ -21,7 +21,7 @@ beforeEach(function () {
     $this->makeView = fn (array $state, ?string $page = null) => storeView($this->user->id, $state, ['resource' => $page ?? $this->page]);
 
     $this->setDefault = function ($view, ?string $page = null) {
-        DB::table('table_view_preferences')->delete();
+        DB::table('tablekit_preferences')->delete();
         storePreference($this->user->id, 'user', (string) $view->id, ['is_default' => true, 'resource' => $page ?? $this->page]);
     };
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\Widgets;
+namespace TableKit\Tests\Fixtures\Widgets;
 
-use Elite\TableViews\Presets\PresetTableView;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use TableKit\Presets\PresetTableView;
 
 class OrdersWidgetWithHeading extends OrdersWidget
 {
