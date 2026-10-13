@@ -480,7 +480,9 @@ class PresetTableView
 
     /**
      * The closure's wheres go into one nested group on the query, so an `orWhere` inside it only widens the preset
-     * and never the constraints already on the query. The closure runs once per call.
+     * and never the constraints already on the query. Scopes the closure removes (`withoutGlobalScopes()`,
+     * `withTrashed()`) are not carried over: every global scope of the table query stays in force.
+     * The closure runs once per call.
      */
     public function applyQuery(Builder $query): Builder
     {
@@ -488,13 +490,18 @@ class PresetTableView
             return $query;
         }
 
-        return $query->where(function (Builder $nested): void {
-            $this->evaluate(
-                $this->modifyQueryUsing,
-                ['query' => $nested, 'livewire' => $this->livewire],
-                [Builder::class => $nested],
-            );
-        });
+        $nested = $query->getModel()->newQueryWithoutRelationships();
+
+        $this->evaluate(
+            $this->modifyQueryUsing,
+            ['query' => $nested, 'livewire' => $this->livewire],
+            [Builder::class => $nested],
+        );
+
+        $query->setEagerLoads(array_merge($query->getEagerLoads(), $nested->getEagerLoads()));
+        $query->getQuery()->addNestedWhereQuery($nested->getQuery());
+
+        return $query;
     }
 
     /**

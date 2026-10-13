@@ -120,27 +120,109 @@ trait HasTableViews
     }
 
     /**
-     * What the user already has in the session for this table when a page loads, before a view is applied during mount:
-     * column order, column toggles, pinned filters and, with persistSortInSession, the sorts. Each entry is `[value]`, or null when nothing is stored.
+     * What the USER left in the session for this table when a page loads, before a view is applied during mount: column order, column toggles,
+     * pinned filters and, with persistSortInSession, the sorts (primary and extra). A stored value only counts when it is not what the last view apply
+     * wrote (see markTableViewWrittenParts), so a view's own leftovers never beat the next startup, remembered or URL view.
+     * Each entry is `[value]`, or null when the user left nothing.
      *
      * @return array<string, array<int, mixed>|null>
      */
     protected function snapshotPersistedTableViewParts(): array
     {
+        $written = $this->getTableViewWrittenParts();
+        $sorts = $this->getTable()->persistsSortInSession() && filled($this->tableSortColumn) ? $this->effectiveTableViewSorts() : null;
+
         return [
-            'order' => $this->isTableViewColumnOrderEnabled() && session()->has($this->getTableViewSessionKey('column_order'))
-                ? [$this->tableViewColumnOrder]
-                : null,
+            'order' => $this->isTableViewColumnOrderEnabled()
+                && session()->has($this->getTableViewSessionKey('column_order'))
+                && $this->tableViewPartHash($this->tableViewColumnOrder) !== ($written['order'] ?? null)
+                    ? [$this->tableViewColumnOrder]
+                    : null,
             'toggles' => session()->has($this->getTableColumnToggleFormStateSessionKey())
-                ? [$this->toggledTableColumns]
-                : null,
-            'pins' => $this->isTableViewQuickFiltersEnabled() && session()->has($this->getTableViewSessionKey('favorite_filters'))
-                ? [$this->tableViewFavoriteFilters]
-                : null,
-            'sorts' => $this->getTable()->persistsSortInSession() && filled($this->tableSortColumn)
-                ? [$this->effectiveTableViewSorts()]
+                && $this->tableViewPartHash($this->toggledTableColumns, sortKeys: true) !== ($written['columns'] ?? null)
+                    ? [$this->toggledTableColumns]
+                    : null,
+            'pins' => $this->isTableViewQuickFiltersEnabled()
+                && session()->has($this->getTableViewSessionKey('favorite_filters'))
+                && $this->tableViewPartHash($this->tableViewFavoriteFilters) !== ($written['pins'] ?? null)
+                    ? [$this->tableViewFavoriteFilters]
+                    : null,
+            'sorts' => $sorts !== null && $this->tableViewPartHash($sorts) !== ($written['sorts'] ?? null)
+                ? [$sorts]
                 : null,
         ];
+    }
+
+    /**
+     * @param  array<mixed>|null  $value
+     */
+    protected function tableViewPartHash(?array $value, bool $sortKeys = false): string
+    {
+        if ($sortKeys) {
+            $value = $this->sortTableViewToggleKeys($value ?? []);
+        }
+
+        return md5(json_encode($value));
+    }
+
+    /**
+     * Toggles are a map: the order of its keys is not a change.
+     *
+     * @param  array<mixed>  $value
+     * @return array<mixed>
+     */
+    protected function sortTableViewToggleKeys(array $value): array
+    {
+        foreach ($value as $key => $item) {
+            if (is_array($item)) {
+                $value[$key] = $this->sortTableViewToggleKeys($item);
+            }
+        }
+
+        ksort($value);
+
+        return $value;
+    }
+
+    protected function getTableViewWrittenSessionKey(): string
+    {
+        return $this->getTableViewSessionKey('applied');
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected function getTableViewWrittenParts(): array
+    {
+        $written = session()->get($this->getTableViewWrittenSessionKey());
+
+        return is_array($written) ? $written : [];
+    }
+
+    /**
+     * Remembers, as hashes, what a view apply left in the session for each part, so a later page load can tell it from a change the user made.
+     * A part the view preserved was not written by the view and keeps its earlier mark.
+     *
+     * @param  array<string>  $preserved
+     */
+    protected function markTableViewWrittenParts(array $preserved = []): void
+    {
+        $written = $this->getTableViewWrittenParts();
+
+        if (! in_array(PresetTableView::PART_COLUMNS, $preserved, true)) {
+            $written['columns'] = $this->tableViewPartHash($this->toggledTableColumns, sortKeys: true);
+            $written['order'] = $this->tableViewPartHash($this->tableViewColumnOrder);
+        }
+
+        if (! in_array(PresetTableView::PART_FILTERS, $preserved, true)) {
+            $written['pins'] = $this->tableViewPartHash($this->tableViewFavoriteFilters);
+        }
+
+        if (! in_array(PresetTableView::PART_SORT, $preserved, true)) {
+            $written['sorts'] = $this->tableViewPartHash($this->effectiveTableViewSorts());
+        }
+
+        session()->put($this->getTableViewWrittenSessionKey(), $written);
     }
 
     /**
@@ -365,6 +447,7 @@ trait HasTableViews
         $this->activeTablePresetKey = null;
         $this->activeTableViewId = $view->getKey();
         $this->activeTableViewHash = $this->captureTableViewState()->hash();
+        $this->markTableViewWrittenParts();
 
         if ($remember) {
             $this->rememberActiveTableView((string) $view->getKey());
@@ -386,6 +469,7 @@ trait HasTableViews
         $this->activeTablePresetKey = $preset->getKey();
         $this->activeTableViewId = null;
         $this->activeTableViewHash = $this->captureTableViewState()->hash();
+        $this->markTableViewWrittenParts($preserved);
 
         if ($remember) {
             $this->rememberActiveTableView('preset:'.$preset->getKey());
@@ -408,6 +492,7 @@ trait HasTableViews
         $this->activeTableViewId = null;
         $this->activeTableViewHash = null;
         $this->activeTablePresetKey = null;
+        $this->markTableViewWrittenParts();
 
         $options = TableViewsOptions::resolve();
 

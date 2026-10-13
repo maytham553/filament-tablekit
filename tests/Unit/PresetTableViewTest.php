@@ -151,3 +151,32 @@ it('runs the query closure with a named or typed builder and keeps the query whe
         ->and($nothing->applyQuery($query())->toSql())->toContain('"status" = ?')
         ->and(PresetTableView::make()->applyQuery($query())->toSql())->not->toContain('where');
 });
+
+it('evaluates the badge, badge color and tooltip closures once per instance, however often they are read', function () {
+    $calls = ['badge' => 0, 'color' => 0, 'tooltip' => 0];
+
+    $preset = PresetTableView::make()
+        ->badge(function () use (&$calls) {
+            $calls['badge']++;
+
+            return 3;
+        })
+        ->badgeColor(function () use (&$calls) {
+            $calls['color']++;
+
+            return 'danger';
+        })
+        ->tooltip(function () use (&$calls) {
+            $calls['tooltip']++;
+
+            return 'tip';
+        });
+
+    foreach (range(1, 3) as $read) {
+        expect($preset->getBadge())->toBe(3)
+            ->and($preset->getBadgeColor())->toBe('danger')
+            ->and($preset->getTooltip())->toBe('tip');
+    }
+
+    expect($calls)->toBe(['badge' => 1, 'color' => 1, 'tooltip' => 1]);
+});

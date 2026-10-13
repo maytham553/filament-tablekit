@@ -217,6 +217,27 @@ describe('session persistence', function () {
             ->assertSet('activeTablePresetKey', 'dev');
     });
 
+    it('does not remember a managed default preset as a choice either', function () {
+        makeDefault('preset', 'shipped');
+
+        Livewire::test(ListOrdersWithPresets::class)->assertSet('activeTablePresetKey', 'shipped');
+
+        TablePreference::query()->delete();
+
+        Livewire::test(ListOrdersWithPresets::class)->assertSet('activeTablePresetKey', 'dev');
+    });
+
+    it('does not remember the developer default preset as a choice', function () {
+        Livewire::test(ListOrdersWithPresets::class)->assertSet('activeTablePresetKey', 'dev');
+
+        presets(fn () => [
+            'shipped' => PresetTableView::make()->label('Shipped')->favorite()->default()->defaultFilters(['status' => ['value' => 'shipped']]),
+            'dev' => PresetTableView::make()->label('Dev default')->defaultSearch('ORD-09'),
+        ]);
+
+        Livewire::test(ListOrdersWithPresets::class)->assertSet('activeTablePresetKey', 'shipped');
+    });
+
     it('falls through to the managed default when the remembered view is stale', function () {
         makeDefault('preset', 'shipped');
 

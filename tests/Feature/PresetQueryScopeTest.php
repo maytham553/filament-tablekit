@@ -6,6 +6,7 @@ use Elite\TableViews\Tests\Fixtures\Order;
 use Elite\TableViews\Tests\Fixtures\Pages\EditCustomer;
 use Elite\TableViews\Tests\Fixtures\Pages\ListTeamOrders;
 use Elite\TableViews\Tests\Fixtures\RelationManagers\OrdersWithPresetsRelationManager;
+use Elite\TableViews\Tests\Fixtures\ScopedOrder;
 use Elite\TableViews\Tests\Fixtures\Team;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
@@ -64,6 +65,27 @@ it('runs the closure exactly once per query build', function () {
 
     $preset->applyQuery(Order::query());
     expect($calls)->toBe(2);
+});
+
+it('keeps the global scopes of the table query when the closure removes them', function (string $how) {
+    $preset = PresetTableView::make()->modifyQueryUsing(fn (Builder $query) => ($how === 'all'
+        ? $query->withoutGlobalScopes()
+        : $query->withoutGlobalScope('not-cancelled'))->whereIn('status', ['paid', 'cancelled']));
+
+    $expected = Order::where('status', 'paid')->count();
+
+    $query = $preset->applyQuery(ScopedOrder::query());
+
+    expect($expected)->toBeGreaterThan(0)
+        ->and(Order::where('status', 'cancelled')->count())->toBeGreaterThan(0)
+        ->and($query->count())->toBe($expected)
+        ->and($query->pluck('status')->unique()->all())->toBe(['paid']);
+})->with(['withoutGlobalScopes()' => 'all', 'withoutGlobalScope(name)' => 'named']);
+
+it('keeps the eager loads of the closure', function () {
+    $preset = PresetTableView::make()->modifyQueryUsing(fn (Builder $query) => $query->with('team'));
+
+    expect($preset->applyQuery(Order::query())->getEagerLoads())->toHaveKey('team');
 });
 
 describe('relation manager', function () {
