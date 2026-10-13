@@ -25,18 +25,20 @@ You are reading the docs for **Filament 5**. See [Which version?](#which-version
 
 ## Which version?
 
-Use the branch that matches your Filament version.
+Use the TableKit version that matches your Filament version. Composer picks it for you from the Filament you have installed.
 
-| Filament | Livewire | Branch | Composer constraint | Laravel |
+| Filament | Livewire | TableKit | Branch | Laravel |
 | --- | --- | --- | --- | --- |
-| 5 | 4 | `main` | `filament/filament: ^5.8.4` | 11.28+, 12, 13 |
-| 4 | 3 | `filament-v4` | `filament/filament: ^4.15` | 11.28+, 12, 13 |
-| 3 | 3 | `filament-v3` | `filament/filament: ^3.3` | 11 |
+| 5 | 4 | `^5.0` | `main` | 11.28+, 12, 13 |
+| 4 | 3 | `^4.0` | `filament-v4` | 11.28+, 12, 13 |
+| 3 | 3 | `^3.0` | `filament-v3` | 11.28+, 12 |
 
 All versions need PHP 8.2 or newer.
 Filament 5.0.0, 5.5.0, 5.7.0 and 5.8.0 fail the package tests before they reach plugin code, so they are excluded. The package is tested with Filament 5.10.1 and Livewire 4.4.7.
 
 ## Installation
+
+You need an existing Filament 5 panel.
 
 1. Install the package.
 
@@ -44,21 +46,15 @@ Filament 5.0.0, 5.5.0, 5.7.0 and 5.8.0 fail the package tests before they reach 
    composer require tablekit/filament-tablekit
    ```
 
+   Not on Packagist yet, or want a branch? See [Install from GitHub](docs/installation.md#install-from-github).
+
 2. Run the migrations. They load by themselves. If your app owns its migrations, see [Database](docs/database.md#publish-the-migrations).
 
    ```bash
    php artisan migrate
    ```
 
-3. Register the plugin on your panel. No theme or CSS step is needed.
-
-   ```php
-   use TableKit\TableKitPlugin;
-
-   $panel->plugin(TableKitPlugin::make());
-   ```
-
-4. Add the trait to a list page, a relation manager or a table widget.
+3. Add the trait to a list page, a relation manager or a table widget, for example `app/Filament/Resources/Orders/Pages/ListOrders.php`.
 
    ```php
    use TableKit\Concerns\HasTableKit;
@@ -69,11 +65,19 @@ Filament 5.0.0, 5.5.0, 5.7.0 and 5.8.0 fail the package tests before they reach 
    }
    ```
 
-Open the table. The bar with **Default** and **Save view** is now above it.
+   Open the table. The bar with **Default** and **Save view** is now above it. No theme or CSS step is needed.
+
+4. Optional: register the plugin in your panel provider (`app/Providers/Filament/AdminPanelProvider.php`, inside `panel()`). You only need it to change options. Everything works without it.
+
+   ```php
+   use TableKit\TableKitPlugin;
+
+   $panel->plugin(TableKitPlugin::make());
+   ```
 
 ## Your first preset
 
-Return presets from the same class. Make the method `protected`.
+Return presets from the same class. Make the method `protected`. This one assumes a `status` filter and a sortable `ordered_at` column. A filter or column that does not exist is ignored.
 
 ```php
 use TableKit\Presets\PresetTableView;
@@ -96,6 +100,7 @@ protected function getPresetTableViews(): array
 
 | Page | What is in it |
 | --- | --- |
+| [Installation](docs/installation.md) | Composer, GitHub, publish tags |
 | [Configuration](docs/configuration.md) | Every config key and plugin option |
 | [Views](docs/views.md) | Saved views, the bar, the manager, defaults, reload and the URL |
 | [Presets](docs/presets.md) | Every preset method, with examples |
@@ -105,6 +110,7 @@ protected function getPresetTableViews(): array
 | [Colors and icons](docs/colors-and-icons.md) | Pickers, icon aliases, Tabler remap, translations |
 | [Database](docs/database.md) | Tables, connection, tenancy, user keys, stored state |
 | [Limits](docs/limits.md) | Known limits |
+| [Testing](docs/testing.md) | Livewire test examples |
 | [Upgrading](docs/upgrading.md) | Upgrade notes |
 
 ## Security and privacy

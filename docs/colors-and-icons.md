@@ -70,11 +70,12 @@ The default list has about 120 keys, ordered by topic:
 
 1. Register the alias.
 2. Add the key to the list (`icons` in config, or `->icons([...])`).
-3. Optionally add a label in `tablekit::icons.<key>` and search words in `tablekit::icon-keywords.<key>` (separated by spaces).
+3. Optionally add a label in `tablekit::icons.<key>` and search words in `tablekit::icon-keywords.<key>` (separated by spaces). An icon without a label shows its key with the first letter capitalized and hyphens turned into spaces (`rocket-x` becomes "Rocket x").
 
 ```php
 use Filament\Support\Facades\FilamentIcon;
 
+// in AppServiceProvider::boot()
 FilamentIcon::register(['tablekit::icons.rocket-x' => 'heroicon-o-rocket-launch']);
 ```
 

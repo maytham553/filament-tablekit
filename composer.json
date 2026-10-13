@@ -30,6 +30,9 @@
         "format": "vendor/bin/pint"
     },
     "extra": {
+        "branch-alias": {
+            "dev-main": "5.x-dev"
+        },
         "laravel": {
             "providers": [
                 "TableKit\\TableKitServiceProvider"

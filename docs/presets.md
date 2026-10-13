@@ -5,6 +5,7 @@ A preset is a view that you define in code. Users can apply, favorite and reorde
 Return presets from the component that uses `HasTableKit`. Declare the method `protected`. A `public` method can be called from the browser. It would only return the presets, but there is no reason to expose it.
 
 ```php
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Builder;
 use TableKit\Presets\PresetTableView;
 
@@ -27,11 +28,19 @@ protected function getPresetTableViews(): array
             ->badgeColor('warning')
             ->cacheBadgeFor(60)
             ->tooltip('Orders on the way')
-            ->visible(fn () => auth()->user()->can('view-shipped'))
-            ->preserveSearch(),
+            // Show the preset only to users who pass this check. It is not access control (see Hidden query).
+            ->visible(fn () => auth()->user()->can('view-shipped')),
     ];
 }
 ```
+
+This example shows every method at once. Some of them need something in the table:
+
+- `defaultGrouping('status', 'asc')` needs the group in the table: `->groups([Group::make('status')])`.
+- `defaultColumnSearches([...])` needs columns with `searchable(isIndividual: true)`.
+- `defaultToggledColumns([...])` only affects columns that are toggleable.
+- Names that do not exist (a filter, a sort or grouping column, a toggleable column) are ignored.
+- `preserveSearch()` is left out of this example on purpose. It keeps the user's search, so it cancels `defaultSearch()` and `defaultColumnSearches()`. See [Preserve parts](#preserve-parts).
 
 The array key is the preset key. Keys are 1 to 100 letters, digits, `_`, `.`, `:` or `-`. A wrong key or value throws an error. Presets show in the order you return them, unless the user reordered them in the [manager](views.md#view-manager).
 
@@ -136,15 +145,19 @@ Use `preserve*` when a preset should leave some parts alone. This preset only ch
 
 ## Custom icons
 
-Register your own icon alias, then use its key:
+Register your own icon alias in the `boot()` method of `AppServiceProvider`. Use a **new** key: the built-in keys (such as `rocket`) are already registered.
 
 ```php
 use Filament\Support\Facades\FilamentIcon;
 
-FilamentIcon::register(['tablekit::icons.rocket' => 'heroicon-o-rocket-launch']);
+FilamentIcon::register(['tablekit::icons.rocket-x' => 'heroicon-o-rocket-launch']);
 ```
 
-An unknown key shows no icon. See [Colors and icons](colors-and-icons.md) for more.
+```php
+PresetTableView::make()->label('Launch')->icon('rocket-x');
+```
+
+A preset may use any registered alias. The `icons` list in the config (or `->icons([...])`) only controls what the icon picker offers for saved views. An unknown key shows no icon. See [Colors and icons](colors-and-icons.md) for more.
 
 ## Storage
 
