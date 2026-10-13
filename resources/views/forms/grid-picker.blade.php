@@ -12,7 +12,7 @@
     $values = array_column($items, 'value');
     $tabStop = in_array($selected, $values, true) ? $selected : ($values[0] ?? '');
     $entries = array_map(fn (array $item): array => ['v' => $item['value'], 's' => $item['search']], $items);
-    $checkIcon = FilamentIcon::resolve('table-views::manager.active');
+    $checkIcon = FilamentIcon::resolve('tablekit::manager.active');
 @endphp
 
 <x-dynamic-component :component="$getFieldWrapperView()" :field="$field">
@@ -135,8 +135,8 @@
                         x-on:keydown.enter.prevent
                         x-on:keydown.down.prevent="fromSearch()"
                         :disabled="$isDisabled"
-                        :placeholder="__('table-views::pickers.search')"
-                        :aria-label="__('table-views::pickers.search')"
+                        :placeholder="__('tablekit::pickers.search')"
+                        :aria-label="__('tablekit::pickers.search')"
                         data-tv-search
                         autocomplete="off"
                     />
@@ -188,7 +188,7 @@
 
             @if ($searchable)
                 <p class="tv-picker__empty" style="display: none" x-show="visible().length === 0">
-                    {{ __('table-views::pickers.no_results') }}
+                    {{ __('tablekit::pickers.no_results') }}
                 </p>
             @endif
         </div>

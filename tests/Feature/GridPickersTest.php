@@ -1,14 +1,5 @@
 <?php
 
-use Elite\TableViews\Forms\ColorGridPicker;
-use Elite\TableViews\Forms\IconGridPicker;
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Support\ColorPalette;
-use Elite\TableViews\Support\IconCatalog;
-use Elite\TableViews\Support\TableViewsOptions;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\TableViewsServiceProvider;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
 use Filament\Support\Facades\FilamentIcon;
@@ -19,6 +10,15 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\HtmlString;
 use Livewire\Livewire;
+use TableKit\Forms\ColorGridPicker;
+use TableKit\Forms\IconGridPicker;
+use TableKit\Models\TableView;
+use TableKit\Support\ColorPalette;
+use TableKit\Support\IconCatalog;
+use TableKit\Support\TableKitOptions;
+use TableKit\TableKitPlugin;
+use TableKit\TableKitServiceProvider;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -78,8 +78,8 @@ describe('rendering', function () {
             ->and(substr_count($html, 'role="radiogroup"'))->toBe(2)
             ->and(pickerHtml($html, 'color'))->not->toContain('<select')
             ->and(preg_match('/<select[^>]*mountedActionsData/', $html))->toBe(0)
-            ->and(array_column(pickerCells($html, 'color'), 'value'))->toBe(config('table-views.colors'))
-            ->and(array_column(pickerCells($html, 'icon'), 'value'))->toBe(['', ...config('table-views.icons')]);
+            ->and(array_column(pickerCells($html, 'color'), 'value'))->toBe(config('tablekit.colors'))
+            ->and(array_column(pickerCells($html, 'icon'), 'value'))->toBe(['', ...config('tablekit.icons')]);
     });
 
     it('puts the no icon cell first and labels every cell with a tooltip and an accessible name', function () {
@@ -106,7 +106,7 @@ describe('rendering', function () {
         $icons = pickerHtml($html, 'icon');
         $colors = pickerHtml($html, 'color');
 
-        expect(substr_count($icons, '<svg'))->toBeGreaterThanOrEqual(count(config('table-views.icons')))
+        expect(substr_count($icons, '<svg'))->toBeGreaterThanOrEqual(count(config('tablekit.icons')))
             ->and($colors)->toContain('--color-500:var(--rose-500)')->toContain('--color-500:var(--primary-500)')
             ->and($icons)->toContain('data-tv-search')->toContain('x-model="search"');
     });
@@ -161,7 +161,7 @@ describe('rendering', function () {
     });
 
     it('offers only the plugin configured colors and icons', function () {
-        TableViewsPlugin::get()->colors(['teal', 'rose'])->icons(['star']);
+        TableKitPlugin::get()->colors(['teal', 'rose'])->icons(['star']);
 
         $html = quickSaveModal();
 
@@ -170,7 +170,7 @@ describe('rendering', function () {
     });
 
     it('renders the icons through the alias, so a remap shows up', function () {
-        FilamentIcon::register(['table-views::icons.star' => new HtmlString('<svg data-test="remapped-star"></svg>')]);
+        FilamentIcon::register(['tablekit::icons.star' => new HtmlString('<svg data-test="remapped-star"></svg>')]);
 
         expect(pickerHtml(quickSaveModal(), 'icon'))->toContain('data-test="remapped-star"');
     });
@@ -259,8 +259,8 @@ describe('validation', function () {
     });
 
     it('accepts the first, middle and last configured color and icon, and offers all of them to validation', function () {
-        $colors = config('table-views.colors');
-        $icons = config('table-views.icons');
+        $colors = config('tablekit.colors');
+        $icons = config('tablekit.icons');
         $component = Livewire::test(ListOrders::class);
 
         foreach ([$colors[0], $colors[intdiv(count($colors), 2)], end($colors)] as $i => $color) {
@@ -271,8 +271,8 @@ describe('validation', function () {
             expect(quickSave($component, "Icon {$i}", ['icon' => $icon])->icon)->toBe($icon);
         }
 
-        expect(TableViewsOptions::resolve()->colors())->toBe($colors)
-            ->and(TableViewsOptions::resolve()->icons())->toBe($icons);
+        expect(TableKitOptions::resolve()->colors())->toBe($colors)
+            ->and(TableKitOptions::resolve()->icons())->toBe($icons);
     });
 
     it('does not blow up rendering when the stored state is not a string', function () {
@@ -348,7 +348,7 @@ describe('colors', function () {
         };
 
         try {
-            (new TableViewsServiceProvider($app))->packageRegistered();
+            (new TableKitServiceProvider($app))->packageRegistered();
         } finally {
             Container::setInstance($previous);
             Facade::setFacadeApplication($previous);
@@ -358,14 +358,14 @@ describe('colors', function () {
     });
 
     it('renders every configured color on the favorites bar and the manager rows', function () {
-        foreach (config('table-views.colors') as $i => $color) {
+        foreach (config('tablekit.colors') as $i => $color) {
             storeView($this->user->id, [], ['name' => "View {$i}", 'color' => $color, 'sort' => $i]);
         }
 
         $bar = Livewire::test(ListOrders::class)->html();
         $manager = Livewire::test(ListOrders::class)->call('openTableViewsManager')->html();
 
-        foreach (config('table-views.colors') as $color) {
+        foreach (config('tablekit.colors') as $color) {
             expect(FilamentColor::getColors())->toHaveKey($color);
             // Filament draws a gray button without a color class.
             expect($bar)->toContain($color === 'gray' ? 'fi-outlined' : "fi-color-{$color}");
@@ -374,21 +374,21 @@ describe('colors', function () {
     });
 
     it('drops a configured color Filament does not know', function () {
-        TableViewsPlugin::get()->colors(['primary', 'nope', 'rose']);
+        TableKitPlugin::get()->colors(['primary', 'nope', 'rose']);
 
-        expect(TableViewsOptions::resolve()->colors())->toBe(['primary', 'rose']);
+        expect(TableKitOptions::resolve()->colors())->toBe(['primary', 'rose']);
     });
 });
 
 describe('icons', function () {
     it('resolves every configured icon key to an icon', function () {
-        foreach (config('table-views.icons') as $key) {
-            expect(FilamentIcon::resolve("table-views::icons.{$key}"))->toBeInstanceOf(Heroicon::class, $key);
+        foreach (config('tablekit.icons') as $key) {
+            expect(FilamentIcon::resolve("tablekit::icons.{$key}"))->toBeInstanceOf(Heroicon::class, $key);
         }
     });
 
     it('offers a rich, unique, ordered set', function () {
-        $icons = config('table-views.icons');
+        $icons = config('tablekit.icons');
 
         expect(count($icons))->toBeGreaterThanOrEqual(80)->toBeLessThanOrEqual(130)
             ->and($icons)->toBe(array_values(array_unique($icons)))
@@ -403,7 +403,7 @@ describe('icons', function () {
         ];
 
         expect(array_diff($legacy, array_keys(IconCatalog::ICONS)))->toBe([])
-            ->and(array_diff($legacy, config('table-views.icons')))->toBe([]);
+            ->and(array_diff($legacy, config('tablekit.icons')))->toBe([]);
     });
 
     it('renders every catalog icon through the blade icon sets', function () {
@@ -413,9 +413,9 @@ describe('icons', function () {
     });
 
     it('drops a configured key that has no alias', function () {
-        TableViewsPlugin::get()->icons(['star', 'unregistered-key']);
+        TableKitPlugin::get()->icons(['star', 'unregistered-key']);
 
-        expect(TableViewsOptions::resolve()->icons())->toBe(['star']);
+        expect(TableKitOptions::resolve()->icons())->toBe(['star']);
     });
 
     it('never hard codes a heroicon in the picker', function () {

@@ -1,10 +1,10 @@
 <?php
 
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Illuminate\Support\Arr;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
 
 function reloadOrders(array $query): Testable
 {
@@ -26,7 +26,7 @@ function expectSameScreen(Testable $before, Testable $after): void
 }
 
 beforeEach(function () {
-    config(['table-views.persist_active_view_in_session' => true]);
+    config(['tablekit.persist_active_view_in_session' => true]);
 
     $this->user = $this->signIn();
     $this->seedOrders();

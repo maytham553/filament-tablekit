@@ -1,13 +1,13 @@
 <?php
 
-namespace Elite\TableViews\Presets;
+namespace TableKit\Presets;
 
 use Closure;
-use Elite\TableViews\Support\CurrentContext;
-use Elite\TableViews\Support\TableViewState;
 use Filament\Support\Concerns\EvaluatesClosures;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
+use TableKit\Support\CurrentContext;
+use TableKit\Support\TableViewState;
 
 /**
  * A developer-defined view returned from getPresetTableViews(). Pure configuration: it never touches the database.
@@ -135,7 +135,7 @@ class PresetTableView
         return $this;
     }
 
-    /** An icon key resolved through the `table-views::icons.<key>` alias, like the icon of a user view. */
+    /** An icon key resolved through the `tablekit::icons.<key>` alias, like the icon of a user view. */
     public function icon(?string $icon): static
     {
         $this->icon = $icon;
@@ -388,7 +388,7 @@ class PresetTableView
             }
 
             $cached = Cache::remember(
-                'table-views.badge.'.md5($this->cacheScope.'|'.CurrentContext::userId().'|'.CurrentContext::tenantType().'|'.CurrentContext::tenantId().'|'.$this->key),
+                'tablekit.badge.'.md5($this->cacheScope.'|'.CurrentContext::userId().'|'.CurrentContext::tenantType().'|'.CurrentContext::tenantId().'|'.$this->key),
                 $this->badgeCacheSeconds,
                 fn (): array => ['value' => $this->resolveBadge()],
             );

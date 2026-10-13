@@ -1,15 +1,15 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
 
 beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
 
-    config(['table-views.view_manager.slide_over' => true]);
+    config(['tablekit.view_manager.slide_over' => true]);
 
     presets(fn () => ['shipped' => PresetTableView::make()->label('Shipped preset')]);
 

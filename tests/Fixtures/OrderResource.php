@@ -1,8 +1,7 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures;
+namespace TableKit\Tests\Fixtures;
 
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
@@ -11,6 +10,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
 
 class OrderResource extends Resource
 {

@@ -1,10 +1,10 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Team;
 use Filament\Facades\Filament;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Team;
 
 beforeEach(function () {
     $this->user = $this->signIn();

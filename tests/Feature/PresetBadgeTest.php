@@ -1,11 +1,11 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
-use Elite\TableViews\Tests\Fixtures\User;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\User;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -74,7 +74,7 @@ it('does not run the badge of a preset that is not in the bar', function () {
 });
 
 it('does not run any badge when the favorites bar is off', function () {
-    TableViewsPlugin::get()->favoritesBar(false);
+    TableKitPlugin::get()->favoritesBar(false);
 
     presets(fn () => [
         'default' => PresetTableView::make()->badge(countingBadge('default')),

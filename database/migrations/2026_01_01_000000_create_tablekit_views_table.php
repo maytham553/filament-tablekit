@@ -8,9 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $schema = Schema::connection(config('table-views.connection'));
+        $schema = Schema::connection(config('tablekit.connection'));
 
-        $schema->create(config('table-views.table', 'table_views'), function (Blueprint $table) {
+        $schema->create(config('tablekit.table', 'tablekit_views'), function (Blueprint $table) {
             $table->id();
             $table->string('user_id', 64);
             $table->string('name', 100);
@@ -26,13 +26,13 @@ return new class extends Migration
 
             $table->index(
                 ['user_id', 'resource', 'tenant_type', 'tenant_id', 'is_favorite', 'sort'],
-                'table_views_lookup',
+                'tablekit_views_lookup',
             );
         });
     }
 
     public function down(): void
     {
-        Schema::connection(config('table-views.connection'))->dropIfExists(config('table-views.table', 'table_views'));
+        Schema::connection(config('tablekit.connection'))->dropIfExists(config('tablekit.table', 'tablekit_views'));
     }
 };

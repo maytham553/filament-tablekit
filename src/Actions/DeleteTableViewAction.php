@@ -1,11 +1,11 @@
 <?php
 
-namespace Elite\TableViews\Actions;
+namespace TableKit\Actions;
 
 use Closure;
-use Elite\TableViews\Models\TableView;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
+use TableKit\Models\TableView;
 
 class DeleteTableViewAction
 {
@@ -19,9 +19,9 @@ class DeleteTableViewAction
             ->color('danger')
             ->requiresConfirmation()
             ->unsavedChangesAlert(false)
-            ->modalHeading(__('table-views::manager.delete.heading'))
-            ->modalDescription(__('table-views::manager.delete.description'))
-            ->modalSubmitActionLabel(__('table-views::manager.delete.submit'))
+            ->modalHeading(__('tablekit::manager.delete.heading'))
+            ->modalDescription(__('tablekit::manager.delete.description'))
+            ->modalSubmitActionLabel(__('tablekit::manager.delete.submit'))
             ->mountUsing(function (Action $action) use ($find): void {
                 if (! $find($action->getArguments()['viewId'] ?? null)) {
                     $action->cancel();
@@ -38,7 +38,7 @@ class DeleteTableViewAction
 
                 $deleted($view);
 
-                Notification::make()->title(__('table-views::manager.delete.deleted'))->success()->send();
+                Notification::make()->title(__('tablekit::manager.delete.deleted'))->success()->send();
             });
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\Pages;
+namespace TableKit\Tests\Fixtures\Pages;
 
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;

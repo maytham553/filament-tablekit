@@ -1,9 +1,9 @@
 <?php
 
-namespace Elite\TableViews\Concerns;
+namespace TableKit\Concerns;
 
-use Elite\TableViews\Support\TableViewsOptions;
 use Illuminate\Support\Arr;
+use TableKit\Support\TableKitOptions;
 
 /**
  * Column order in views and presets. Filament 4's column manager owns the order and its reordering UI (`reorderableColumns()`); this only saves what it
@@ -22,7 +22,7 @@ trait HasColumnOrderTableViews
         $table = $this->getTable();
 
         return static::columnOrderTableViews()
-            && TableViewsOptions::resolve()->columnReorderingEnabled()
+            && TableKitOptions::resolve()->columnReorderingEnabled()
             && ! $table->hasColumnsLayout()
             && $table->hasReorderableColumns();
     }

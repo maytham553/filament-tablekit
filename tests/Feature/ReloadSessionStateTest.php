@@ -1,12 +1,12 @@
 <?php
 
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPersistent;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersUnpersistedColumns;
 use Livewire\Livewire;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPersistent;
+use TableKit\Tests\Fixtures\Pages\ListOrdersUnpersistedColumns;
 
 beforeEach(function () {
-    config(['table-views.persist_active_view_in_session' => true]);
+    config(['tablekit.persist_active_view_in_session' => true]);
 
     $this->user = $this->signIn();
     $this->seedOrders();

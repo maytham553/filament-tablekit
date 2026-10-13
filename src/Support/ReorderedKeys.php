@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Support;
+namespace TableKit\Support;
 
 /**
  * Checks an order sent by the browser after a drag: it must be a list holding exactly the keys the user may reorder, each once.

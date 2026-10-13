@@ -8,8 +8,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $schema = Schema::connection(config('table-views.connection'));
-        $name = config('table-views.preferences_table', 'table_view_preferences');
+        $schema = Schema::connection(config('tablekit.connection'));
+        $name = config('tablekit.preferences_table', 'tablekit_preferences');
 
         $schema->create($name, function (Blueprint $table) {
             $table->id();
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('is_default')->default(false);
             $table->timestamps();
 
-            $table->index(['user_id', 'resource', 'tenant_type', 'tenant_id'], 'table_view_preferences_lookup');
+            $table->index(['user_id', 'resource', 'tenant_type', 'tenant_id'], 'tablekit_preferences_lookup');
         });
 
         // coalesce makes rows without a tenant collide too (NULLs are distinct in a plain unique index).
@@ -34,7 +34,7 @@ return new class extends Migration
             $wrapped = $connection->getSchemaGrammar()->wrapTable($name);
 
             $connection->statement(
-                "create unique index table_view_preferences_unique on {$wrapped} "
+                "create unique index tablekit_preferences_unique on {$wrapped} "
                 ."(user_id, resource, view_type, view_key, coalesce(tenant_type, ''), coalesce(tenant_id, ''))"
             );
         }
@@ -42,6 +42,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::connection(config('table-views.connection'))->dropIfExists(config('table-views.preferences_table', 'table_view_preferences'));
+        Schema::connection(config('tablekit.connection'))->dropIfExists(config('tablekit.preferences_table', 'tablekit_preferences'));
     }
 };

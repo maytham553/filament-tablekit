@@ -1,10 +1,10 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures;
+namespace TableKit\Tests\Fixtures;
 
-use Elite\TableViews\TableViewsPlugin;
 use Filament\Panel;
 use Filament\PanelProvider;
+use TableKit\TableKitPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -15,6 +15,6 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->resources([OrderResource::class, CustomerResource::class])
-            ->plugin(TableViewsPlugin::make());
+            ->plugin(TableKitPlugin::make());
     }
 }

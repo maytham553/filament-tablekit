@@ -2,17 +2,17 @@
 
 return [
     // The migration creates this table, so it is config only.
-    'table' => 'table_views',
+    'table' => 'tablekit_views',
 
     // Per user preferences (favorites, order, managed default). Also config only, the migration reads it.
-    'preferences_table' => 'table_view_preferences',
+    'preferences_table' => 'tablekit_preferences',
 
     // null = the app's default connection at the time of use. In an app that switches the default connection
-    // per panel or module, pin one connection here or per panel with TableViewsPlugin::connection().
+    // per panel or module, pin one connection here or per panel with TableKitPlugin::connection().
     // The table must exist on that connection (php artisan migrate --database=<connection>).
     'connection' => null,
 
-    // Set to false when the host app owns the migration (publish tag: table-views-migrations).
+    // Set to false when the host app owns the migration (publish tag: tablekit-migrations).
     'load_migrations' => true,
 
     // user_id is stored as a string, so integer, ULID and UUID keys all work. Used only by the user() relation.
@@ -81,9 +81,9 @@ return [
         'violet', 'purple', 'fuchsia', 'pink', 'rose', 'slate',
     ],
 
-    // Icon keys offered in the icon picker, in this order. Each key is the Filament icon alias `table-views::icons.<key>`
+    // Icon keys offered in the icon picker, in this order. Each key is the Filament icon alias `tablekit::icons.<key>`
     // (heroicon default, remappable); a key without an alias is not offered. Add your own with
-    // FilamentIcon::register(['table-views::icons.rocket' => '...']) plus the label in table-views::icons.rocket.
+    // FilamentIcon::register(['tablekit::icons.rocket' => '...']) plus the label in tablekit::icons.rocket.
     'icons' => [
         // status and highlights
         'star', 'heart', 'flag', 'bookmark', 'fire', 'bolt', 'sparkles', 'trophy', 'rocket', 'light-bulb', 'thumb-up',

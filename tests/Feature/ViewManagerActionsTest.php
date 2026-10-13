@@ -1,18 +1,18 @@
 <?php
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
-use Elite\TableViews\Tests\Fixtures\Team;
-use Elite\TableViews\Tests\Fixtures\User;
 use Filament\Facades\Filament;
 use Livewire\Exceptions\MethodNotFoundException;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
+use TableKit\Models\TablePreference;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\Team;
+use TableKit\Tests\Fixtures\User;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -70,7 +70,7 @@ describe('apply', function () {
     });
 
     it('closes the slide over after applying', function () {
-        TableViewsPlugin::get()->viewManager(slideOver: true);
+        TableKitPlugin::get()->viewManager(slideOver: true);
 
         $component = Livewire::test(ListOrdersWithPresets::class)
             ->mountAction('manageTableViews')
@@ -138,7 +138,7 @@ describe('favorites', function () {
     });
 
     it('refuses to change preset favorites when presets are not manageable', function () {
-        config(['table-views.preset_views.manageable' => false]);
+        config(['tablekit.preset_views.manageable' => false]);
 
         manager()->call('toggleTableViewFavorite', 'preset', 'a')->call('toggleTableViewFavorite', 'preset', 'c');
 
@@ -220,13 +220,13 @@ describe('reorder', function () {
 
         expect(presetOrder(manager()))->toBe(['b', 'a', 'c', 'd', 'new']);
 
-        config(['table-views.preset_views.new_sort_position' => 'before']);
+        config(['tablekit.preset_views.new_sort_position' => 'before']);
 
         expect(presetOrder(manager()))->toBe(['new', 'b', 'a', 'c', 'd']);
     });
 
     it('refuses to reorder presets when they are not manageable but still reorders user views', function () {
-        config(['table-views.preset_views.manageable' => false]);
+        config(['tablekit.preset_views.manageable' => false]);
 
         $component = manager()
             ->call('moveTableView', 'preset', 'b', 'up')
@@ -241,7 +241,7 @@ describe('reorder', function () {
         storePreference($this->user->id, 'preset', 'b', ['sort' => 0, 'is_favorite' => false]);
         storePreference($this->user->id, 'preset', 'a', ['sort' => 1]);
 
-        config(['table-views.preset_views.manageable' => false]);
+        config(['tablekit.preset_views.manageable' => false]);
 
         $catalog = callProtected(manager(), 'getTableViewsCatalog');
 
@@ -362,7 +362,7 @@ describe('drag reorder', function () {
     });
 
     it('refuses to reorder presets when they are not manageable but still reorders user views', function () {
-        config(['table-views.preset_views.manageable' => false]);
+        config(['tablekit.preset_views.manageable' => false]);
 
         $component = manager()
             ->call('reorderTableViews', 'preset', true, ['b', 'a'])
@@ -374,7 +374,7 @@ describe('drag reorder', function () {
     });
 
     it('does nothing when the manager is disabled', function () {
-        TableViewsPlugin::get()->viewManager(false);
+        TableKitPlugin::get()->viewManager(false);
 
         Livewire::test(ListOrdersWithPresets::class)->call('reorderTableViews', 'preset', true, ['b', 'a'])->assertSuccessful();
 
@@ -502,7 +502,7 @@ describe('delete', function () {
     it('deletes an own view after confirmation', function () {
         manager()
             ->callAction('deleteTableView', arguments: ['viewId' => $this->v2->id])
-            ->assertNotified(__('table-views::manager.delete.deleted'));
+            ->assertNotified(__('tablekit::manager.delete.deleted'));
 
         expect(TableView::find($this->v2->id))->toBeNull()
             ->and(TableView::count())->toBe(3);
@@ -511,7 +511,7 @@ describe('delete', function () {
     it('requires confirmation', function () {
         $component = manager()->mountAction('deleteTableView', ['viewId' => $this->v2->id]);
 
-        expect($component->instance()->getMountedAction()->getModalHeading())->toBe(__('table-views::manager.delete.heading'))
+        expect($component->instance()->getMountedAction()->getModalHeading())->toBe(__('tablekit::manager.delete.heading'))
             ->and($component->instance()->getMountedAction()->shouldOpenModal())->toBeTrue();
     });
 
@@ -549,7 +549,7 @@ describe('delete', function () {
     });
 
     it('removes the preference rows of a deleted view', function () {
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $component = manager()->call('toggleTableViewDefault', 'user', (string) $this->v2->id);
 
@@ -570,7 +570,7 @@ describe('delete', function () {
 });
 
 describe('default', function () {
-    beforeEach(fn () => config(['table-views.managed_default_views' => true]));
+    beforeEach(fn () => config(['tablekit.managed_default_views' => true]));
 
     it('sets and removes a default for a preset and a user view', function () {
         $component = manager()->call('toggleTableViewDefault', 'preset', 'c');
@@ -606,7 +606,7 @@ describe('default', function () {
     });
 
     it('is ignored while managed defaults are off', function () {
-        config(['table-views.managed_default_views' => false]);
+        config(['tablekit.managed_default_views' => false]);
 
         manager()->call('toggleTableViewDefault', 'preset', 'c');
 
@@ -630,13 +630,13 @@ describe('default', function () {
     it('shows the default marker in the open manager', function () {
         manager()
             ->call('toggleTableViewDefault', 'preset', 'c')
-            ->assertSee(__('table-views::manager.actions.remove_default'));
+            ->assertSee(__('tablekit::manager.actions.remove_default'));
     });
 });
 
 describe('scoping', function () {
     it('keeps preference rows per tenant', function () {
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $x = Team::create(['name' => 'X']);
         $y = Team::create(['name' => 'Y']);
@@ -663,7 +663,7 @@ describe('scoping', function () {
 
 describe('hostile input', function () {
     it('ignores bad types, keys and directions on every manager call', function (mixed $type, mixed $key, mixed $direction) {
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $component = manager()
             ->call('toggleTableViewFavorite', $type, $key)
@@ -700,7 +700,7 @@ describe('hostile input', function () {
     })->with(['sideways', [['up']], '', null, 1, 'UP']);
 
     it('does not let a user favorite, move or default another users view', function () {
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $theirs = storeView($this->other->id, [], ['name' => 'Theirs', 'sort' => 1, 'resource' => ListOrdersWithPresets::class]);
         $theirs2 = storeView($this->other->id, [], ['name' => 'Theirs two', 'sort' => 2, 'resource' => ListOrdersWithPresets::class]);
@@ -726,7 +726,7 @@ describe('hostile input', function () {
     });
 
     it('does nothing when the manager is disabled', function () {
-        TableViewsPlugin::get()->viewManager(false);
+        TableKitPlugin::get()->viewManager(false);
 
         $component = Livewire::test(ListOrdersWithPresets::class)
             ->call('openTableViewsManager')

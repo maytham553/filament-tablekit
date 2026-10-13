@@ -1,11 +1,11 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\UlidUser;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\UlidUser;
 
 function ulidUser(): UlidUser
 {
@@ -17,7 +17,7 @@ beforeEach(function () {
 });
 
 it('stores the user key in a string column', function () {
-    expect(Schema::getColumnType('table_views', 'user_id'))->toBe('varchar');
+    expect(Schema::getColumnType('tablekit_views', 'user_id'))->toBe('varchar');
 });
 
 it('saves, lists and applies views for a ULID user', function () {
@@ -63,7 +63,7 @@ it('works with UUID and numeric looking string keys', function () {
 });
 
 it('resolves the user relation for a ULID user', function () {
-    config(['table-views.user.model' => UlidUser::class]);
+    config(['tablekit.user.model' => UlidUser::class]);
 
     $user = ulidUser();
     $view = TableView::create(['user_id' => $user->getKey(), 'name' => 'R', 'resource' => 'res', 'state' => []]);

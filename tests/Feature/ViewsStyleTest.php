@@ -1,8 +1,8 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
 
 it('leaves layout to inline styles, because the precompiled Filament css has no utility classes of its own', function () {
     $files = [...glob(__DIR__.'/../../resources/views/*.blade.php'), ...glob(__DIR__.'/../../resources/views/components/*.blade.php')];
@@ -49,7 +49,7 @@ it('shows the hovered manager row and keeps Arabic headings free of letter spaci
 
     $html = Livewire::test(ListOrdersWithPresets::class)->call('openTableViewsManager')->html();
 
-    expect($html)->toContain('.fi-table-views-manager-row > div:hover')
-        ->and($html)->toMatch('/\[dir="rtl"\] \.fi-table-views-manager-heading \{ letter-spacing: normal/')
-        ->and($html)->toMatch('/<h4 class="fi-table-views-manager-heading" style="(?![^"]*letter-spacing)/');
+    expect($html)->toContain('.fi-tablekit-manager-row > div:hover')
+        ->and($html)->toMatch('/\[dir="rtl"\] \.fi-tablekit-manager-heading \{ letter-spacing: normal/')
+        ->and($html)->toMatch('/<h4 class="fi-tablekit-manager-heading" style="(?![^"]*letter-spacing)/');
 });

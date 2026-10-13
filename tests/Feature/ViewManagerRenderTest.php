@@ -1,12 +1,12 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -36,22 +36,22 @@ function openManager()
 describe('dropdown', function () {
     it('renders the trigger but not the list until it is opened', function () {
         Livewire::test(ListOrdersWithPresets::class)
-            ->assertSee(__('table-views::manager.label'))
-            ->assertSee(__('table-views::manager.loading'))
+            ->assertSee(__('tablekit::manager.label'))
+            ->assertSee(__('tablekit::manager.loading'))
             ->assertDontSee('Plain view')
             ->assertDontSee('Beta preset')
-            ->assertDontSee(__('table-views::manager.sections.presets'));
+            ->assertDontSee(__('tablekit::manager.sections.presets'));
     });
 
     it('lists favorites, my views and preset views in that order', function () {
         openManager()
             ->assertSeeInOrder([
-                __('table-views::manager.sections.favorites'),
+                __('tablekit::manager.sections.favorites'),
                 'Alpha preset',
                 'Fav view',
-                __('table-views::manager.sections.my_views'),
+                __('tablekit::manager.sections.my_views'),
                 'Plain view',
-                __('table-views::manager.sections.presets'),
+                __('tablekit::manager.sections.presets'),
                 'Beta preset',
             ])
             ->assertDontSee('Hidden preset');
@@ -69,19 +69,19 @@ describe('dropdown', function () {
         ListOrdersWithPresets::$presets = fn () => [];
         $component = openManager();
 
-        $component->assertSee(__('table-views::manager.sections.favorites'))
-            ->assertSee(__('table-views::manager.sections.my_views'))
-            ->assertDontSee(__('table-views::manager.sections.presets'));
+        $component->assertSee(__('tablekit::manager.sections.favorites'))
+            ->assertSee(__('tablekit::manager.sections.my_views'))
+            ->assertDontSee(__('tablekit::manager.sections.presets'));
 
         TableView::query()->delete();
 
-        openManager()->assertDontSee(__('table-views::manager.sections.favorites'))->assertSee(__('table-views::manager.empty'));
+        openManager()->assertDontSee(__('tablekit::manager.sections.favorites'))->assertSee(__('tablekit::manager.empty'));
     });
 
     it('marks the active view and shows row actions by type', function () {
         $component = openManager()->call('applyTablePresetView', 'a');
 
-        $component->assertSee(__('table-views::manager.active'))->assertSeeHtml('data-active="true"');
+        $component->assertSee(__('tablekit::manager.active'))->assertSeeHtml('data-active="true"');
 
         $html = $component->html();
 
@@ -112,7 +112,7 @@ describe('dropdown', function () {
             ->and($html)->not->toContain('moveTableView');
 
         foreach (['Alpha preset', 'Alpha two', 'Beta preset', 'Beta two', 'Fav view', 'Fav two', 'Plain view', 'Plain two'] as $label) {
-            expect($html)->toContain(__('table-views::reorder.handle', ['name' => $label]));
+            expect($html)->toContain(__('tablekit::reorder.handle', ['name' => $label]));
         }
     });
 
@@ -123,7 +123,7 @@ describe('dropdown', function () {
     });
 
     it('renders no preset handles when presets are not manageable', function () {
-        config(['table-views.preset_views.manageable' => false]);
+        config(['tablekit.preset_views.manageable' => false]);
 
         presets(fn () => [
             'a' => PresetTableView::make()->label('Alpha preset')->favorite(),
@@ -134,13 +134,13 @@ describe('dropdown', function () {
     });
 
     it('shows default buttons only with managed defaults', function () {
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         expect(clickCount(openManager()->html(), 'toggleTableViewDefault'))->toBe(4);
     });
 
     it('hides preset favorite and move buttons when presets are not manageable', function () {
-        config(['table-views.preset_views.manageable' => false]);
+        config(['tablekit.preset_views.manageable' => false]);
 
         $html = openManager()->html();
 
@@ -150,80 +150,80 @@ describe('dropdown', function () {
     });
 
     it('shows the lock icon label for presets only when enabled', function () {
-        openManager()->assertSeeHtml('>'.__('table-views::manager.type.preset').'<')->assertSeeHtml('>'.__('table-views::manager.type.user').'<');
+        openManager()->assertSeeHtml('>'.__('tablekit::manager.type.preset').'<')->assertSeeHtml('>'.__('tablekit::manager.type.user').'<');
 
-        TableViewsPlugin::get()->presetViewLockIcon(false);
+        TableKitPlugin::get()->presetViewLockIcon(false);
 
-        openManager()->assertDontSeeHtml('>'.__('table-views::manager.type.preset').'<')->assertSeeHtml('>'.__('table-views::manager.type.user').'<');
+        openManager()->assertDontSeeHtml('>'.__('tablekit::manager.type.preset').'<')->assertSeeHtml('>'.__('tablekit::manager.type.user').'<');
     });
 
     it('shows the search box above eight views, and follows the config', function () {
-        openManager()->assertDontSee(__('table-views::manager.search'));
+        openManager()->assertDontSee(__('tablekit::manager.search'));
 
         foreach (range(1, 7) as $i) {
             storeView($this->user->id, [], ['name' => "Extra {$i}", 'resource' => ListOrdersWithPresets::class]);
         }
 
-        openManager()->assertSee(__('table-views::manager.search'));
+        openManager()->assertSee(__('tablekit::manager.search'));
 
-        config(['table-views.view_manager.search' => false]);
+        config(['tablekit.view_manager.search' => false]);
 
-        openManager()->assertDontSee(__('table-views::manager.search'));
+        openManager()->assertDontSee(__('tablekit::manager.search'));
 
-        config(['table-views.view_manager.search' => true]);
+        config(['tablekit.view_manager.search' => true]);
         TableView::query()->where('name', 'like', 'Extra%')->delete();
 
-        openManager()->assertSee(__('table-views::manager.search'));
+        openManager()->assertSee(__('tablekit::manager.search'));
     });
 
     it('renders arabic labels', function () {
         app()->setLocale('ar');
 
-        openManager()->assertSee(__('table-views::manager.sections.favorites'))->assertSee('المفضلة');
+        openManager()->assertSee(__('tablekit::manager.sections.favorites'))->assertSee('المفضلة');
     });
 });
 
 describe('position and switches', function () {
     it('puts the manager after the save button by default and before the default button at start', function () {
-        Livewire::test(ListOrdersWithPresets::class)->assertSeeInOrder(['Save view', __('table-views::manager.label')]);
+        Livewire::test(ListOrdersWithPresets::class)->assertSeeInOrder(['Save view', __('tablekit::manager.label')]);
 
-        config(['table-views.view_manager.position' => 'start']);
+        config(['tablekit.view_manager.position' => 'start']);
 
-        Livewire::test(ListOrdersWithPresets::class)->assertSeeInOrder([__('table-views::manager.label'), 'Default', 'Save view']);
+        Livewire::test(ListOrdersWithPresets::class)->assertSeeInOrder([__('tablekit::manager.label'), 'Default', 'Save view']);
 
-        config(['table-views.view_manager.position' => 'nonsense']);
+        config(['tablekit.view_manager.position' => 'nonsense']);
 
-        Livewire::test(ListOrdersWithPresets::class)->assertSeeInOrder(['Save view', __('table-views::manager.label')]);
+        Livewire::test(ListOrdersWithPresets::class)->assertSeeInOrder(['Save view', __('tablekit::manager.label')]);
     });
 
     it('can be positioned and disabled on the plugin', function () {
-        TableViewsPlugin::get()->viewManager(position: 'start');
+        TableKitPlugin::get()->viewManager(position: 'start');
 
-        Livewire::test(ListOrdersWithPresets::class)->assertSeeInOrder([__('table-views::manager.label'), 'Default']);
+        Livewire::test(ListOrdersWithPresets::class)->assertSeeInOrder([__('tablekit::manager.label'), 'Default']);
 
-        TableViewsPlugin::get()->viewManager(false);
+        TableKitPlugin::get()->viewManager(false);
 
-        Livewire::test(ListOrdersWithPresets::class)->assertDontSee(__('table-views::manager.label'));
+        Livewire::test(ListOrdersWithPresets::class)->assertDontSee(__('tablekit::manager.label'));
     });
 
     it('can be disabled in config', function () {
-        config(['table-views.view_manager.enabled' => false]);
+        config(['tablekit.view_manager.enabled' => false]);
 
-        Livewire::test(ListOrdersWithPresets::class)->assertDontSee(__('table-views::manager.label'))->assertSee('Save view');
+        Livewire::test(ListOrdersWithPresets::class)->assertDontSee(__('tablekit::manager.label'))->assertSee('Save view');
     });
 });
 
 describe('slide over', function () {
     it('renders an action instead of the dropdown', function () {
-        config(['table-views.view_manager.slide_over' => true]);
+        config(['tablekit.view_manager.slide_over' => true]);
 
         Livewire::test(ListOrdersWithPresets::class)
-            ->assertSee(__('table-views::manager.label'))
-            ->assertDontSeeHtml('fi-table-views-manager');
+            ->assertSee(__('tablekit::manager.label'))
+            ->assertDontSeeHtml('fi-tablekit-manager');
     });
 
     it('opens the list in a slide over modal', function () {
-        TableViewsPlugin::get()->viewManager(slideOver: true);
+        TableKitPlugin::get()->viewManager(slideOver: true);
 
         $component = Livewire::test(ListOrdersWithPresets::class)
             ->assertDontSee('Plain view')
@@ -233,15 +233,15 @@ describe('slide over', function () {
 
         $modal = $component->getMountedActionModalHtml();
 
-        expect($modal)->toContain(__('table-views::manager.heading'))
+        expect($modal)->toContain(__('tablekit::manager.heading'))
             ->toContain('Plain view')
             ->toContain('Beta preset')
-            ->toContain(__('table-views::manager.close'))
-            ->and(substr_count($modal, 'aria-label="'.__('table-views::manager.actions.edit').'"'))->toBeGreaterThan(0);
+            ->toContain(__('tablekit::manager.close'))
+            ->and(substr_count($modal, 'aria-label="'.__('tablekit::manager.actions.edit').'"'))->toBeGreaterThan(0);
     });
 
     it('opens the edit and delete modals on top of the slide over', function () {
-        config(['table-views.view_manager.slide_over' => true]);
+        config(['tablekit.view_manager.slide_over' => true]);
 
         $view = TableView::where('name', 'Plain view')->first();
 
@@ -261,7 +261,7 @@ describe('slide over', function () {
 
 describe('slide over delete', function () {
     it('deletes through the nested confirmation modal', function () {
-        config(['table-views.view_manager.slide_over' => true]);
+        config(['tablekit.view_manager.slide_over' => true]);
 
         $view = TableView::where('name', 'Plain view')->first();
 
@@ -284,7 +284,7 @@ describe('queries', function () {
         $count = 0;
 
         DB::listen(function ($query) use (&$count) {
-            if (str_contains($query->sql, 'table_view_preferences')) {
+            if (str_contains($query->sql, 'tablekit_preferences')) {
                 $count++;
             }
         });

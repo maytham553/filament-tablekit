@@ -1,10 +1,10 @@
 <?php
 
-namespace Elite\TableViews\Support;
+namespace TableKit\Support;
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
+use TableKit\Models\TablePreference;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
 
 /**
  * One entry of the favorites bar or the view manager: either a preset or a user view, with the user's preferences merged in.

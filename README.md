@@ -1,4 +1,4 @@
-# elite/filament-table-views
+# tablekit/filament-tablekit
 
 Saved table views for Filament v4: save the current filters, search, column searches, sort, toggled columns, column order and grouping as a named view, and reload it in one click from a favorites bar above the table.
 
@@ -9,38 +9,38 @@ Requires PHP 8.2+, Laravel 11.28+ / 12 / 13, Filament 4 (tested with 4.15, Livew
 ## Install
 
 ```bash
-composer require elite/filament-table-views
+composer require tablekit/filament-tablekit
 php artisan migrate
 ```
 
-The `table_views` and `table_view_preferences` migrations are loaded automatically. If your app owns its migrations, set `load_migrations` to `false` in the config and publish it instead:
+The `tablekit_views` and `tablekit_preferences` migrations are loaded automatically. If your app owns its migrations, set `load_migrations` to `false` in the config and publish it instead:
 
 ```bash
-php artisan vendor:publish --tag=table-views-migrations   # both migration files
-php artisan vendor:publish --tag=table-views-config   # optional
+php artisan vendor:publish --tag=tablekit-migrations   # both migration files
+php artisan vendor:publish --tag=tablekit-config   # optional
 ```
 
 ## Register the plugin
 
 ```php
-use Elite\TableViews\TableViewsPlugin;
+use TableKit\TableKitPlugin;
 
 $panel->plugin(
-    TableViewsPlugin::make()
+    TableKitPlugin::make()
         ->favoritesBar()                     // bool|Closure, default from config
         ->quickSaveSlideOver()               // modal by default
         ->colors(['primary', 'success', 'rose'])  // color names offered in the color picker
         ->icons(['star', 'flag'])            // subset of the icon keys below (see Color and icon pickers)
         ->userModel(App\Models\User::class) // only used by TableView::user()
         ->persistActiveViewInSession()
-        ->connection('kyc')                  // wins over config('table-views.connection')
+        ->connection('kyc')                  // wins over config('tablekit.connection')
 );
 ```
 
 Phase 2 options (all optional, the plugin wins over config):
 
 ```php
-TableViewsPlugin::make()
+TableKitPlugin::make()
     ->viewManager(enabled: true, slideOver: false, position: 'end')  // 'start' | 'end'
     ->presetViewsManageable(true)       // false = users cannot reorder/unfavorite presets
     ->newPresetViewSortPosition('after') // where presets the user has not ranked yet go: 'before' | 'after'
@@ -53,14 +53,14 @@ TableViewsPlugin::make()
 Phase 3 options (all optional, the plugin wins over config):
 
 ```php
-TableViewsPlugin::make()
+TableKitPlugin::make()
     ->multiSort(true, max: 5)           // Sort button with several sort columns
     ->quickFilters(false)               // clickable filter chips (off by default)
     ->limitIndicatorLabels(2)           // "Status: A, B & 3 more" on multi-select chips
     ->columnReordering(true)            // save and apply the column order in views and presets
 ```
 
-Every option is optional and falls back to `config/table-views.php`. The favorites bar also works without registering the plugin (config only). The table name is config only (`table-views.table`) because the migration reads it too.
+Every option is optional and falls back to `config/tablekit.php`. The favorites bar also works without registering the plugin (config only). The table name is config only (`tablekit.table`) because the migration reads it too.
 
 ## User key
 
@@ -71,51 +71,51 @@ Every option is optional and falls back to `config/table-views.php`. The favorit
 `connection` is `null` by default, which means the app's default connection **at the moment of use**. If your app changes `database.default` per panel or module, views would then be read from a different database than the one you migrated. In that case pin the connection, either in config or per panel (the plugin value wins):
 
 ```php
-// config/table-views.php
+// config/tablekit.php
 'connection' => 'kyc',
 
 // or per panel
-TableViewsPlugin::make()->connection('kyc')
+TableKitPlugin::make()->connection('kyc')
 ```
 
-The migration uses `config('table-views.connection')`, or the default connection when it is `null`, so for a per-panel connection run it against that connection:
+The migration uses `config('tablekit.connection')`, or the default connection when it is `null`, so for a per-panel connection run it against that connection:
 
 ```bash
 php artisan migrate --database=kyc
 ```
 
-Each connection that serves a panel with the plugin needs its own `table_views` table.
+Each connection that serves a panel with the plugin needs its own `tablekit_views` table.
 
 ## Add the trait
 
 On a List/Manage page, a relation manager or a table widget:
 
 ```php
-use Elite\TableViews\Concerns\HasTableViews;
+use TableKit\Concerns\HasTableKit;
 
 class ListOrders extends ListRecords
 {
-    use HasTableViews;
+    use HasTableKit;
 }
 ```
 
 Views are stored per user, per tenant (`Filament::getTenant()`) and per component class. Override the protected `getTableViewsResourceKey()` to change the key (for example to share views between two classes).
 
-Declare `InteractsWithTable` (already part of `ListRecords`, relation managers and `TableWidget`) before `HasTableViews` in a custom Livewire class. The remembered-view restore is skipped when the table is not ready yet.
+Declare `InteractsWithTable` (already part of `ListRecords`, relation managers and `TableWidget`) before `HasTableKit` in a custom Livewire class. The remembered-view restore is skipped when the table is not ready yet.
 
 ## Preset views
 
 Return presets from the component that uses the trait. Declare the method `protected` (a `public` one is callable from the browser; it only returns the presets, but there is no reason to expose it):
 
 ```php
-use Elite\TableViews\Presets\PresetTableView;
+use TableKit\Presets\PresetTableView;
 
 protected function getPresetTableViews(): array
 {
     return [
         'shipped' => PresetTableView::make()
             ->label(__('Shipped'))
-            ->icon('truck')                    // icon KEY, resolved through the table-views::icons.<key> alias
+            ->icon('truck')                    // icon KEY, resolved through the tablekit::icons.<key> alias
             ->color('success')
             ->favorite()                       // shown in the favorites bar unless the user unfavorites it
             ->defaultFilters(['status' => ['value' => 'shipped']])   // raw `filters` state, per filter name
@@ -147,7 +147,7 @@ protected function getPresetTableViews(): array
 - Quick Save while such a preset is active shows a notification instead (the hidden query could not be part of the saved view). Set `preset_views.create_from_preset_with_query` to allow it: the saved view then holds the visible state only.
 - The preset keyed `default` replaces the built-in Default button (label, icon, color, tooltip, badge) and is the implicit developer default.
 - `badge()`, `badgeColor()` and `tooltip()` closures run at most once per request, only for presets shown in the bar and only when the bar renders. Every Livewire request re-renders the bar (search, sort, pagination, polling), so a badge that queries still runs on each of them: add `->cacheBadgeFor($seconds)` to keep the value in the app cache per user, tenant and table.
-- Custom icon keys: register `FilamentIcon::register(['table-views::icons.rocket' => '...'])`. An unknown key shows no icon.
+- Custom icon keys: register `FilamentIcon::register(['tablekit::icons.rocket' => '...'])`. An unknown key shows no icon.
 - Presets of a component are ordered as returned, unless the user reordered them in the manager.
 
 ## Multi-sort
@@ -214,14 +214,14 @@ The dropdown list loads when the panel first becomes visible (`x-intersect` on i
 
 In slide-over mode Filament renders only the open modal while an action is mounted. A change made there (favorite, default, order, edit, delete) forces a full render so the favorites bar behind it stays current. Edit and delete are registered as modal actions of the slide-over (`registerModalActions`), which is how Filament 4 resolves a nested mounted action.
 
-Storage: user views keep `is_favorite` and `sort` on `table_views`. Presets keep their choices in `table_view_preferences` (`is_favorite` null = the preset's own default, `sort`, `is_hidden`). `is_default` lives in `table_view_preferences` for both kinds. Reordering writes the whole order of that kind.
+Storage: user views keep `is_favorite` and `sort` on `tablekit_views`. Presets keep their choices in `tablekit_preferences` (`is_favorite` null = the preset's own default, `sort`, `is_hidden`). `is_default` lives in `tablekit_preferences` for both kinds. Reordering writes the whole order of that kind.
 
 ### Drag and drop
 
 The manager rows are reordered by dragging. It uses the `x-sortable` Alpine directive (SortableJS) that Filament 4 ships in its `support` script, so there is nothing to install, publish or load from a CDN.
 
-- Each list is one `x-sortable` container whose rows carry `x-sortable-item="<key>"` and a handle (`x-sortable-handle`, an icon button with the `table-views::reorder.handle` alias). After a drop (Filament's `end` event) the browser sends the whole new order of that list to `reorderTableViews($type, $favorite, $keys)`. The server accepts an order only when it is a list holding exactly the keys the user may reorder in that list, each once (no extra, missing, duplicate, unknown, hidden, other-section or other-user keys, no non-scalar values); anything else is ignored without an error.
-- Keyboard: the handle is a focusable button; ArrowUp / ArrowDown on it moves the row one place through the same server method and keeps the focus on the handle. The handle's accessible name comes from `table-views::reorder.handle`.
+- Each list is one `x-sortable` container whose rows carry `x-sortable-item="<key>"` and a handle (`x-sortable-handle`, an icon button with the `tablekit::reorder.handle` alias). After a drop (Filament's `end` event) the browser sends the whole new order of that list to `reorderTableViews($type, $favorite, $keys)`. The server accepts an order only when it is a list holding exactly the keys the user may reorder in that list, each once (no extra, missing, duplicate, unknown, hidden, other-section or other-user keys, no non-scalar values); anything else is ignored without an error.
+- Keyboard: the handle is a focusable button; ArrowUp / ArrowDown on it moves the row one place through the same server method and keeps the focus on the handle. The handle's accessible name comes from `tablekit::reorder.handle`.
 - `moveTableView` (move one place up or down) still exists as a server method but no button calls it.
 
 ## Managed default view
@@ -263,41 +263,41 @@ When the remembered view is applied on load, the plugin asks the browser to alwa
 
 ## Config
 
-See `config/table-views.php`: table, preferences table and connection, `load_migrations`, user model, bar on/off and divider, `view_manager.*`, `preset_views.*`, `managed_default_views`, `multi_sort.*`, `quick_filters.*`, `column_reordering.enabled`, quick save slide-over, max name length, colors, icons, `persist_active_view_in_session`, `state.tab` (also save the ListRecords `activeTab`, off by default) and `state.max_bytes`.
+See `config/tablekit.php`: table, preferences table and connection, `load_migrations`, user model, bar on/off and divider, `view_manager.*`, `preset_views.*`, `managed_default_views`, `multi_sort.*`, `quick_filters.*`, `column_reordering.enabled`, quick save slide-over, max name length, colors, icons, `persist_active_view_in_session`, `state.tab` (also save the ListRecords `activeTab`, off by default) and `state.max_bytes`.
 
 ## Upgrading from Phase 1
 
 Phase 3 needs no migration and no new table.
 
-Run the new migration (`table_view_preferences`) before deploying code that defines presets or turns on managed defaults. It uses the same `table-views.connection` rule as `table_views` (`php artisan migrate --database=<connection>` for a pinned connection) and adds a unique index through raw SQL on Postgres and SQLite only. Components without presets behave as in Phase 1 and run no preferences query. Remap the new icon aliases (see Icons) if you use another icon set.
+Run the new migration (`tablekit_preferences`) before deploying code that defines presets or turns on managed defaults. It uses the same `tablekit.connection` rule as `tablekit_views` (`php artisan migrate --database=<connection>` for a pinned connection) and adds a unique index through raw SQL on Postgres and SQLite only. Components without presets behave as in Phase 1 and run no preferences query. Remap the new icon aliases (see Icons) if you use another icon set.
 
 ## Icons
 
 Icons are never hard-coded. They are Filament icon aliases with `Heroicon` defaults, registered only when nobody registered them first, so an app can remap them (for example to Tabler) with `FilamentIcon::register()`:
 
 ```
-table-views::favorites-bar.default   table-views::quick-save   table-views::reorder.handle
-table-views::manager.open  preset  user-view  favorite  unfavorite  default  remove-default  edit  delete  active
-table-views::sort.open  asc  desc  remove
-table-views::quick-filters.chevron  favorite  unfavorite
-table-views::icons.<key>   one alias per key of the icon picker, about 120 keys (see Color and icon pickers)
+tablekit::favorites-bar.default   tablekit::quick-save   tablekit::reorder.handle
+tablekit::manager.open  preset  user-view  favorite  unfavorite  default  remove-default  edit  delete  active
+tablekit::sort.open  asc  desc  remove
+tablekit::quick-filters.chevron  favorite  unfavorite
+tablekit::icons.<key>   one alias per key of the icon picker, about 120 keys (see Color and icon pickers)
 ```
 
 The `icon` column stores the key (`star`, `chart-bar`, ...), resolved through the alias at render time.
 
 ## Color and icon pickers
 
-Quick Save and the Edit view form use two grid pickers instead of selects: `Elite\TableViews\Forms\ColorGridPicker` (round swatches, a check and a ring on the selected one) and `Elite\TableViews\Forms\IconGridPicker` (a scrollable grid of rendered icons, "No icon" first, a search box). Both are radio groups: arrow keys move and select (they follow the visual direction in RTL, up/down move by row), Home/End jump, Enter and Space select. Every cell has a tooltip and an accessible label. The styles are inline in the field view (logical properties, light and dark), so they do not depend on the panel theme. The fields are normal Filament fields and can be used in your own forms: `ColorGridPicker::make('color')->colors([...])`, `IconGridPicker::make('icon')->icons([...])`.
+Quick Save and the Edit view form use two grid pickers instead of selects: `TableKit\Forms\ColorGridPicker` (round swatches, a check and a ring on the selected one) and `TableKit\Forms\IconGridPicker` (a scrollable grid of rendered icons, "No icon" first, a search box). Both are radio groups: arrow keys move and select (they follow the visual direction in RTL, up/down move by row), Home/End jump, Enter and Space select. Every cell has a tooltip and an accessible label. The styles are inline in the field view (logical properties, light and dark), so they do not depend on the panel theme. The fields are normal Filament fields and can be used in your own forms: `ColorGridPicker::make('color')->colors([...])`, `IconGridPicker::make('icon')->icons([...])`.
 
-**Colors** (`config('table-views.colors')` or `->colors([...])` on the plugin): Filament's own names (`primary gray success warning danger info`) plus the Tailwind palettes `red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate`. The plugin registers the extra palettes with `FilamentColor` before the app boots, so a color the app or a panel registers under the same name replaces it. The stored value is the name; a stored name Filament does not know falls back to `primary`, as before. A configured name Filament has no color for is not offered and not accepted. If you register your own colors, add their names to the list and give them a label in `table-views::colors.<name>` (the name is capitalized when there is none).
+**Colors** (`config('tablekit.colors')` or `->colors([...])` on the plugin): Filament's own names (`primary gray success warning danger info`) plus the Tailwind palettes `red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate`. The plugin registers the extra palettes with `FilamentColor` before the app boots, so a color the app or a panel registers under the same name replaces it. The stored value is the name; a stored name Filament does not know falls back to `primary`, as before. A configured name Filament has no color for is not offered and not accepted. If you register your own colors, add their names to the list and give them a label in `tablekit::colors.<name>` (the name is capitalized when there is none).
 
-**Icons** (`config('table-views.icons')` or `->icons([...])`): about 120 keys ordered by topic (status, people, commerce and finance, time, documents, communication, places, charts, organize, arrows, tools). Each key is the alias `table-views::icons.<key>` with a `Heroicon` default, registered only when nobody registered it first, so an app remaps any of them (Tabler, ...). The stored value is the key. Add your own: `FilamentIcon::register(['table-views::icons.rocket-x' => '...'])`, add the key to the list, and optionally the label (`table-views::icons.<key>`) and search words (`table-views::icon-keywords.<key>`, space separated). A key without an alias is not offered and not accepted. The search box matches the key, the label and the keywords in the current language and in English; it filters in the browser.
+**Icons** (`config('tablekit.icons')` or `->icons([...])`): about 120 keys ordered by topic (status, people, commerce and finance, time, documents, communication, places, charts, organize, arrows, tools). Each key is the alias `tablekit::icons.<key>` with a `Heroicon` default, registered only when nobody registered it first, so an app remaps any of them (Tabler, ...). The stored value is the key. Add your own: `FilamentIcon::register(['tablekit::icons.rocket-x' => '...'])`, add the key to the list, and optionally the label (`tablekit::icons.<key>`) and search words (`tablekit::icon-keywords.<key>`, space separated). A key without an alias is not offered and not accepted. The search box matches the key, the label and the keywords in the current language and in English; it filters in the browser.
 
 Validation accepts only the keys of the (filtered) lists on both Quick Save and Edit; anything else is a normal field error.
 
 ## Translations
 
-`en` and `ar` under the `table-views` namespace (`favorites-bar`, `quick-save`, `colors`, `icons`, `icon-keywords`, `pickers`, `validation`, `manager`, `reorder`, `sort`, `quick-filters`). Publish with `--tag=table-views-translations`.
+`en` and `ar` under the `tablekit` namespace (`favorites-bar`, `quick-save`, `colors`, `icons`, `icon-keywords`, `pickers`, `validation`, `manager`, `reorder`, `sort`, `quick-filters`). Publish with `--tag=tablekit-translations`.
 
 ## Stored state
 
@@ -335,7 +335,7 @@ Phase 3 adds three optional keys. They are written only when they differ from th
 - The `?view=` marker exists only where the table state is URL-bound (`ListRecords`, `ManageRelatedRecords`). Relation managers and table widgets have no URL for it, so a reload there starts from the usual start view.
 - Two tabs setting a default at the same instant can leave two default rows for a user (the earliest wins at startup); preference rows of presets removed from the code stay until the user's rows are deleted. Both are harmless and not cleaned up.
 - The color and icon pickers bring their own inline styles. Porting them to Filament v5: the Filament specific parts are the `Field` base and `$view` property in `src/Forms/GridPicker.php` and `resources/views/forms/grid-picker.blade.php` (field wrapper, `$wire.$entangle` binding, `x-filament::input`, the `var(--primary-600)` / `var(--gray-200)` color variables at the top of the style block, and the `--color-500` swatch variable from `get_color_css_variables()`); the icon defaults are `Heroicon` enum cases in `src/Support/IconCatalog.php`, and the palettes are registered through `FilamentColor::register()` in `src/Support/ColorPalette.php`.
-- The trait's lifecycle hooks (`mountHasTableViews`, `bootedHasTableViews`, `renderingHasTableViews`) are public because Livewire needs that; a browser request that names them is ignored by `callHasTableViews`.
+- The trait's lifecycle hooks (`mountHasTableKit`, `bootedHasTableKit`, `renderingHasTableKit`) are public because Livewire needs that; a browser request that names them is ignored by `callHasTableKit`.
 - No UI to hide a preset (`is_hidden` is honored when set in the database).
 - Column visibility that the user set back to the table defaults, or to exactly what the last applied view wrote, is not told apart from "never changed", so the start view's own columns apply on the next load.
 

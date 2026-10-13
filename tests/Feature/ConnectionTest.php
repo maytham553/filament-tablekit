@@ -1,10 +1,10 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
 
 function sqliteConnections(string ...$names): void
 {
@@ -15,12 +15,12 @@ function sqliteConnections(string ...$names): void
 
 function runViewsMigration(): void
 {
-    (require __DIR__.'/../../database/migrations/2026_01_01_000000_create_table_views_table.php')->up();
+    (require __DIR__.'/../../database/migrations/2026_01_01_000000_create_tablekit_views_table.php')->up();
 }
 
 it('keeps the model on the configured connection while the default is another one', function () {
     sqliteConnections('views', 'elsewhere');
-    config(['table-views.connection' => 'views']);
+    config(['tablekit.connection' => 'views']);
     runViewsMigration();
 
     DB::setDefaultConnection('elsewhere');
@@ -28,8 +28,8 @@ it('keeps the model on the configured connection while the default is another on
     $view = TableView::create(['user_id' => '1', 'name' => 'Pinned', 'resource' => 'res', 'state' => []]);
 
     expect($view->getConnectionName())->toBe('views')
-        ->and(DB::connection('views')->table('table_views')->count())->toBe(1)
-        ->and(DB::connection('testing')->table('table_views')->count())->toBe(0)
+        ->and(DB::connection('views')->table('tablekit_views')->count())->toBe(1)
+        ->and(DB::connection('testing')->table('tablekit_views')->count())->toBe(0)
         ->and(TableView::query()->ownedBy('1')->count())->toBe(1);
 });
 
@@ -38,14 +38,14 @@ it('saves and applies through the page on the configured connection', function (
     $this->seedOrders();
 
     sqliteConnections('views');
-    config(['table-views.connection' => 'views']);
+    config(['tablekit.connection' => 'views']);
     runViewsMigration();
 
     $view = quickSave(Livewire::test(ListOrders::class)->filterTable('status', 'paid'), 'On views');
 
     expect($view->getConnectionName())->toBe('views')
-        ->and(DB::connection('views')->table('table_views')->count())->toBe(1)
-        ->and(DB::connection('testing')->table('table_views')->count())->toBe(0);
+        ->and(DB::connection('views')->table('tablekit_views')->count())->toBe(1)
+        ->and(DB::connection('testing')->table('tablekit_views')->count())->toBe(0);
 
     Livewire::test(ListOrders::class)
         ->assertSee('On views')
@@ -55,16 +55,16 @@ it('saves and applies through the page on the configured connection', function (
 
 it('lets the plugin connection win over the config connection', function () {
     sqliteConnections('configured', 'plugin');
-    config(['table-views.connection' => 'plugin']);
+    config(['tablekit.connection' => 'plugin']);
     runViewsMigration();
-    config(['table-views.connection' => 'configured']);
+    config(['tablekit.connection' => 'configured']);
 
-    TableViewsPlugin::get()->connection('plugin');
+    TableKitPlugin::get()->connection('plugin');
 
     $view = TableView::create(['user_id' => '1', 'name' => 'Plugin', 'resource' => 'res', 'state' => []]);
 
     expect($view->getConnectionName())->toBe('plugin')
-        ->and(DB::connection('plugin')->table('table_views')->count())->toBe(1);
+        ->and(DB::connection('plugin')->table('tablekit_views')->count())->toBe(1);
 });
 
 it('falls back to the app default connection when nothing is configured', function () {

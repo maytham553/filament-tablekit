@@ -1,16 +1,16 @@
 <?php
 
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Columns;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Deferred;
 use Livewire\Livewire;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Columns;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Deferred;
 
 beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
-    config(['table-views.quick_filters.enabled' => true]);
+    config(['tablekit.quick_filters.enabled' => true]);
 });
 
 describe('multi-sort next to the native column manager', function () {
@@ -46,7 +46,7 @@ describe('multi-sort next to the native column manager', function () {
         $html = Livewire::test(ListOrders::class)->html();
 
         expect(strpos($html, 'fi-ta-search-field'))->toBeInt()
-            ->and(strpos($html, 'data-table-views-sort-trigger'))->toBeInt()
+            ->and(strpos($html, 'data-tablekit-sort-trigger'))->toBeInt()
             ->toBeLessThan(strpos($html, 'fi-ta-search-field'));
     });
 
@@ -86,7 +86,7 @@ describe('quick filters on a Filament 4 table', function () {
     it('reuses the markup and classes of Filament\'s own indicator bar and its clear-all action', function () {
         $html = Livewire::test(ListOrdersPhase3::class)->set('tableFilters.status.value', 'paid')->html();
 
-        expect($html)->toContain('class="fi-ta-filter-indicators fi-table-views-quick-filters"')
+        expect($html)->toContain('class="fi-ta-filter-indicators fi-tablekit-quick-filters"')
             ->and($html)->toContain('fi-ta-filter-indicators-label')
             ->and($html)->toContain('fi-ta-filter-indicators-badges-ctn')
             ->and($html)->toContain('data-table-filter-action')->not->toContain('data-table-filter-action="remove-all"')
@@ -109,8 +109,8 @@ describe('quick filters on a Filament 4 table', function () {
     it('renders its popover as a plain popover, not a menu', function () {
         $html = Livewire::test(ListOrdersPhase3::class)->html();
 
-        expect($html)->toMatch('/class="fi-dropdown fi-table-views-quick-filter"/')
-            ->and(preg_match('/x-data="filamentDropdown\(\{ isMenu: false \}\)"[^>]*fi-table-views-quick-filter/s', $html))->toBe(1);
+        expect($html)->toMatch('/class="fi-dropdown fi-tablekit-quick-filter"/')
+            ->and(preg_match('/x-data="filamentDropdown\(\{ isMenu: false \}\)"[^>]*fi-tablekit-quick-filter/s', $html))->toBe(1);
     });
 });
 
@@ -121,7 +121,7 @@ describe('the sort priority list', function () {
             ->call('addTableViewSort', 'amount')
             ->html();
 
-        expect($html)->toContain('data-table-views-sortable')
+        expect($html)->toContain('data-tablekit-sortable')
             ->and(substr_count($html, 'x-sortable-item="'))->toBe(2)
             ->and(preg_match_all('/\sx-sortable-handle[\s>=\/]/', $html))->toBeGreaterThanOrEqual(2)
             ->and($html)->toContain('x-on:keydown.arrow-up.prevent="moveItem($el, -1)"')
@@ -131,6 +131,6 @@ describe('the sort priority list', function () {
     it('is a plain popover so the arrow keys on the handles stay with the list', function () {
         $html = Livewire::test(ListOrdersPhase3::class)->html();
 
-        expect($html)->toMatch('/isMenu: false \}\)"\s+class="fi-dropdown fi-table-views-sort"/');
+        expect($html)->toMatch('/isMenu: false \}\)"\s+class="fi-dropdown fi-tablekit-sort"/');
     });
 });

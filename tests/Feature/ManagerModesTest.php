@@ -1,25 +1,25 @@
 <?php
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
+use TableKit\Models\TablePreference;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
 
 beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
 
-    config(['table-views.managed_default_views' => true]);
+    config(['tablekit.managed_default_views' => true]);
 
     $this->view = storeView($this->user->id, ['search' => 'one'], ['name' => 'Only view']);
 });
 
 function openManagerIn(string $mode, string $class = ListOrders::class)
 {
-    config(['table-views.view_manager.slide_over' => $mode === 'slide-over']);
+    config(['tablekit.view_manager.slide_over' => $mode === 'slide-over']);
 
     $component = Livewire::test($class);
 
@@ -37,17 +37,17 @@ describe('managed defaults without presets', function () {
     it('sets and removes the default in every manager mode', function (string $mode) {
         $component = openManagerIn($mode);
 
-        expect(renderedHtml($component))->toContain(__('table-views::manager.actions.default'))
-            ->and(renderedHtml($component))->not->toContain(__('table-views::manager.actions.remove_default'));
+        expect(renderedHtml($component))->toContain(__('tablekit::manager.actions.default'))
+            ->and(renderedHtml($component))->not->toContain(__('tablekit::manager.actions.remove_default'));
 
         $component->call('toggleTableViewDefault', 'user', (string) $this->view->id);
 
-        expect(renderedHtml($component))->toContain(__('table-views::manager.actions.remove_default'))
+        expect(renderedHtml($component))->toContain(__('tablekit::manager.actions.remove_default'))
             ->and(defaultRows())->toBe(1);
 
         $component->call('toggleTableViewDefault', 'user', (string) $this->view->id);
 
-        expect(renderedHtml($component))->not->toContain(__('table-views::manager.actions.remove_default'))
+        expect(renderedHtml($component))->not->toContain(__('tablekit::manager.actions.remove_default'))
             ->and(defaultRows())->toBe(0);
 
         $component->call('toggleTableViewDefault', 'user', (string) $this->view->id);
@@ -56,7 +56,7 @@ describe('managed defaults without presets', function () {
     })->with(['dropdown', 'slide-over']);
 
     it('still sets and clears the default when the manager list was never loaded', function (string $mode) {
-        config(['table-views.view_manager.slide_over' => $mode === 'slide-over']);
+        config(['tablekit.view_manager.slide_over' => $mode === 'slide-over']);
 
         $component = Livewire::test(ListOrders::class);
 
@@ -70,17 +70,17 @@ describe('managed defaults without presets', function () {
     it('shows the marker of an existing default when the slide over opens', function () {
         storePreference($this->user->id, 'user', (string) $this->view->id, ['is_default' => true, 'resource' => ListOrders::class]);
 
-        expect(renderedHtml(openManagerIn('slide-over')))->toContain(__('table-views::manager.actions.remove_default'));
+        expect(renderedHtml(openManagerIn('slide-over')))->toContain(__('tablekit::manager.actions.remove_default'));
     });
 
     it('does not read preferences while the slide over is closed', function () {
-        config(['table-views.view_manager.slide_over' => true]);
+        config(['tablekit.view_manager.slide_over' => true]);
 
         $component = Livewire::test(ListOrders::class);
 
         $count = 0;
         DB::listen(function ($query) use (&$count) {
-            if (str_contains($query->sql, 'table_view_preferences')) {
+            if (str_contains($query->sql, 'tablekit_preferences')) {
                 $count++;
             }
         });
@@ -120,12 +120,12 @@ describe('opening the manager', function () {
     }
 
     it('never applies or changes a view, in either mode', function (string $mode, bool $persist) {
-        config(['table-views.persist_active_view_in_session' => $persist]);
+        config(['tablekit.persist_active_view_in_session' => $persist]);
 
         $fresh = Livewire::test(ListOrdersWithPresets::class);
         $before = tableState($fresh);
 
-        config(['table-views.view_manager.slide_over' => $mode === 'slide-over']);
+        config(['tablekit.view_manager.slide_over' => $mode === 'slide-over']);
 
         $component = Livewire::test(ListOrdersWithPresets::class);
 
@@ -141,7 +141,7 @@ describe('opening the manager', function () {
     })->with(['dropdown', 'slide-over'])->with([false, true]);
 
     it('only renders view buttons as explicit clicks, and opening the panel only loads the list', function () {
-        config(['table-views.view_manager.slide_over' => false]);
+        config(['tablekit.view_manager.slide_over' => false]);
 
         $component = Livewire::test(ListOrdersWithPresets::class);
         $closed = $component->html();

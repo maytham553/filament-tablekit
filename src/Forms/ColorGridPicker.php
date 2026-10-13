@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Forms;
+namespace TableKit\Forms;
 
 use Closure;
 
@@ -35,7 +35,7 @@ class ColorGridPicker extends GridPicker
 
     public static function labelFor(string $color): string
     {
-        $key = "table-views::colors.{$color}";
+        $key = "tablekit::colors.{$color}";
         $label = __($key);
 
         return $label === $key ? ucfirst($color) : $label;

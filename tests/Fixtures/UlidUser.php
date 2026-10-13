@@ -1,6 +1,6 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures;
+namespace TableKit\Tests\Fixtures;
 
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;

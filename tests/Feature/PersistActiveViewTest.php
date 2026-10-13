@@ -1,11 +1,11 @@
 <?php
 
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithDefaults;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithTabs;
 use Livewire\Livewire;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithDefaults;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithTabs;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -20,7 +20,7 @@ it('does not remember the active view by default', function () {
 });
 
 it('restores the active view on the next visit when enabled in config', function () {
-    config(['table-views.persist_active_view_in_session' => true]);
+    config(['tablekit.persist_active_view_in_session' => true]);
 
     Livewire::test(ListOrders::class)->call('applyTableView', $this->view->id);
 
@@ -31,7 +31,7 @@ it('restores the active view on the next visit when enabled in config', function
 });
 
 it('restores the active view when enabled on the plugin', function () {
-    TableViewsPlugin::get()->persistActiveViewInSession();
+    TableKitPlugin::get()->persistActiveViewInSession();
 
     Livewire::test(ListOrders::class)->call('applyTableView', $this->view->id);
 
@@ -39,7 +39,7 @@ it('restores the active view when enabled on the plugin', function () {
 });
 
 it('remembers a freshly saved view too', function () {
-    config(['table-views.persist_active_view_in_session' => true]);
+    config(['tablekit.persist_active_view_in_session' => true]);
 
     $saved = quickSave(Livewire::test(ListOrders::class)->searchTable('ORD-02'), 'Saved now');
 
@@ -49,7 +49,7 @@ it('remembers a freshly saved view too', function () {
 });
 
 it('lets url state win over the remembered view', function () {
-    config(['table-views.persist_active_view_in_session' => true]);
+    config(['tablekit.persist_active_view_in_session' => true]);
 
     Livewire::test(ListOrders::class)->call('applyTableView', $this->view->id);
 
@@ -61,10 +61,10 @@ it('lets url state win over the remembered view', function () {
 });
 
 it('ignores and forgets a remembered view that was deleted', function () {
-    config(['table-views.persist_active_view_in_session' => true]);
+    config(['tablekit.persist_active_view_in_session' => true]);
 
     Livewire::test(ListOrders::class)->call('applyTableView', $this->view->id);
-    $key = 'table-views.'.md5(ListOrders::class.'||').'.active';
+    $key = 'tablekit.'.md5(ListOrders::class.'||').'.active';
 
     expect(session($key))->toBe($this->view->id);
 
@@ -76,7 +76,7 @@ it('ignores and forgets a remembered view that was deleted', function () {
 });
 
 it('forgets the remembered view on default', function () {
-    config(['table-views.persist_active_view_in_session' => true]);
+    config(['tablekit.persist_active_view_in_session' => true]);
 
     Livewire::test(ListOrders::class)
         ->call('applyTableView', $this->view->id)
@@ -86,7 +86,7 @@ it('forgets the remembered view on default', function () {
 });
 
 it('remembers the view per table', function () {
-    config(['table-views.persist_active_view_in_session' => true]);
+    config(['tablekit.persist_active_view_in_session' => true]);
 
     Livewire::test(ListOrders::class)->call('applyTableView', $this->view->id);
 
@@ -94,7 +94,7 @@ it('remembers the view per table', function () {
 });
 
 it('lets a tab in the url win over the remembered view', function () {
-    config(['table-views.persist_active_view_in_session' => true]);
+    config(['tablekit.persist_active_view_in_session' => true]);
 
     $view = storeView($this->user->id, ['filters' => ['status' => ['value' => 'paid']]], ['resource' => ListOrdersWithTabs::class]);
 

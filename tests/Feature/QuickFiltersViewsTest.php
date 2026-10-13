@@ -1,14 +1,14 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
 
 beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
-    config(['table-views.quick_filters.enabled' => true]);
+    config(['tablekit.quick_filters.enabled' => true]);
 });
 
 function favoritesOf($component): array
@@ -85,7 +85,7 @@ describe('saving and applying', function () {
     it('ignores the stored pins when quick filters are off', function () {
         $view = storeView($this->user->id, ['favoriteFilters' => ['big']], ['resource' => ListOrdersPhase3::class]);
 
-        config(['table-views.quick_filters.enabled' => false]);
+        config(['tablekit.quick_filters.enabled' => false]);
 
         $component = Livewire::test(ListOrdersPhase3::class)->call('applyTableView', $view->id);
 

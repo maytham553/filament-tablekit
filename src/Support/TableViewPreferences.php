@@ -1,11 +1,11 @@
 <?php
 
-namespace Elite\TableViews\Support;
+namespace TableKit\Support;
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Models\TableView;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use TableKit\Models\TablePreference;
+use TableKit\Models\TableView;
 
 /**
  * Writes the user's favorite, order and default choices. Callers pass a catalog built from fresh data,
@@ -16,7 +16,7 @@ class TableViewPreferences
     public function __construct(
         protected string $resourceKey,
         protected TableViewCatalog $catalog,
-        protected TableViewsOptions $options,
+        protected TableKitOptions $options,
     ) {}
 
     public function toggleFavorite(string $type, string $key): bool

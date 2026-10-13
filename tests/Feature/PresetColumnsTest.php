@@ -1,10 +1,10 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersColumnGroupsPresets;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersDottedColumnPresets;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersReorderableColumnsPresets;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersColumnGroupsPresets;
+use TableKit\Tests\Fixtures\Pages\ListOrdersDottedColumnPresets;
+use TableKit\Tests\Fixtures\Pages\ListOrdersReorderableColumnsPresets;
 
 beforeEach(function () {
     $this->user = $this->signIn();

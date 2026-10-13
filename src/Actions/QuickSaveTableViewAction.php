@@ -1,16 +1,16 @@
 <?php
 
-namespace Elite\TableViews\Actions;
+namespace TableKit\Actions;
 
 use Closure;
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Support\TableViewsOptions;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\Size;
 use Filament\Support\Enums\Width;
 use Filament\Support\Facades\FilamentIcon;
+use TableKit\Models\TableView;
+use TableKit\Support\TableKitOptions;
 
 class QuickSaveTableViewAction
 {
@@ -19,17 +19,17 @@ class QuickSaveTableViewAction
      */
     public static function make(string $resourceKey, Closure $save): Action
     {
-        $options = TableViewsOptions::resolve();
+        $options = TableKitOptions::resolve();
 
         return Action::make('quickSaveTableView')
-            ->label(__('table-views::quick-save.label'))
-            ->icon(FilamentIcon::resolve('table-views::quick-save'))
+            ->label(__('tablekit::quick-save.label'))
+            ->icon(FilamentIcon::resolve('tablekit::quick-save'))
             ->color('gray')
             ->size(Size::Small)
             ->outlined()
-            ->modalHeading(__('table-views::quick-save.heading'))
-            ->modalDescription(__('table-views::quick-save.description'))
-            ->modalSubmitActionLabel(__('table-views::quick-save.submit'))
+            ->modalHeading(__('tablekit::quick-save.heading'))
+            ->modalDescription(__('tablekit::quick-save.description'))
+            ->modalSubmitActionLabel(__('tablekit::quick-save.submit'))
             ->modalWidth(Width::Medium)
             ->slideOver($options->isQuickSaveSlideOver())
             ->fillForm([
@@ -41,13 +41,13 @@ class QuickSaveTableViewAction
             ->schema([
                 ...TableViewForm::fields($resourceKey),
                 Toggle::make('is_favorite')
-                    ->label(__('table-views::quick-save.fields.is_favorite')),
+                    ->label(__('tablekit::quick-save.fields.is_favorite')),
             ])
             ->action(function (array $data) use ($save): void {
                 $save($data);
 
                 Notification::make()
-                    ->title(__('table-views::quick-save.saved'))
+                    ->title(__('tablekit::quick-save.saved'))
                     ->success()
                     ->send();
             });
@@ -59,15 +59,15 @@ class QuickSaveTableViewAction
     public static function blocked(): Action
     {
         return Action::make('quickSaveTableView')
-            ->label(__('table-views::quick-save.label'))
-            ->icon(FilamentIcon::resolve('table-views::quick-save'))
+            ->label(__('tablekit::quick-save.label'))
+            ->icon(FilamentIcon::resolve('tablekit::quick-save'))
             ->color('gray')
             ->size(Size::Small)
             ->outlined()
             ->action(function (): void {
                 Notification::make()
-                    ->title(__('table-views::quick-save.preset_with_query_title'))
-                    ->body(__('table-views::quick-save.preset_with_query_body'))
+                    ->title(__('tablekit::quick-save.preset_with_query_title'))
+                    ->body(__('tablekit::quick-save.preset_with_query_body'))
                     ->warning()
                     ->send();
             });

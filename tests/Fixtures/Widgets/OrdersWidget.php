@@ -1,17 +1,17 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\Widgets;
+namespace TableKit\Tests\Fixtures\Widgets;
 
-use Elite\TableViews\Concerns\HasTableViews;
-use Elite\TableViews\Tests\Fixtures\Order;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
+use TableKit\Concerns\HasTableKit;
+use TableKit\Tests\Fixtures\Order;
 
 class OrdersWidget extends TableWidget
 {
-    use HasTableViews;
+    use HasTableKit;
 
     public function table(Table $table): Table
     {
