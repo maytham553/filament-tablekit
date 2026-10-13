@@ -1,6 +1,7 @@
 {
     "name": "tablekit/filament-tablekit",
     "description": "Saved table views (filters, search, sort, columns, grouping) with a favorites bar for Filament v3 tables.",
+    "homepage": "https://maytham553.github.io/filament-tablekit/",
     "type": "library",
     "license": "MIT",
     "require": {
