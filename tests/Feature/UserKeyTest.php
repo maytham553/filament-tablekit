@@ -6,6 +6,7 @@ use Livewire\Livewire;
 use TableKit\Models\TableView;
 use TableKit\Tests\Fixtures\Pages\ListOrders;
 use TableKit\Tests\Fixtures\UlidUser;
+use TableKit\Tests\Fixtures\User;
 
 function ulidUser(): UlidUser
 {
@@ -55,18 +56,18 @@ it('keeps views of two ULID users apart', function () {
 
 it('works with UUID and numeric looking string keys', function () {
     foreach ([(string) Str::uuid(), '12345678901234567890'] as $key) {
-        TableView::create(['user_id' => $key, 'name' => 'K '.$key, 'resource' => 'res', 'state' => []]);
+        TableView::create(['user_type' => User::class, 'user_id' => $key, 'name' => 'K '.$key, 'resource' => 'res', 'state' => []]);
     }
 
-    expect(TableView::query()->ownedBy((string) Str::uuid())->count())->toBe(0)
-        ->and(TableView::query()->ownedBy('12345678901234567890')->pluck('name')->all())->toBe(['K 12345678901234567890']);
+    expect(TableView::query()->ownedBy(User::class, (string) Str::uuid())->count())->toBe(0)
+        ->and(TableView::query()->ownedBy(User::class, '12345678901234567890')->pluck('name')->all())->toBe(['K 12345678901234567890']);
 });
 
 it('resolves the user relation for a ULID user', function () {
     config(['tablekit.user.model' => UlidUser::class]);
 
     $user = ulidUser();
-    $view = TableView::create(['user_id' => $user->getKey(), 'name' => 'R', 'resource' => 'res', 'state' => []]);
+    $view = TableView::create(['user_type' => UlidUser::class, 'user_id' => $user->getKey(), 'name' => 'R', 'resource' => 'res', 'state' => []]);
 
     expect($view->user->is($user))->toBeTrue();
 });

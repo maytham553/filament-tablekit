@@ -12,6 +12,20 @@ class CurrentContext
         return Filament::getCurrentPanel() ? Filament::auth()->id() : auth()->id();
     }
 
+    /**
+     * The auth user's morph class: with the id it tells apart two user models that share the same ids.
+     */
+    public static function userType(): ?string
+    {
+        $user = Filament::getCurrentPanel() ? Filament::auth()->user() : auth()->user();
+
+        return match (true) {
+            $user instanceof Model => $user->getMorphClass(),
+            $user !== null => $user::class,
+            default => null,
+        };
+    }
+
     public static function tenant(): ?Model
     {
         return Filament::getCurrentPanel() ? Filament::getTenant() : null;

@@ -1019,7 +1019,14 @@ trait HasTableKit
 
         $resourceKey = $this->getTableViewsResourceKey();
 
+        if (TableView::forCurrentContext($resourceKey)->count() >= $options->maxViewsPerTable()) {
+            throw ValidationException::withMessages([
+                'mountedActions.'.array_key_last($this->mountedActions).'.data.name' => __('tablekit::validation.too_many_views', ['max' => $options->maxViewsPerTable()]),
+            ]);
+        }
+
         $view = TableView::query()->create([
+            'user_type' => CurrentContext::userType(),
             'user_id' => $userId,
             'name' => trim($data['name']),
             'icon' => $data['icon'] ?? null,

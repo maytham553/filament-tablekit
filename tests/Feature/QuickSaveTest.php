@@ -27,6 +27,14 @@ it('requires a name', function () {
     expect(TableView::count())->toBe(0);
 });
 
+it('requires the name to be a string', function () {
+    saveAttempt(Livewire::test(ListOrders::class), ['name' => ['a', 'b'], 'color' => 'primary'])
+        ->assertHasActionErrors(['name'])
+        ->assertSuccessful();
+
+    expect(TableView::count())->toBe(0);
+});
+
 it('limits the name length', function () {
     saveAttempt(Livewire::test(ListOrders::class), ['name' => str_repeat('a', 101), 'color' => 'primary'])
         ->assertHasActionErrors(['name' => 'max']);
@@ -217,4 +225,83 @@ it('strips NUL bytes from the saved state', function () {
     expect($view->state->search)->toBe('abc')
         ->and($view->getRawOriginal('state'))->not->toContain('\u0000')
         ->and(callProtected($component, 'isActiveTableViewModified'))->toBeFalse();
+});
+
+describe('view limit', function () {
+    it('refuses a view when the user is at the limit and writes nothing', function () {
+        config(['tablekit.max_views_per_table' => 2]);
+
+        $component = Livewire::test(ListOrders::class);
+        quickSave($component, 'One');
+        quickSave($component, 'Two');
+
+        saveAttempt($component, ['name' => 'Three', 'color' => 'primary'])
+            ->assertHasActionErrors(['name']);
+
+        expect(TableView::pluck('name')->all())->toBe(['One', 'Two']);
+    });
+
+    it('saves below the limit', function () {
+        config(['tablekit.max_views_per_table' => 2]);
+
+        $component = Livewire::test(ListOrders::class);
+        quickSave($component, 'One');
+
+        expect(quickSave($component, 'Two')->name)->toBe('Two');
+    });
+
+    it('shows the limit in the message, in English and Arabic', function () {
+        config(['tablekit.max_views_per_table' => 1]);
+
+        $component = Livewire::test(ListOrders::class);
+        quickSave($component, 'One');
+
+        saveAttempt($component, ['name' => 'Two', 'color' => 'primary'])
+            ->assertHasActionErrors(['name' => [__('tablekit::validation.too_many_views', ['max' => 1])]]);
+
+        expect(__('tablekit::validation.too_many_views', ['max' => 1]))->toContain('1')
+            ->and(__('tablekit::validation.too_many_views', ['max' => 1], 'ar'))->toContain('1')
+            ->not->toBe(__('tablekit::validation.too_many_views', ['max' => 1]));
+    });
+
+    it('counts per user, per table and per tenant', function () {
+        config(['tablekit.max_views_per_table' => 1]);
+
+        quickSave(Livewire::test(ListOrders::class), 'Mine');
+        quickSave(Livewire::test(ListOrdersDeferred::class), 'Other table');
+
+        $this->signIn(User::create(['name' => 'B', 'email' => 'b@example.test', 'password' => 'x']));
+        quickSave(Livewire::test(ListOrders::class), 'Other user');
+
+        $x = Team::create(['name' => 'X']);
+        $y = Team::create(['name' => 'Y']);
+
+        Filament::setCurrentPanel(Filament::getPanel('team'));
+        Filament::bootCurrentPanel();
+
+        Filament::setTenant($x);
+        quickSave(Livewire::test(ListOrders::class), 'Tenant X');
+        saveAttempt(Livewire::test(ListOrders::class), ['name' => 'Tenant X two', 'color' => 'primary'])->assertHasActionErrors(['name']);
+
+        Filament::setTenant($y);
+        quickSave(Livewire::test(ListOrders::class), 'Tenant Y');
+
+        expect(TableView::count())->toBe(5);
+    });
+
+    it('can be set on the plugin and wins over the config', function () {
+        config(['tablekit.max_views_per_table' => 50]);
+        TableKitPlugin::get()->maxViewsPerTable(1);
+
+        $component = Livewire::test(ListOrders::class);
+        quickSave($component, 'One');
+
+        saveAttempt($component, ['name' => 'Two', 'color' => 'primary'])->assertHasActionErrors(['name']);
+
+        expect(TableView::count())->toBe(1);
+    });
+
+    it('defaults to 100', function () {
+        expect(config('tablekit.max_views_per_table'))->toBe(100);
+    });
 });

@@ -7,8 +7,9 @@ use Filament\Support\Facades\FilamentColor;
 
 /**
  * The Tailwind palettes the color picker offers on top of Filament's own names (primary, gray, success, warning,
- * danger, info). They are registered before the app boots, so anything the app or a panel registers under the same
- * name wins.
+ * danger, info). They go to the front of Filament's color list, so whatever the app or a panel registers under the same
+ * name wins, whether it registers before or after the plugin. The list is edited, not read with getColors(), because
+ * that call freezes Filament's color cache and would drop every later registration.
  */
 class ColorPalette
 {
@@ -33,6 +34,17 @@ class ColorPalette
 
     public static function register(): void
     {
-        FilamentColor::register(static::extras());
+        $manager = FilamentColor::getFacadeRoot();
+        $extras = static::extras();
+
+        if (! property_exists($manager, 'colors')) {
+            FilamentColor::register($extras);
+
+            return;
+        }
+
+        (function () use ($extras): void {
+            array_unshift($this->colors, $extras);
+        })->call($manager);
     }
 }
