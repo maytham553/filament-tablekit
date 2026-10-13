@@ -21,6 +21,7 @@ it('renders the dropdown panel with a fixed position so the table card cannot cl
 
     expect($html)->toContain('fi-tablekit-manager"')
         ->and($matches)->not->toBeEmpty()
+        ->and($matches[0])->toContain('.placement.bottom-end')
         ->and($matches[0])->toContain('.teleport')
         ->and($matches[0])->toContain('.flip')
         ->and($matches[0])->toContain('.shift');
