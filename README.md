@@ -2,7 +2,7 @@
 
 Saved views and power tools for Filament tables.
 
-[![TableKit demo](art/tablekit-demo.gif)](https://youtu.be/sZXJRwCzboU)
+[![TableKit demo](https://raw.githubusercontent.com/maytham553/filament-tablekit/main/art/tablekit-demo.gif)](https://youtu.be/sZXJRwCzboU)
 
 [Watch the full demo on YouTube (77 s, with sound)](https://youtu.be/sZXJRwCzboU)
 
@@ -46,9 +46,9 @@ You need an existing Filament 5 panel.
    composer require tablekit/filament-tablekit
    ```
 
-   Not on Packagist yet, or want a branch? See [Install from GitHub](docs/installation.md#install-from-github).
+   Not on Packagist yet, or want a branch? See [Install from GitHub](https://github.com/maytham553/filament-tablekit/blob/main/docs/installation.md#install-from-github).
 
-2. Run the migrations. They load by themselves. If your app owns its migrations, see [Database](docs/database.md#publish-the-migrations).
+2. Run the migrations. They load by themselves. If your app owns its migrations, see [Database](https://github.com/maytham553/filament-tablekit/blob/main/docs/database.md#publish-the-migrations).
 
    ```bash
    php artisan migrate
@@ -100,26 +100,26 @@ protected function getPresetTableViews(): array
 
 | Page | What is in it |
 | --- | --- |
-| [Installation](docs/installation.md) | Composer, GitHub, publish tags |
-| [Configuration](docs/configuration.md) | Every config key and plugin option |
-| [Views](docs/views.md) | Saved views, the bar, the manager, defaults, reload and the URL |
-| [Presets](docs/presets.md) | Every preset method, with examples |
-| [Multi-sort](docs/multi-sort.md) | Sort by several columns |
-| [Quick filters](docs/quick-filters.md) | Filter chips and favorite filters |
-| [Columns](docs/columns.md) | Column order in views and presets |
-| [Colors and icons](docs/colors-and-icons.md) | Pickers, icon aliases, Tabler remap, translations |
-| [Database](docs/database.md) | Tables, connection, tenancy, user keys, stored state |
-| [Limits](docs/limits.md) | Known limits |
-| [Testing](docs/testing.md) | Livewire test examples |
-| [Upgrading](docs/upgrading.md) | Upgrade notes |
+| [Installation](https://github.com/maytham553/filament-tablekit/blob/main/docs/installation.md) | Composer, GitHub, publish tags |
+| [Configuration](https://github.com/maytham553/filament-tablekit/blob/main/docs/configuration.md) | Every config key and plugin option |
+| [Views](https://github.com/maytham553/filament-tablekit/blob/main/docs/views.md) | Saved views, the bar, the manager, defaults, reload and the URL |
+| [Presets](https://github.com/maytham553/filament-tablekit/blob/main/docs/presets.md) | Every preset method, with examples |
+| [Multi-sort](https://github.com/maytham553/filament-tablekit/blob/main/docs/multi-sort.md) | Sort by several columns |
+| [Quick filters](https://github.com/maytham553/filament-tablekit/blob/main/docs/quick-filters.md) | Filter chips and favorite filters |
+| [Columns](https://github.com/maytham553/filament-tablekit/blob/main/docs/columns.md) | Column order in views and presets |
+| [Colors and icons](https://github.com/maytham553/filament-tablekit/blob/main/docs/colors-and-icons.md) | Pickers, icon aliases, Tabler remap, translations |
+| [Database](https://github.com/maytham553/filament-tablekit/blob/main/docs/database.md) | Tables, connection, tenancy, user keys, stored state |
+| [Limits](https://github.com/maytham553/filament-tablekit/blob/main/docs/limits.md) | Known limits |
+| [Testing](https://github.com/maytham553/filament-tablekit/blob/main/docs/testing.md) | Livewire test examples |
+| [Upgrading](https://github.com/maytham553/filament-tablekit/blob/main/docs/upgrading.md) | Upgrade notes |
 
 ## Security and privacy
 
 - A preset's hidden query is a filter, **not access control**. Users can drop it at any time. Put real rules in your resource query, policies or global scopes.
-- A view stores the search text and filter values the user typed. This can be personal data. Views are **not** deleted with the user, so delete them when you delete the account. See [Database](docs/database.md#delete-a-users-views).
+- A view stores the search text and filter values the user typed. This can be personal data. Views are **not** deleted with the user, so delete them when you delete the account. See [Database](https://github.com/maytham553/filament-tablekit/blob/main/docs/database.md#delete-a-users-views).
 - The server checks ownership on every action. View ids and preset keys that come from the browser are checked again on the server.
 - Views are scoped by user type, user id, tenant and table. Users never see each other's views.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](https://github.com/maytham553/filament-tablekit/blob/main/LICENSE).
