@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Database: TableKit for Filament 4 docs</title>
+<meta name="description" content="TableKit database guide for Filament 4: the two tables, migrations, a custom connection, tenancy, user keys, deleting a user's views and stored state.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/docs/v4/database/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="Database: TableKit for Filament 4 docs">
+<meta property="og:description" content="TableKit database guide for Filament 4: the two tables, migrations, a custom connection, tenancy, user keys, deleting a user's views and stored state.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/docs/v4/database/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Database: TableKit for Filament 4 docs">
+<meta name="twitter:description" content="TableKit database guide for Filament 4: the two tables, migrations, a custom connection, tenancy, user keys, deleting a user's views and stored state.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://maytham553.github.io/filament-tablekit/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://maytham553.github.io/filament-tablekit/docs/"},{"@type":"ListItem","position":3,"name":"Filament 4","item":"https://maytham553.github.io/filament-tablekit/docs/v4/"},{"@type":"ListItem","position":4,"name":"Database","item":"https://maytham553.github.io/filament-tablekit/docs/v4/database/"}]},{"@type":"TechArticle","headline":"Database (TableKit for Filament 4)","description":"TableKit database guide for Filament 4: the two tables, migrations, a custom connection, tenancy, user keys, deleting a user's views and stored state.","url":"https://maytham553.github.io/filament-tablekit/docs/v4/database/","inLanguage":"en","dateModified":"2026-10-13","author":{"@type":"Person","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@type":"WebSite","name":"TableKit","url":"https://maytham553.github.io/filament-tablekit/"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg"}]}</script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/" aria-current="true">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<div class="wrap docs has-toc">
+<div class="docs-side">
+<input type="checkbox" id="docs-nav-toggle" class="docs-nav-toggle" aria-label="Show documentation menu">
+<label for="docs-nav-toggle" class="menu-btn">Docs menu: Database (Filament 4)</label>
+<nav class="sidebar" aria-label="Documentation">
+<span class="side-title">Filament version</span>
+<ul class="ver"><li><a href="/filament-tablekit/docs/database/" hreflang="en">v5</a></li><li><a href="/filament-tablekit/docs/v4/database/" aria-current="true" hreflang="en">v4</a></li><li><a href="/filament-tablekit/docs/v3/database/" hreflang="en">v3</a></li></ul>
+<div class="side-group"><span class="side-title">Getting started</span><ul><li><a href="/filament-tablekit/docs/v4/">Overview</a></li><li><a href="/filament-tablekit/docs/v4/installation/">Installation</a></li><li><a href="/filament-tablekit/docs/v4/configuration/">Configuration</a></li></ul></div>
+<div class="side-group"><span class="side-title">Using TableKit</span><ul><li><a href="/filament-tablekit/docs/v4/views/">Views</a></li><li><a href="/filament-tablekit/docs/v4/presets/">Preset views</a></li><li><a href="/filament-tablekit/docs/v4/multi-sort/">Multi-sort</a></li><li><a href="/filament-tablekit/docs/v4/quick-filters/">Quick filters</a></li><li><a href="/filament-tablekit/docs/v4/columns/">Columns</a></li><li><a href="/filament-tablekit/docs/v4/colors-and-icons/">Colors and icons</a></li></ul></div>
+<div class="side-group"><span class="side-title">Reference</span><ul><li><a href="/filament-tablekit/docs/v4/database/" aria-current="page">Database</a></li><li><a href="/filament-tablekit/docs/v4/testing/">Testing</a></li><li><a href="/filament-tablekit/docs/v4/limits/">Limits</a></li><li><a href="/filament-tablekit/docs/v4/upgrading/">Upgrading</a></li></ul></div>
+</nav>
+</div>
+<main id="main" class="prose">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/filament-tablekit/">Home</a></li><li><a href="/filament-tablekit/docs/">Docs</a></li><li><a href="/filament-tablekit/docs/v4/">Filament 4</a></li><li><span aria-current="page">Database</span></li></ol></nav>
+<p class="notice" role="note">You are viewing the <strong>Filament 4</strong> docs (TableKit <code>^4.0</code>). Using Filament 5? <a href="/filament-tablekit/docs/database/">Open the latest version of this page</a>.</p>
+<details class="toc toc-m"><summary>On this page</summary><ul><li class="l2"><a href="#tables">Tables</a></li><li class="l2"><a href="#run-the-migrations">Run the migrations</a></li><li class="l3"><a href="#publish-the-migrations">Publish the migrations</a></li><li class="l2"><a href="#database-connection">Database connection</a></li><li class="l2"><a href="#tenancy">Tenancy</a></li><li class="l2"><a href="#user-keys">User keys</a></li><li class="l2"><a href="#delete-a-users-views">Delete a user's views</a></li><li class="l2"><a href="#stored-state">Stored state</a></li></ul></details>
+<article>
+<h1 id="database">Database</h1>
+<p>TableKit keeps its data in two tables. This page covers the tables, migrations, the connection, tenancy, user keys, privacy and the stored view format.</p>
+<h2 id="tables">Tables<a class="anchor" href="#tables" aria-label="Link to section: Tables">#</a></h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Tables, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Config key</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>tablekit_views</code></td>
+<td><code>table</code></td>
+<td>The views users save.</td>
+</tr>
+<tr>
+<td><code>tablekit_preferences</code></td>
+<td><code>preferences_table</code></td>
+<td>Per-user choices: favorite, order, hidden and default. For presets and for user views (<code>is_default</code>).</td>
+</tr>
+</tbody></table>
+</div>
+<p>The table names are config only, because the migrations read them.</p>
+<p><strong><code>tablekit_views</code></strong> columns: <code>id</code>, <code>user_type</code>, <code>user_id</code>, <code>name</code>, <code>icon</code>, <code>color</code>, <code>resource</code>, <code>state</code> (jsonb), <code>is_favorite</code>, <code>sort</code>, <code>tenant_type</code>, <code>tenant_id</code>, timestamps. One index covers the lookup by user, resource, tenant, favorite and sort.</p>
+<p><strong><code>tablekit_preferences</code></strong> columns: <code>id</code>, <code>user_type</code>, <code>user_id</code>, <code>tenant_type</code>, <code>tenant_id</code>, <code>resource</code>, <code>view_type</code>, <code>view_key</code>, <code>is_favorite</code> (null means the preset&#39;s own default), <code>is_hidden</code>, <code>sort</code>, <code>is_default</code>, timestamps. It has a lookup index. On Postgres and SQLite it also gets a unique index, created with raw SQL (<code>coalesce</code> makes rows without a tenant collide too, because NULLs are distinct in a plain unique index).</p>
+<p>The Eloquent models are <code>TableKit\Models\TableView</code> and <code>TableKit\Models\TablePreference</code>.</p>
+<h2 id="run-the-migrations">Run the migrations<a class="anchor" href="#run-the-migrations" aria-label="Link to section: Run the migrations">#</a></h2>
+<p>The migrations load by themselves:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">php</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> artisan</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> migrate</span></span></code></pre></div>
+<p>Run the <code>tablekit_preferences</code> migration before you deploy code that defines presets or turns on managed defaults. Components without presets run no preferences query.</p>
+<h3 id="publish-the-migrations">Publish the migrations<a class="anchor" href="#publish-the-migrations" aria-label="Link to section: Publish the migrations">#</a></h3>
+<p>If your app owns its migrations, do these three steps <strong>in this order</strong>:</p>
+<ol>
+<li><p>Turn off the automatic loading. Publish the config first if you have not (<code>php artisan vendor:publish --tag=tablekit-config</code>), then set it in <code>config/tablekit.php</code>:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'load_migrations'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span></span></code></pre></div>
+</li>
+<li><p>Publish the migrations:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">php</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> artisan</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> vendor:publish</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> --tag=tablekit-migrations</span><span style="--shiki-light:#646c76;--shiki-dark:#7b838c">   # both migration files</span></span></code></pre></div>
+</li>
+<li><p>Run them:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">php</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> artisan</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> migrate</span></span></code></pre></div>
+</li>
+</ol>
+<p>If you publish while loading is still on, <code>php artisan migrate</code> sees two copies of each migration (the package&#39;s and yours) and fails with &quot;table already exists&quot; on the second one. The same happens if you already ran <code>php artisan migrate</code> and publish afterwards. In both cases, set <code>load_migrations</code> to <code>false</code> and either delete the published copies, or rename the rows in your <code>migrations</code> table to the published file names. Do not run the copies on top of existing tables.</p>
+<h2 id="database-connection">Database connection<a class="anchor" href="#database-connection" aria-label="Link to section: Database connection">#</a></h2>
+<p><code>connection</code> is <code>null</code> by default. That means the app&#39;s default connection <strong>at the moment of use</strong>. If your app changes <code>database.default</code> per panel or module, views would be read from a different database than the one you migrated. In that case, pin the connection. The plugin value wins over the config value.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#646c76;--shiki-dark:#7b838c">// config/tablekit.php</span></span>
+<span class="line"><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'connection'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> 'reporting'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#646c76;--shiki-dark:#7b838c">// or per panel</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">TableKitPlugin</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">connection</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'reporting'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span></code></pre></div>
+<p>The migration uses <code>config(&#39;tablekit.connection&#39;)</code>, or the default connection when it is <code>null</code>. For a per-panel connection, run only the TableKit migrations against that connection. <code>--database</code> alone would run <strong>all</strong> of your app&#39;s migrations there, so add <code>--path</code>:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">php</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> artisan</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> migrate</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> --database=reporting</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> --path=vendor/tablekit/filament-tablekit/database/migrations</span></span></code></pre></div>
+<p>Each connection that serves a panel with the plugin needs its own TableKit tables.</p>
+<p><code>TableView::user()</code> reads the user from the pinned connection too. If your users live on another connection, set <code>$connection</code> on the user model.</p>
+<h2 id="tenancy">Tenancy<a class="anchor" href="#tenancy" aria-label="Link to section: Tenancy">#</a></h2>
+<ul>
+<li>Views are stored per user, per tenant (<code>Filament::getTenant()</code>) and per component class.</li>
+<li><code>tenant_type</code> is the tenant&#39;s morph class and <code>tenant_id</code> is its key as a string.</li>
+<li>Without a tenant, both columns are <code>null</code>.</li>
+<li>The unique name check (per user, table and tenant) and all reads and writes use the same scope. Views never leak across users, tenants or tables.</li>
+<li>To change the table key, override the protected <code>getTableViewsResourceKey()</code> on the component. The default is the component class. For example, return the same string from two classes to share views.</li>
+</ul>
+<h2 id="user-keys">User keys<a class="anchor" href="#user-keys" aria-label="Link to section: User keys">#</a></h2>
+<p><code>user_id</code> is a string column (64 characters). Integer, ULID and UUID user keys all work with no setting.</p>
+<ul>
+<li><code>user_type</code> is the auth user&#39;s morph class (<code>getMorphClass()</code>). A morph map alias works.</li>
+<li><code>user_id</code> is the auth identifier (<code>Filament::auth()-&gt;id()</code>), compared as a string.</li>
+<li>Views and preferences belong to a user <strong>type and id</strong>. Two panels or guards with their own user models that share the same ids never see each other&#39;s views.</li>
+<li>There is no foreign key to the users table, so any key type works.</li>
+<li><code>user.model</code> (or <code>-&gt;userModel()</code>) is only used by the <code>TableView::user()</code> relation.</li>
+</ul>
+<h2 id="delete-a-users-views">Delete a user&#39;s views<a class="anchor" href="#delete-a-users-views" aria-label="Link to section: Delete a user's views">#</a></h2>
+<p>Views are <strong>not</strong> deleted when a user is deleted. A view stores the table&#39;s search text and filter values, which can hold personal data the user typed. Delete the user&#39;s rows when you delete the account, for example in the user&#39;s <code>deleted</code> event:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\Models\TablePreference</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\Models\TableView</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">TableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">query</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'user_type'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, $user</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">getMorphClass</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">())</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'user_id'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, (</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">string</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">) $user</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">getKey</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">())</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">delete</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">TablePreference</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">query</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'user_type'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, $user</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">getMorphClass</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">())</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'user_id'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, (</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">string</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">) $user</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">getKey</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">())</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">delete</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">();</span></span></code></pre></div>
+<p>Deleting a user view also deletes its preference rows.</p>
+<h2 id="stored-state">Stored state<a class="anchor" href="#stored-state" aria-label="Link to section: Stored state">#</a></h2>
+<p>The <code>state</code> column holds JSON like this:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"v"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">1</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"filters"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:{</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"status"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:{</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"value"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">null</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}},</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"search"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">""</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"columnSearches"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:{},</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"sort"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:{</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"column"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">null</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"direction"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">null</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">},</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"toggledColumns"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:{},</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"grouping"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:{</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"column"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">null</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"direction"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">null</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}}</span></span></code></pre></div>
+<ul>
+<li><code>filters</code> holds each filter&#39;s own state, under the filter&#39;s name. Its shape depends on the filter, for example <code>{&quot;status&quot;:{&quot;value&quot;:&quot;shipped&quot;}}</code> or <code>{&quot;ordered&quot;:{&quot;from&quot;:null,&quot;until&quot;:null}}</code>.</li>
+<li>Empty maps are stored as <code>{}</code>.</li>
+<li>Readers ignore unknown keys and treat missing keys as empty.</li>
+<li><code>v</code> is the format version. It stays at 1.</li>
+<li>With <code>state.tab</code> on, a <code>tab</code> key is added.</li>
+</ul>
+<p>Three more keys are optional (<code>sorts</code>, <code>columnOrder</code> and <code>favoriteFilters</code>). They are written only when they differ from the default, so a view without them looks exactly like an older view:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"sort"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:{</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"column"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"amount"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"direction"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"desc"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">},</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> "sorts"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:[{</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"column"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"amount"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"direction"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"desc"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">},{</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"column"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"ordered_at"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">"direction"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"asc"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}],</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> "columnOrder"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:[</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"reference"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"status"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"amount"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">],</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> "favoriteFilters"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">:[</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"status"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"is_paid"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">]}</span></span></code></pre></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Stored state, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sort</code></td>
+<td>Always the first entry of <code>sorts</code>. A reader without multi-sort still sees a valid single sort.</td>
+</tr>
+<tr>
+<td><code>sorts</code></td>
+<td>The whole multi-sort. Present only with two or more entries.</td>
+</tr>
+<tr>
+<td><code>columnOrder</code></td>
+<td>The full column order. Absent means the code order, or no opinion.</td>
+</tr>
+<tr>
+<td><code>favoriteFilters</code></td>
+<td>Pinned quick filters. Absent means the developer&#39;s <code>favorite()</code> filters. <code>[]</code> means none.</td>
+</tr>
+</tbody></table>
+</div>
+<p>Invalid entries are dropped when a view is applied.</p>
+<p>The shape is the same as the Filament 3 version&#39;s, so views saved there load here. A nested <code>toggledColumns</code> map (Filament 3 stored dotted column names as nested arrays) is flattened, and sort and grouping are converted to Filament 4&#39;s <code>column:direction</code> properties when the view is applied.</p>
+
+</article>
+<p class="edit">Docs for Filament 4. Also available for <a href="/filament-tablekit/docs/database/">Filament 5</a>, <a href="/filament-tablekit/docs/v3/database/">Filament 3</a>. <a href="https://github.com/maytham553/filament-tablekit/edit/filament-v4/docs/database.md">Edit this page on GitHub</a>.</p>
+<nav class="pager" aria-label="Previous and next page">
+<a class="prev" rel="prev" href="/filament-tablekit/docs/v4/colors-and-icons/"><small>Previous</small><strong>Colors and icons</strong></a>
+<a class="next" rel="next" href="/filament-tablekit/docs/v4/testing/"><small>Next</small><strong>Testing</strong></a>
+</nav>
+</main>
+<nav class="toc toc-d" aria-label="On this page"><span class="toc-title">On this page</span><ul><li class="l2"><a href="#tables">Tables</a></li><li class="l2"><a href="#run-the-migrations">Run the migrations</a></li><li class="l3"><a href="#publish-the-migrations">Publish the migrations</a></li><li class="l2"><a href="#database-connection">Database connection</a></li><li class="l2"><a href="#tenancy">Tenancy</a></li><li class="l2"><a href="#user-keys">User keys</a></li><li class="l2"><a href="#delete-a-users-views">Delete a user's views</a></li><li class="l2"><a href="#stored-state">Stored state</a></li></ul></nav>
+</div>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>

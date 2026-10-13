@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Columns: TableKit for Filament 4 docs</title>
+<meta name="description" content="Save column visibility and column order in TableKit views and presets for Filament 4: what is supported, which order wins, and how to turn it off.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/docs/v4/columns/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="Columns: TableKit for Filament 4 docs">
+<meta property="og:description" content="Save column visibility and column order in TableKit views and presets for Filament 4: what is supported, which order wins, and how to turn it off.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/docs/v4/columns/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Columns: TableKit for Filament 4 docs">
+<meta name="twitter:description" content="Save column visibility and column order in TableKit views and presets for Filament 4: what is supported, which order wins, and how to turn it off.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://maytham553.github.io/filament-tablekit/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://maytham553.github.io/filament-tablekit/docs/"},{"@type":"ListItem","position":3,"name":"Filament 4","item":"https://maytham553.github.io/filament-tablekit/docs/v4/"},{"@type":"ListItem","position":4,"name":"Columns","item":"https://maytham553.github.io/filament-tablekit/docs/v4/columns/"}]},{"@type":"TechArticle","headline":"Columns (TableKit for Filament 4)","description":"Save column visibility and column order in TableKit views and presets for Filament 4: what is supported, which order wins, and how to turn it off.","url":"https://maytham553.github.io/filament-tablekit/docs/v4/columns/","inLanguage":"en","dateModified":"2026-10-13","author":{"@type":"Person","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@type":"WebSite","name":"TableKit","url":"https://maytham553.github.io/filament-tablekit/"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg"}]}</script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/" aria-current="true">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<div class="wrap docs has-toc">
+<div class="docs-side">
+<input type="checkbox" id="docs-nav-toggle" class="docs-nav-toggle" aria-label="Show documentation menu">
+<label for="docs-nav-toggle" class="menu-btn">Docs menu: Columns (Filament 4)</label>
+<nav class="sidebar" aria-label="Documentation">
+<span class="side-title">Filament version</span>
+<ul class="ver"><li><a href="/filament-tablekit/docs/columns/" hreflang="en">v5</a></li><li><a href="/filament-tablekit/docs/v4/columns/" aria-current="true" hreflang="en">v4</a></li><li><a href="/filament-tablekit/docs/v3/columns/" hreflang="en">v3</a></li></ul>
+<div class="side-group"><span class="side-title">Getting started</span><ul><li><a href="/filament-tablekit/docs/v4/">Overview</a></li><li><a href="/filament-tablekit/docs/v4/installation/">Installation</a></li><li><a href="/filament-tablekit/docs/v4/configuration/">Configuration</a></li></ul></div>
+<div class="side-group"><span class="side-title">Using TableKit</span><ul><li><a href="/filament-tablekit/docs/v4/views/">Views</a></li><li><a href="/filament-tablekit/docs/v4/presets/">Preset views</a></li><li><a href="/filament-tablekit/docs/v4/multi-sort/">Multi-sort</a></li><li><a href="/filament-tablekit/docs/v4/quick-filters/">Quick filters</a></li><li><a href="/filament-tablekit/docs/v4/columns/" aria-current="page">Columns</a></li><li><a href="/filament-tablekit/docs/v4/colors-and-icons/">Colors and icons</a></li></ul></div>
+<div class="side-group"><span class="side-title">Reference</span><ul><li><a href="/filament-tablekit/docs/v4/database/">Database</a></li><li><a href="/filament-tablekit/docs/v4/testing/">Testing</a></li><li><a href="/filament-tablekit/docs/v4/limits/">Limits</a></li><li><a href="/filament-tablekit/docs/v4/upgrading/">Upgrading</a></li></ul></div>
+</nav>
+</div>
+<main id="main" class="prose">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/filament-tablekit/">Home</a></li><li><a href="/filament-tablekit/docs/">Docs</a></li><li><a href="/filament-tablekit/docs/v4/">Filament 4</a></li><li><span aria-current="page">Columns</span></li></ol></nav>
+<p class="notice" role="note">You are viewing the <strong>Filament 4</strong> docs (TableKit <code>^4.0</code>). Using Filament 5? <a href="/filament-tablekit/docs/columns/">Open the latest version of this page</a>.</p>
+<details class="toc toc-m"><summary>On this page</summary><ul><li class="l2"><a href="#filaments-column-manager">Filament's column manager</a></li><li class="l3"><a href="#what-is-supported">What is supported</a></li><li class="l2"><a href="#in-views">In views</a></li><li class="l2"><a href="#in-presets">In presets</a></li><li class="l2"><a href="#which-order-wins">Which order wins</a></li><li class="l2"><a href="#turn-it-off">Turn it off</a></li></ul></details>
+<article>
+<h1 id="columns">Columns</h1>
+<p>TableKit saves the column <strong>visibility</strong> and the column <strong>order</strong> in views and presets.</p>
+<h2 id="filaments-column-manager">Filament&#39;s column manager<a class="anchor" href="#filaments-column-manager" aria-label="Link to section: Filament's column manager">#</a></h2>
+<p>Filament 4 has a native column manager with reordering. Turn it on in the table with <code>-&gt;reorderableColumns()</code>. TableKit does <strong>not</strong> replace it and builds no reorder UI of its own. It saves and applies what the manager holds.</p>
+<p>Filament 4 keeps column order and visibility in one state (the column manager). A view saves both. The Default button resets both.</p>
+<h3 id="what-is-supported">What is supported<a class="anchor" href="#what-is-supported" aria-label="Link to section: What is supported">#</a></h3>
+<ul>
+<li>Only tables with <code>reorderableColumns()</code> and <strong>no columns layout</strong> (Split, Stack, Panel) have an order to save. On any other table, <code>columnOrder</code> is neither stored nor applied.</li>
+<li>A column group moves as one block and orders its own columns. Columns never change group.</li>
+</ul>
+<h2 id="in-views">In views<a class="anchor" href="#in-views" aria-label="Link to section: In views">#</a></h2>
+<ul>
+<li>A view stores the order as <code>columnOrder</code>: the column names in order. Groups are expanded in place. It is stored only when it differs from the code order, so earlier views stay byte-identical.</li>
+<li>Applying a view puts the columns in that order through <code>applyTableColumnManager()</code>, together with the visibility, so headers, cells and the manager agree.</li>
+<li>A view saved without an order <strong>keeps the user&#39;s order</strong> when applied.</li>
+<li>The order is part of the &quot;modified&quot; check.</li>
+<li>Columns added in code after the view was saved land after the listed ones, in code order. Names that no longer exist are skipped.</li>
+</ul>
+<h2 id="in-presets">In presets<a class="anchor" href="#in-presets" aria-label="Link to section: In presets">#</a></h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: In presets, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Order</th>
+<th>Visibility</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>defaultColumns([&#39;reference&#39;, &#39;amount&#39;, &#39;notes&#39;])</code></td>
+<td>Listed columns first, in this order. Other columns follow in code order.</td>
+<td>Toggleable columns that are not listed are hidden.</td>
+</tr>
+<tr>
+<td><code>defaultToggledColumns([&#39;notes&#39;, &#39;customer.city&#39;])</code></td>
+<td>The user&#39;s order is kept.</td>
+<td>Listed toggleable columns are shown. The others are hidden.</td>
+</tr>
+</tbody></table>
+</div>
+<p>The Default button puts the order back to the code order.</p>
+<h2 id="which-order-wins">Which order wins<a class="anchor" href="#which-order-wins" aria-label="Link to section: Which order wins">#</a></h2>
+<ul>
+<li>A user&#39;s own order that Filament kept in the session beats the startup, remembered or URL-restored view&#39;s order (like the toggles), until a view is applied by hand.</li>
+<li>The plugin records what the last view apply wrote, per table, in the session. So an order written by a view is not mistaken for the user&#39;s change.</li>
+<li>An order equal to what the last view wrote, or to the code order, cannot be told apart from &quot;never changed&quot;. The startup view&#39;s order then applies on the next load.</li>
+<li>A view saved without an order keeps the user&#39;s order. If the user then moves a column and reloads, the plugin still shows the view as modified. It remembers the order of the last apply in the session. A user who cleared the session, or never applied a view in it, sees the view as clean.</li>
+</ul>
+<h2 id="turn-it-off">Turn it off<a class="anchor" href="#turn-it-off" aria-label="Link to section: Turn it off">#</a></h2>
+<p>Per table:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">public</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> static</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> function</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> columnOrderTableViews</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">:</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> bool</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    return</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span></code></pre></div>
+<p>Everywhere: <code>columnReordering(false)</code> on the plugin, or <code>column_reordering.enabled</code> in the config.</p>
+
+</article>
+<p class="edit">Docs for Filament 4. Also available for <a href="/filament-tablekit/docs/columns/">Filament 5</a>, <a href="/filament-tablekit/docs/v3/columns/">Filament 3</a>. <a href="https://github.com/maytham553/filament-tablekit/edit/filament-v4/docs/columns.md">Edit this page on GitHub</a>.</p>
+<nav class="pager" aria-label="Previous and next page">
+<a class="prev" rel="prev" href="/filament-tablekit/docs/v4/quick-filters/"><small>Previous</small><strong>Quick filters</strong></a>
+<a class="next" rel="next" href="/filament-tablekit/docs/v4/colors-and-icons/"><small>Next</small><strong>Colors and icons</strong></a>
+</nav>
+</main>
+<nav class="toc toc-d" aria-label="On this page"><span class="toc-title">On this page</span><ul><li class="l2"><a href="#filaments-column-manager">Filament's column manager</a></li><li class="l3"><a href="#what-is-supported">What is supported</a></li><li class="l2"><a href="#in-views">In views</a></li><li class="l2"><a href="#in-presets">In presets</a></li><li class="l2"><a href="#which-order-wins">Which order wins</a></li><li class="l2"><a href="#turn-it-off">Turn it off</a></li></ul></nav>
+</div>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>

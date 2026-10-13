@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quick filters: TableKit for Filament 5 docs</title>
+<meta name="description" content="Turn Filament 5 filter indicators into clickable chips with popovers, pin favorite filters so they stay visible, and shorten filter labels.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/docs/quick-filters/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="Quick filters: TableKit for Filament 5 docs">
+<meta property="og:description" content="Turn Filament 5 filter indicators into clickable chips with popovers, pin favorite filters so they stay visible, and shorten filter labels.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/docs/quick-filters/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quick filters: TableKit for Filament 5 docs">
+<meta name="twitter:description" content="Turn Filament 5 filter indicators into clickable chips with popovers, pin favorite filters so they stay visible, and shorten filter labels.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://maytham553.github.io/filament-tablekit/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://maytham553.github.io/filament-tablekit/docs/"},{"@type":"ListItem","position":3,"name":"Quick filters","item":"https://maytham553.github.io/filament-tablekit/docs/quick-filters/"}]},{"@type":"TechArticle","headline":"Quick filters (TableKit for Filament 5)","description":"Turn Filament 5 filter indicators into clickable chips with popovers, pin favorite filters so they stay visible, and shorten filter labels.","url":"https://maytham553.github.io/filament-tablekit/docs/quick-filters/","inLanguage":"en","dateModified":"2026-10-13","author":{"@type":"Person","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@type":"WebSite","name":"TableKit","url":"https://maytham553.github.io/filament-tablekit/"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg"}]}</script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/" aria-current="true">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<div class="wrap docs has-toc">
+<div class="docs-side">
+<input type="checkbox" id="docs-nav-toggle" class="docs-nav-toggle" aria-label="Show documentation menu">
+<label for="docs-nav-toggle" class="menu-btn">Docs menu: Quick filters (Filament 5)</label>
+<nav class="sidebar" aria-label="Documentation">
+<span class="side-title">Filament version</span>
+<ul class="ver"><li><a href="/filament-tablekit/docs/quick-filters/" aria-current="true" hreflang="en">v5</a></li><li><a href="/filament-tablekit/docs/v4/quick-filters/" hreflang="en">v4</a></li><li><a href="/filament-tablekit/docs/v3/quick-filters/" hreflang="en">v3</a></li></ul>
+<div class="side-group"><span class="side-title">Getting started</span><ul><li><a href="/filament-tablekit/docs/">Overview</a></li><li><a href="/filament-tablekit/docs/installation/">Installation</a></li><li><a href="/filament-tablekit/docs/configuration/">Configuration</a></li></ul></div>
+<div class="side-group"><span class="side-title">Using TableKit</span><ul><li><a href="/filament-tablekit/docs/views/">Views</a></li><li><a href="/filament-tablekit/docs/presets/">Preset views</a></li><li><a href="/filament-tablekit/docs/multi-sort/">Multi-sort</a></li><li><a href="/filament-tablekit/docs/quick-filters/" aria-current="page">Quick filters</a></li><li><a href="/filament-tablekit/docs/columns/">Columns</a></li><li><a href="/filament-tablekit/docs/colors-and-icons/">Colors and icons</a></li></ul></div>
+<div class="side-group"><span class="side-title">Reference</span><ul><li><a href="/filament-tablekit/docs/database/">Database</a></li><li><a href="/filament-tablekit/docs/testing/">Testing</a></li><li><a href="/filament-tablekit/docs/limits/">Limits</a></li><li><a href="/filament-tablekit/docs/upgrading/">Upgrading</a></li></ul></div>
+</nav>
+</div>
+<main id="main" class="prose">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/filament-tablekit/">Home</a></li><li><a href="/filament-tablekit/docs/">Docs</a></li><li><span aria-current="page">Quick filters</span></li></ol></nav>
+
+<details class="toc toc-m"><summary>On this page</summary><ul><li class="l2"><a href="#turn-them-on">Turn them on</a></li><li class="l2"><a href="#turn-them-off-for-one-table">Turn them off for one table</a></li><li class="l2"><a href="#what-you-see">What you see</a></li><li class="l2"><a href="#chips-and-popovers">Chips and popovers</a></li><li class="l3"><a href="#how-the-popover-works">How the popover works</a></li><li class="l2"><a href="#favorite-filters">Favorite filters</a></li><li class="l3"><a href="#pins">Pins</a></li><li class="l2"><a href="#shorter-labels">Shorter labels</a></li></ul></details>
+<article>
+<h1 id="quick-filters">Quick filters</h1>
+<p>Quick filters turn the filter indicators into clickable chips. A chip opens a popover with that filter&#39;s own fields. Favorite filters stay visible even when they are not active.</p>
+<p>Quick filters are <strong>off by default</strong>.</p>
+<h2 id="turn-them-on">Turn them on<a class="anchor" href="#turn-them-on" aria-label="Link to section: Turn them on">#</a></h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Turn them on, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Where</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Config</td>
+<td><code>quick_filters.enabled</code> set to <code>true</code></td>
+</tr>
+<tr>
+<td>Plugin</td>
+<td><code>TableKitPlugin::make()-&gt;quickFilters()</code></td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="turn-them-off-for-one-table">Turn them off for one table<a class="anchor" href="#turn-them-off-for-one-table" aria-label="Link to section: Turn them off for one table">#</a></h2>
+<p>Quick filters are on for a table only when the global setting is on <strong>and</strong> the table allows them. The per-table method can only turn them <strong>off</strong> (its default is <code>true</code>):</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Turn them off for one table, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Where</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>One table</td>
+<td>Override <code>public static function quickFiltersTableViews(): bool</code> on the component and return <code>false</code></td>
+</tr>
+</tbody></table>
+</div>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">public</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> static</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> function</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> quickFiltersTableViews</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">:</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> bool</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    return</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span></code></pre></div>
+<p>Returning <code>true</code> does not turn them on when the global setting is off.</p>
+<p>The bar needs a visible table header toolbar. A table with no search, filters, grouping or column toggle hides the toolbar, and the chip bar with it.</p>
+<h2 id="what-you-see">What you see<a class="anchor" href="#what-you-see" aria-label="Link to section: What you see">#</a></h2>
+<p>When quick filters are on, <strong>Filament&#39;s indicator bar is replaced</strong> by a chip bar under the toolbar.</p>
+<p>The new bar uses Filament&#39;s own indicator markup and classes (<code>fi-ta-filter-indicators</code>), so it looks the same. It has its own clear-all action. Filament has a <code>FILTER_INDICATORS</code> render hook, but it only fires when an indicator is active and cannot show an inactive favorite chip. So the plugin hides Filament&#39;s bar (<code>hiddenFilterIndicators()</code>) and draws the chips from the <code>TOOLBAR_AFTER</code> hook.
+The table&#39;s own <code>hiddenFilterIndicators()</code> call is ignored while quick filters are on, so the two bars never show together.</p>
+<p>The bar holds:</p>
+<ul>
+<li>the search and column search chips, exactly as Filament builds them, with the same remove buttons;</li>
+<li>one chip per filter that is <strong>active</strong> or <strong>favorite</strong>, in the order the table defines the filters;</li>
+<li>a clear-all action.</li>
+</ul>
+<p>A filter is active when it has an indicator, when Filament counts it as active the way <code>QueryBuilder</code> does, or when its applied state holds a value. So a plain <code>schema()</code> filter without <code>indicateUsing</code> is covered too.</p>
+<h2 id="chips-and-popovers">Chips and popovers<a class="anchor" href="#chips-and-popovers" aria-label="Link to section: Chips and popovers">#</a></h2>
+<ul>
+<li>A chip opens a popover with that filter&#39;s own form group.</li>
+<li>A filter with several fields (such as a date range) is <strong>one</strong> chip that edits all its fields. Its label joins the indicators.</li>
+<li>Filament 5 defers filters by default. The popover then has an <strong>Apply</strong> button (<code>applyTableFilters</code>) and nothing is applied before it. With <code>deferFilters(false)</code>, changes apply at once.</li>
+<li>An outside click or Apply closes the popover.</li>
+<li>The x on a chip calls Filament&#39;s own <code>removeTableFilter()</code>. A favorite chip stays (inactive). Any other chip disappears.</li>
+<li>The x respects each indicator&#39;s <code>removable()</code> flag. When every indicator is removable, the whole filter is cleared. When only some are, the x removes just those (through their <code>removeField()</code>). When none is, there is no x.</li>
+<li>The x stops the mousedown, so it does not also toggle the popover.</li>
+</ul>
+<h3 id="how-the-popover-works">How the popover works<a class="anchor" href="#how-the-popover-works" aria-label="Link to section: How the popover works">#</a></h3>
+<ul>
+<li>The popover renders <strong>only while its chip is open</strong>. A closed bar costs no option queries, and a search keystroke or a sort adds nothing.</li>
+<li>When the panel becomes visible, its loading line calls <code>openTableViewQuickFilter</code> (<code>x-intersect</code>). So mouse, touch and keyboard all work. Filament&#39;s dropdown opens on mousedown and handles Enter and Space itself, so a click binding would never run for the keyboard.</li>
+<li>The open chip&#39;s form is a clone of the filter&#39;s group in its own schema (state path <code>tableViewQuickFilterState.&lt;filter&gt;.*</code>). Its DOM ids and wire keys never repeat the filter dropdown&#39;s, and a label click reaches the right field.</li>
+<li>Its changes are copied into <code>tableFilters</code> (or <code>tableDeferredFilters</code> when the table defers filters). The popover is refilled from that state on every render, so it always matches Filament&#39;s filter dropdown.</li>
+<li>Only the open chip&#39;s own filter is copied. Anything else the browser sends for that property is dropped.</li>
+<li>Popovers are filled from the filter state when they open, so a closed chip never loads options. A preloaded relationship select is queried once for the filter dropdown, and once more only while its chip is open.</li>
+</ul>
+<h2 id="favorite-filters">Favorite filters<a class="anchor" href="#favorite-filters" aria-label="Link to section: Favorite filters">#</a></h2>
+<p><code>-&gt;favorite()</code> keeps a chip visible while its filter is inactive. It is a macro on Filament&#39;s filter base class, so it works on every filter. It accepts a bool or a closure.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">SelectFilter</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'status'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">options</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">([</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">...</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">])</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">favorite</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(),</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">TernaryFilter</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'is_paid'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">quickFilterFavorite</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(),</span></span></code></pre></div>
+<p><code>-&gt;quickFilterFavorite()</code> is the same call under the plugin&#39;s own name. It is always registered.</p>
+<p>If another package already defines <code>BaseFilter::favorite()</code>, the plugin does <strong>not</strong> override it. It logs a warning at boot, and <code>quickFilterFavorite()</code> is the way to mark a filter.</p>
+<h3 id="pins">Pins<a class="anchor" href="#pins" aria-label="Link to section: Pins">#</a></h3>
+<p>The star in the popover pins or unpins a filter for the user.</p>
+<ul>
+<li>The pins are part of the view state (<code>favoriteFilters</code>). They are stored only when they differ from the <code>favorite()</code> defaults, so a later change in code still reaches users.</li>
+<li>They are kept in the session, so a reload keeps them.</li>
+<li>Default and presets reset them. A preset sets its own with <code>defaultFavoriteFilters([&#39;status&#39;, &#39;is_paid&#39;])</code>.</li>
+</ul>
+<h2 id="shorter-labels">Shorter labels<a class="anchor" href="#shorter-labels" aria-label="Link to section: Shorter labels">#</a></h2>
+<p><code>limitIndicatorLabels(2)</code> or <code>quick_filters.limit_labels</code> makes a multi-select chip show &quot;Status: A, B &amp; 3 more&quot;. <code>0</code> or <code>null</code> shows all values.</p>
+<p>The label is shortened only when Filament&#39;s own label splits back into exactly the selected values, so it can never show something wrong.</p>
+
+</article>
+<p class="edit">Docs for Filament 5 <span class="badge">latest</span>. Also available for <a href="/filament-tablekit/docs/v4/quick-filters/">Filament 4</a>, <a href="/filament-tablekit/docs/v3/quick-filters/">Filament 3</a>. <a href="https://github.com/maytham553/filament-tablekit/edit/main/docs/quick-filters.md">Edit this page on GitHub</a>.</p>
+<nav class="pager" aria-label="Previous and next page">
+<a class="prev" rel="prev" href="/filament-tablekit/docs/multi-sort/"><small>Previous</small><strong>Multi-sort</strong></a>
+<a class="next" rel="next" href="/filament-tablekit/docs/columns/"><small>Next</small><strong>Columns</strong></a>
+</nav>
+</main>
+<nav class="toc toc-d" aria-label="On this page"><span class="toc-title">On this page</span><ul><li class="l2"><a href="#turn-them-on">Turn them on</a></li><li class="l2"><a href="#turn-them-off-for-one-table">Turn them off for one table</a></li><li class="l2"><a href="#what-you-see">What you see</a></li><li class="l2"><a href="#chips-and-popovers">Chips and popovers</a></li><li class="l3"><a href="#how-the-popover-works">How the popover works</a></li><li class="l2"><a href="#favorite-filters">Favorite filters</a></li><li class="l3"><a href="#pins">Pins</a></li><li class="l2"><a href="#shorter-labels">Shorter labels</a></li></ul></nav>
+</div>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>

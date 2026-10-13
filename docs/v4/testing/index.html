@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Testing: TableKit for Filament 4 docs</title>
+<meta name="description" content="Test Filament 4 tables that use TableKit with Livewire: set up, Quick Save, apply a preset, a view or the default, and check state properties.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/docs/v4/testing/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="Testing: TableKit for Filament 4 docs">
+<meta property="og:description" content="Test Filament 4 tables that use TableKit with Livewire: set up, Quick Save, apply a preset, a view or the default, and check state properties.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/docs/v4/testing/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Testing: TableKit for Filament 4 docs">
+<meta name="twitter:description" content="Test Filament 4 tables that use TableKit with Livewire: set up, Quick Save, apply a preset, a view or the default, and check state properties.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://maytham553.github.io/filament-tablekit/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://maytham553.github.io/filament-tablekit/docs/"},{"@type":"ListItem","position":3,"name":"Filament 4","item":"https://maytham553.github.io/filament-tablekit/docs/v4/"},{"@type":"ListItem","position":4,"name":"Testing","item":"https://maytham553.github.io/filament-tablekit/docs/v4/testing/"}]},{"@type":"TechArticle","headline":"Testing (TableKit for Filament 4)","description":"Test Filament 4 tables that use TableKit with Livewire: set up, Quick Save, apply a preset, a view or the default, and check state properties.","url":"https://maytham553.github.io/filament-tablekit/docs/v4/testing/","inLanguage":"en","dateModified":"2026-10-13","author":{"@type":"Person","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@type":"WebSite","name":"TableKit","url":"https://maytham553.github.io/filament-tablekit/"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg"}]}</script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/" aria-current="true">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<div class="wrap docs has-toc">
+<div class="docs-side">
+<input type="checkbox" id="docs-nav-toggle" class="docs-nav-toggle" aria-label="Show documentation menu">
+<label for="docs-nav-toggle" class="menu-btn">Docs menu: Testing (Filament 4)</label>
+<nav class="sidebar" aria-label="Documentation">
+<span class="side-title">Filament version</span>
+<ul class="ver"><li><a href="/filament-tablekit/docs/testing/" hreflang="en">v5</a></li><li><a href="/filament-tablekit/docs/v4/testing/" aria-current="true" hreflang="en">v4</a></li><li><a href="/filament-tablekit/docs/v3/testing/" hreflang="en">v3</a></li></ul>
+<div class="side-group"><span class="side-title">Getting started</span><ul><li><a href="/filament-tablekit/docs/v4/">Overview</a></li><li><a href="/filament-tablekit/docs/v4/installation/">Installation</a></li><li><a href="/filament-tablekit/docs/v4/configuration/">Configuration</a></li></ul></div>
+<div class="side-group"><span class="side-title">Using TableKit</span><ul><li><a href="/filament-tablekit/docs/v4/views/">Views</a></li><li><a href="/filament-tablekit/docs/v4/presets/">Preset views</a></li><li><a href="/filament-tablekit/docs/v4/multi-sort/">Multi-sort</a></li><li><a href="/filament-tablekit/docs/v4/quick-filters/">Quick filters</a></li><li><a href="/filament-tablekit/docs/v4/columns/">Columns</a></li><li><a href="/filament-tablekit/docs/v4/colors-and-icons/">Colors and icons</a></li></ul></div>
+<div class="side-group"><span class="side-title">Reference</span><ul><li><a href="/filament-tablekit/docs/v4/database/">Database</a></li><li><a href="/filament-tablekit/docs/v4/testing/" aria-current="page">Testing</a></li><li><a href="/filament-tablekit/docs/v4/limits/">Limits</a></li><li><a href="/filament-tablekit/docs/v4/upgrading/">Upgrading</a></li></ul></div>
+</nav>
+</div>
+<main id="main" class="prose">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/filament-tablekit/">Home</a></li><li><a href="/filament-tablekit/docs/">Docs</a></li><li><a href="/filament-tablekit/docs/v4/">Filament 4</a></li><li><span aria-current="page">Testing</span></li></ol></nav>
+<p class="notice" role="note">You are viewing the <strong>Filament 4</strong> docs (TableKit <code>^4.0</code>). Using Filament 5? <a href="/filament-tablekit/docs/testing/">Open the latest version of this page</a>.</p>
+<details class="toc toc-m"><summary>On this page</summary><ul><li class="l2"><a href="#set-up">Set up</a></li><li class="l2"><a href="#quick-save">Quick Save</a></li><li class="l2"><a href="#apply-a-preset-a-view-or-the-default">Apply a preset, a view or the default</a></li><li class="l2"><a href="#state-properties">State properties</a></li></ul></details>
+<article>
+<h1 id="testing">Testing</h1>
+<p>Examples for testing a table that uses TableKit with Livewire. The calls are the same ones the buttons in the browser make.</p>
+<h2 id="set-up">Set up<a class="anchor" href="#set-up" aria-label="Link to section: Set up">#</a></h2>
+<p>Use an in-memory SQLite database in <code>phpunit.xml</code>. The TableKit migrations load by themselves, so <code>RefreshDatabase</code> creates the tables:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">&#x3C;</span><span style="--shiki-light:#207e37;--shiki-dark:#85e89d">php</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">></span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">    &#x3C;</span><span style="--shiki-light:#207e37;--shiki-dark:#85e89d">env</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> name</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">=</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"DB_CONNECTION"</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> value</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">=</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"sqlite"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">/></span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">    &#x3C;</span><span style="--shiki-light:#207e37;--shiki-dark:#85e89d">env</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> name</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">=</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">"DB_DATABASE"</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> value</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">=</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">":memory:"</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">/></span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">&#x3C;/</span><span style="--shiki-light:#207e37;--shiki-dark:#85e89d">php</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">></span></span></code></pre></div>
+<p>Sign in a user and test the page class:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> App\Models\User</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Livewire\Livewire</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">beforeEach</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">function</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> () {</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">    $this</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">actingAs</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">User</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">factory</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">create</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">());</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">});</span></span></code></pre></div>
+<p>If your app owns the migrations (<code>load_migrations</code> is <code>false</code>), run your own copies in the test setup as usual.</p>
+<h2 id="quick-save">Quick Save<a class="anchor" href="#quick-save" aria-label="Link to section: Quick Save">#</a></h2>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\Models\TableView</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">it</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'saves the current table state as a view'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">function</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> () {</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">    Livewire</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">test</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">ListOrders</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::class</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">set</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'tableFilters.status.value'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">callAction</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'quickSaveTableView'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">data</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">: [</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'name'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> 'Shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'color'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> 'primary'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">])</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">assertHasNoActionErrors</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">    expect</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">TableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'name'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'Shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">exists</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">())</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">toBeTrue</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">();</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">});</span></span></code></pre></div>
+<p>Pass <code>icon</code> and <code>is_favorite</code> (add to the favorites bar) in <code>data</code> if you need them. A name that is taken, a color that is not in the list, or a full table (<code>max_views_per_table</code>) comes back as an action error (<code>assertHasActionErrors()</code>).</p>
+<h2 id="apply-a-preset-a-view-or-the-default">Apply a preset, a view or the default<a class="anchor" href="#apply-a-preset-a-view-or-the-default" aria-label="Link to section: Apply a preset, a view or the default">#</a></h2>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">it</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'applies a preset'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">function</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> () {</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">    Livewire</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">test</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">ListOrders</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::class</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">call</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'applyTablePresetView'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">assertSet</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'activeTablePresetKey'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">assertSet</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'tableFilters.status.value'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">it</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'applies a saved view'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">function</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> () {</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">    $view </span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">=</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">first</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">    Livewire</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">test</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">ListOrders</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::class</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">call</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'applyTableView'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, $view</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">id)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">assertSet</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'activeTableViewId'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, $view</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">id);</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">it</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'goes back to the default'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">function</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> () {</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">    Livewire</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">test</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">ListOrders</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::class</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">call</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'applyTablePresetView'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">call</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'applyDefaultTableView'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">assertSet</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'activeTablePresetKey'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">null</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">assertSet</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'activeTableViewId'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">null</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">});</span></span></code></pre></div>
+<h2 id="state-properties">State properties<a class="anchor" href="#state-properties" aria-label="Link to section: State properties">#</a></h2>
+<p>These public properties are what you can assert on:</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: State properties, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Property</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>activeTablePresetKey</code></td>
+<td>The key of the active preset, or <code>null</code>.</td>
+</tr>
+<tr>
+<td><code>activeTableViewId</code></td>
+<td>The id of the active saved view, or <code>null</code>.</td>
+</tr>
+<tr>
+<td><code>tableViewSorts</code></td>
+<td>The multi-sort list: <code>[[&#39;column&#39; =&gt; &#39;amount&#39;, &#39;direction&#39; =&gt; &#39;asc&#39;], ...]</code>.</td>
+</tr>
+<tr>
+<td><code>tableViewFavoriteFilters</code></td>
+<td>Pinned quick filters. <code>null</code> means the developer&#39;s <code>favorite()</code> filters.</td>
+</tr>
+</tbody></table>
+</div>
+<p>The column order is Filament&#39;s own column manager state (<code>tableColumns</code>). To test it, save a view and read <code>$view-&gt;state-&gt;columnOrder</code>.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">it</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'sorts by several columns'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">function</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> () {</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">    Livewire</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">test</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">ListOrders</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::class</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">call</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'addTableViewSort'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'amount'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">call</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'addTableViewSort'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'reference'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">assertCount</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'tableViewSorts'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">2</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">);</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">});</span></span></code></pre></div>
+<p>Other public methods a test can call, the same ones the buttons call: <code>removeTableViewSort</code>, <code>setTableViewSortDirection</code>, <code>clearTableViewSorts</code> (multi-sort) and <code>togglePinnedTableViewFilter</code> (pinned quick filters). Methods that are <code>protected</code>, such as <code>getPresetTableViews()</code>, cannot be called from a test the way a browser would.</p>
+
+</article>
+<p class="edit">Docs for Filament 4. Also available for <a href="/filament-tablekit/docs/testing/">Filament 5</a>, <a href="/filament-tablekit/docs/v3/testing/">Filament 3</a>. <a href="https://github.com/maytham553/filament-tablekit/edit/filament-v4/docs/testing.md">Edit this page on GitHub</a>.</p>
+<nav class="pager" aria-label="Previous and next page">
+<a class="prev" rel="prev" href="/filament-tablekit/docs/v4/database/"><small>Previous</small><strong>Database</strong></a>
+<a class="next" rel="next" href="/filament-tablekit/docs/v4/limits/"><small>Next</small><strong>Limits</strong></a>
+</nav>
+</main>
+<nav class="toc toc-d" aria-label="On this page"><span class="toc-title">On this page</span><ul><li class="l2"><a href="#set-up">Set up</a></li><li class="l2"><a href="#quick-save">Quick Save</a></li><li class="l2"><a href="#apply-a-preset-a-view-or-the-default">Apply a preset, a view or the default</a></li><li class="l2"><a href="#state-properties">State properties</a></li></ul></nav>
+</div>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>

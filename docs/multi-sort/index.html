@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Multi-sort: TableKit for Filament 5 docs</title>
+<meta name="description" content="Sort Filament 5 tables by several columns with a priority for each. How TableKit multi-sort works, its settings and rules, and how views save it.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/docs/multi-sort/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="Multi-sort: TableKit for Filament 5 docs">
+<meta property="og:description" content="Sort Filament 5 tables by several columns with a priority for each. How TableKit multi-sort works, its settings and rules, and how views save it.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/docs/multi-sort/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Multi-sort: TableKit for Filament 5 docs">
+<meta name="twitter:description" content="Sort Filament 5 tables by several columns with a priority for each. How TableKit multi-sort works, its settings and rules, and how views save it.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://maytham553.github.io/filament-tablekit/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://maytham553.github.io/filament-tablekit/docs/"},{"@type":"ListItem","position":3,"name":"Multi-sort","item":"https://maytham553.github.io/filament-tablekit/docs/multi-sort/"}]},{"@type":"TechArticle","headline":"Multi-sort (TableKit for Filament 5)","description":"Sort Filament 5 tables by several columns with a priority for each. How TableKit multi-sort works, its settings and rules, and how views save it.","url":"https://maytham553.github.io/filament-tablekit/docs/multi-sort/","inLanguage":"en","dateModified":"2026-10-13","author":{"@type":"Person","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@type":"WebSite","name":"TableKit","url":"https://maytham553.github.io/filament-tablekit/"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg"}]}</script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/" aria-current="true">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<div class="wrap docs has-toc">
+<div class="docs-side">
+<input type="checkbox" id="docs-nav-toggle" class="docs-nav-toggle" aria-label="Show documentation menu">
+<label for="docs-nav-toggle" class="menu-btn">Docs menu: Multi-sort (Filament 5)</label>
+<nav class="sidebar" aria-label="Documentation">
+<span class="side-title">Filament version</span>
+<ul class="ver"><li><a href="/filament-tablekit/docs/multi-sort/" aria-current="true" hreflang="en">v5</a></li><li><a href="/filament-tablekit/docs/v4/multi-sort/" hreflang="en">v4</a></li><li><a href="/filament-tablekit/docs/v3/multi-sort/" hreflang="en">v3</a></li></ul>
+<div class="side-group"><span class="side-title">Getting started</span><ul><li><a href="/filament-tablekit/docs/">Overview</a></li><li><a href="/filament-tablekit/docs/installation/">Installation</a></li><li><a href="/filament-tablekit/docs/configuration/">Configuration</a></li></ul></div>
+<div class="side-group"><span class="side-title">Using TableKit</span><ul><li><a href="/filament-tablekit/docs/views/">Views</a></li><li><a href="/filament-tablekit/docs/presets/">Preset views</a></li><li><a href="/filament-tablekit/docs/multi-sort/" aria-current="page">Multi-sort</a></li><li><a href="/filament-tablekit/docs/quick-filters/">Quick filters</a></li><li><a href="/filament-tablekit/docs/columns/">Columns</a></li><li><a href="/filament-tablekit/docs/colors-and-icons/">Colors and icons</a></li></ul></div>
+<div class="side-group"><span class="side-title">Reference</span><ul><li><a href="/filament-tablekit/docs/database/">Database</a></li><li><a href="/filament-tablekit/docs/testing/">Testing</a></li><li><a href="/filament-tablekit/docs/limits/">Limits</a></li><li><a href="/filament-tablekit/docs/upgrading/">Upgrading</a></li></ul></div>
+</nav>
+</div>
+<main id="main" class="prose">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/filament-tablekit/">Home</a></li><li><a href="/filament-tablekit/docs/">Docs</a></li><li><span aria-current="page">Multi-sort</span></li></ol></nav>
+
+<details class="toc toc-m"><summary>On this page</summary><ul><li class="l2"><a href="#what-users-see">What users see</a></li><li class="l2"><a href="#settings">Settings</a></li><li class="l2"><a href="#in-views-and-presets">In views and presets</a></li><li class="l2"><a href="#how-it-works-with-filament-5">How it works with Filament 5</a></li><li class="l2"><a href="#rules">Rules</a></li><li class="l2"><a href="#reload-and-the-url">Reload and the URL</a></li></ul></details>
+<article>
+<h1 id="multi-sort">Multi-sort</h1>
+<p>Multi-sort lets users sort a table by several columns. Each column has a priority.</p>
+<h2 id="what-users-see">What users see<a class="anchor" href="#what-users-see" aria-label="Link to section: What users see">#</a></h2>
+<p>A <strong>Sort</strong> button (an icon with a count badge) sits in the table toolbar, next to the grouping selector. It opens a dropdown where the user can:</p>
+<ul>
+<li>add a sort column (only sortable, visible columns are offered);</li>
+<li>set each sort to ascending or descending;</li>
+<li>drag a sort to a new priority (a handle at the start of the row, shown with two or more sorts). ArrowUp and ArrowDown on the handle move it by keyboard;</li>
+<li>remove a sort.</li>
+</ul>
+<p>The column headers of a multi-sort show a small priority number after the label.</p>
+<p>The button shows only when the table has at least two sortable columns and a visible header toolbar. A table with no search, filters, grouping or column toggle hides the toolbar, and the Sort button with it.</p>
+<h2 id="settings">Settings<a class="anchor" href="#settings" aria-label="Link to section: Settings">#</a></h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Settings, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>multi_sort.enabled</code> or <code>multiSort(true)</code></td>
+<td><code>true</code></td>
+<td>Turns multi-sort on for every table that uses the trait.</td>
+</tr>
+<tr>
+<td><code>multi_sort.max</code> or <code>multiSort(true, max: 5)</code></td>
+<td><code>5</code></td>
+<td>Most sort columns. Kept between 2 and 20.</td>
+</tr>
+</tbody></table>
+</div>
+<p>When the maximum is reached, the dropdown says so.</p>
+<p>Turn it off for one table:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">public</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> static</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> function</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> multiSortTableViews</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">:</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> bool</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    return</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span></code></pre></div>
+<p>Turn it off everywhere with <code>multiSort(false)</code> or <code>multi_sort.enabled</code>.</p>
+<h2 id="in-views-and-presets">In views and presets<a class="anchor" href="#in-views-and-presets" aria-label="Link to section: In views and presets">#</a></h2>
+<ul>
+<li>A view stores the sorts as <code>sorts</code>, next to <code>sort</code>. <code>sort</code> is always the first entry of <code>sorts</code>. <code>sorts</code> appears only with two or more entries. See <a href="/filament-tablekit/docs/database/#stored-state">Database</a>.</li>
+<li>A preset sets several sorts with an array. The first entry has the highest priority.</li>
+</ul>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">PresetTableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">label</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'Big and new'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultSort</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">([</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'amount'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> 'desc'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'ordered_at'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> 'asc'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">]);</span></span></code></pre></div>
+<h2 id="how-it-works-with-filament-5">How it works with Filament 5<a class="anchor" href="#how-it-works-with-filament-5" aria-label="Link to section: How it works with Filament 5">#</a></h2>
+<ul>
+<li>The first sort is Filament&#39;s own (the <code>tableSort</code> string <code>column:direction</code>). The header arrow, the <code>sort</code> URL parameter, <code>persistSortInSession</code> and the mobile sort select keep working. The other sorts ride on it.</li>
+<li>Filament 5 applies a sort through <code>Column::applySort()</code> inside <code>applySortingToTableQuery()</code>. Every sortable column gets a thin wrapper around its own <code>sortable(query: ...)</code>. Custom sort closures, relationship columns and <code>sortable([...])</code> keep working.</li>
+<li>The extra sorts run in priority order inside Filament&#39;s own sort step. Grouping stays first, the table&#39;s default sort and key sort come after, and exports use the same order.</li>
+<li>The wrapper is installed on the same <code>Column</code> objects the column manager re-uses when the user reorders columns. Reordering columns never loses the multi-sort.</li>
+<li>The priority numbers use the <code>data-sort-priority</code> attribute. A <code>&lt;style&gt;</code> next to the Sort button targets Filament&#39;s <code>fi-ta-header-cell-sort-btn</code>.</li>
+</ul>
+<h2 id="rules">Rules<a class="anchor" href="#rules" aria-label="Link to section: Rules">#</a></h2>
+<ul>
+<li>A click on a column header keeps Filament&#39;s behavior and <strong>replaces</strong> the multi-sort with that single sort. The stored list only counts while it still starts with Filament&#39;s current sort.</li>
+<li>Adding the first sort to a table with a string <code>defaultSort(&#39;amount&#39;, &#39;desc&#39;)</code> keeps that sort as number 1 and appends the new one. A closure default has no column to extend, so the new sort becomes the first. Choosing the default column itself makes the default explicit.</li>
+<li>With <code>persistSortInSession()</code>, the extra sorts are kept in the session next to Filament&#39;s own sort. They are restored only when they start with the restored sort.</li>
+<li>While records are being reordered, the Sort button is replaced by a disabled one and the sort methods do nothing (Filament ignores sorts then).</li>
+</ul>
+<h2 id="reload-and-the-url">Reload and the URL<a class="anchor" href="#reload-and-the-url" aria-label="Link to section: Reload and the URL">#</a></h2>
+<p>On a <code>ListRecords</code> page the extra sorts are mirrored in the URL:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span>?sort=amount:desc&#x26;sorts=amount:desc,ordered_at:asc</span></span></code></pre></div>
+<p>The <code>sorts</code> value is written by the server and locked.</p>
+<p>On a fresh load, the extra sorts are checked (sortable columns, direction, count, no duplicates). They are accepted only when they start with the sort the URL already carries. The plugin also asks the browser to always write the state a view set (see <a href="/filament-tablekit/docs/views/#remembered-view">Views</a>), so a startup view&#39;s multi-sort survives a reload.</p>
+<p>Relation managers and table widgets have no URL, so extra sorts are lost on a full reload there.</p>
+
+</article>
+<p class="edit">Docs for Filament 5 <span class="badge">latest</span>. Also available for <a href="/filament-tablekit/docs/v4/multi-sort/">Filament 4</a>, <a href="/filament-tablekit/docs/v3/multi-sort/">Filament 3</a>. <a href="https://github.com/maytham553/filament-tablekit/edit/main/docs/multi-sort.md">Edit this page on GitHub</a>.</p>
+<nav class="pager" aria-label="Previous and next page">
+<a class="prev" rel="prev" href="/filament-tablekit/docs/presets/"><small>Previous</small><strong>Preset views</strong></a>
+<a class="next" rel="next" href="/filament-tablekit/docs/quick-filters/"><small>Next</small><strong>Quick filters</strong></a>
+</nav>
+</main>
+<nav class="toc toc-d" aria-label="On this page"><span class="toc-title">On this page</span><ul><li class="l2"><a href="#what-users-see">What users see</a></li><li class="l2"><a href="#settings">Settings</a></li><li class="l2"><a href="#in-views-and-presets">In views and presets</a></li><li class="l2"><a href="#how-it-works-with-filament-5">How it works with Filament 5</a></li><li class="l2"><a href="#rules">Rules</a></li><li class="l2"><a href="#reload-and-the-url">Reload and the URL</a></li></ul></nav>
+</div>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>

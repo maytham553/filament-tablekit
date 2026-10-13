@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TableKit: Saved views and power tools for Filament tables</title>
+<meta name="description" content="TableKit is an open-source Filament plugin: saved table views, presets, multi-sort, quick filters and column order. Works with Filament 3, 4 and 5.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="TableKit: Saved views and power tools for Filament tables">
+<meta property="og:description" content="TableKit is an open-source Filament plugin: saved table views, presets, multi-sort, quick filters and column order. Works with Filament 3, 4 and 5.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TableKit: Saved views and power tools for Filament tables">
+<meta name="twitter:description" content="TableKit is an open-source Filament plugin: saved table views, presets, multi-sort, quick filters and column order. Works with Filament 3, 4 and 5.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://maytham553.github.io/filament-tablekit/#website","url":"https://maytham553.github.io/filament-tablekit/","name":"TableKit","description":"TableKit is an open-source Filament plugin: saved table views, presets, multi-sort, quick filters and column order. Works with Filament 3, 4 and 5.","inLanguage":"en","publisher":{"@id":"https://maytham553.github.io/filament-tablekit/#author"}},{"@type":["SoftwareApplication","SoftwareSourceCode"],"@id":"https://maytham553.github.io/filament-tablekit/#software","name":"TableKit (tablekit/filament-tablekit)","alternateName":"filament-tablekit","description":"Saved views and power tools for Filament tables: saved views, presets, view manager, multi-sort, quick filters and column order.","url":"https://maytham553.github.io/filament-tablekit/","applicationCategory":"DeveloperApplication","applicationSubCategory":"Filament plugin","operatingSystem":"Any (PHP 8.2+ with Laravel)","programmingLanguage":"PHP","runtimePlatform":"PHP 8.2+","codeRepository":"https://github.com/maytham553/filament-tablekit","license":"https://opensource.org/licenses/MIT","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg","sameAs":["https://github.com/maytham553/filament-tablekit","https://packagist.org/packages/tablekit/filament-tablekit"],"installUrl":"https://packagist.org/packages/tablekit/filament-tablekit","author":{"@type":"Person","@id":"https://maytham553.github.io/filament-tablekit/#author","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@id":"https://maytham553.github.io/filament-tablekit/#website"}}]}</script>
+</head>
+<body class="home">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<main id="main">
+<section class="hero">
+<div class="wrap">
+<p class="wordmark"><span class="logo-tile"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></svg></span><span>Table<b>Kit</b></span></p>
+<h1>Saved views and power tools for Filament tables</h1>
+<p class="lead">Let your users save the state of a table as a named view and open it again in one click. Free and open source, MIT licensed.</p>
+<div class="install" data-copy="composer require tablekit/filament-tablekit"><code><span>$ </span>composer require tablekit/filament-tablekit</code></div>
+<div class="cta">
+<a class="btn btn-primary" href="/filament-tablekit/docs/installation/">Get started</a>
+<a class="btn" href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a class="btn" href="#demo">Watch demo</a>
+</div>
+<ul class="chips" aria-label="Main features">
+<li>Saved views</li><li>Presets</li><li>View manager</li><li>Multi-sort</li><li>Quick filters</li><li>Column order</li>
+</ul>
+<p class="works">Works with Filament <b>3</b>, <b>4</b> and <b>5</b></p>
+</div>
+</section>
+
+<section class="section" id="demo" aria-labelledby="demo-h">
+<div class="wrap">
+<h2 id="demo-h">See it in action</h2>
+<p class="sub">A bar above the table shows each user's favorite views. One click puts the table back the way they saved it.</p>
+<a class="demo" href="https://youtu.be/sZXJRwCzboU" data-yt="sZXJRwCzboU" aria-label="Watch the TableKit demo on YouTube (77 seconds, with sound)">
+<picture>
+<source type="image/avif" srcset="/filament-tablekit/img/tablekit-demo-640.avif 640w, /filament-tablekit/img/tablekit-demo-960.avif 960w, /filament-tablekit/img/tablekit-demo-1600.avif 1600w" sizes="(min-width: 64rem) 960px, 100vw">
+<source type="image/webp" srcset="/filament-tablekit/img/tablekit-demo-640.webp 640w, /filament-tablekit/img/tablekit-demo-960.webp 960w, /filament-tablekit/img/tablekit-demo-1600.webp 1600w" sizes="(min-width: 64rem) 960px, 100vw">
+<img src="/filament-tablekit/img/tablekit-demo-960.jpg" srcset="/filament-tablekit/img/tablekit-demo-640.jpg 640w, /filament-tablekit/img/tablekit-demo-960.jpg 960w, /filament-tablekit/img/tablekit-demo-1600.jpg 1600w" sizes="(min-width: 64rem) 960px, 100vw" width="1600" height="1000" loading="lazy" decoding="async" alt="TableKit in a Filament Orders table: a favorites bar of saved views (All orders, Needs attention, High value, Top accounts, Save view) above the table, with sort, filter and search controls.">
+</picture>
+<span class="play" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 001.5.86l12.5-7.5a1 1 0 000-1.72L8.5 3.64A1 1 0 007 4.5z"/></svg></span></span>
+</a>
+<p class="demo-note">77 seconds, with sound. <a href="https://youtu.be/sZXJRwCzboU">Watch on YouTube</a>.</p>
+</div>
+</section>
+
+<section class="section alt" id="features" aria-labelledby="features-h">
+<div class="wrap">
+<h2 id="features-h">What you get</h2>
+<p class="sub">Everything is built for Filament tables and needs no theme or CSS step.</p>
+<ul class="grid">
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 4h12v17l-6-4-6 4z"/></svg></span><h3><a href="/filament-tablekit/docs/views/">Saved views</a></h3><p>Save filters, search, sort, columns and grouping under a name. Open them again in one click.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l1.8 4.7 4.7 1.8-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2 2.2.8-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span><h3><a href="/filament-tablekit/docs/presets/">Preset views</a></h3><p>Define ready-made views in code, with an optional hidden query, a badge and a tooltip.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg></span><h3><a href="/filament-tablekit/docs/views/#view-manager">View manager</a></h3><p>Open, favorite, reorder, edit and delete views from one list, and mark views as default.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></span><h3><a href="/filament-tablekit/docs/views/#default-views-and-the-start-view">Default view</a></h3><p>Each user can pick one start view per table. You can set a default in code too.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h10M4 12h7M4 18h4"/><path d="M17 5v14m0 0l-3-3m3 3l3-3"/></svg></span><h3><a href="/filament-tablekit/docs/multi-sort/">Multi-sort</a></h3><p>Sort by several columns and give each column a priority.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h16l-6 7v6l-4 2v-8z"/></svg></span><h3><a href="/filament-tablekit/docs/quick-filters/">Quick filters</a></h3><p>Clickable filter chips. Favorite filters stay visible even when they are not active.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 4v16"/></svg></span><h3><a href="/filament-tablekit/docs/columns/">Column order</a></h3><p>The order from Filament's column manager is saved in views and presets.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 100 18c1.4 0 2-1 1.5-2.2-.5-1.2.3-2.3 1.6-2.3H17a4 4 0 004-4c0-5-4-9.5-9-9.5z"/><path d="M8 11h.01M12 7.5h.01M16 11h.01"/></svg></span><h3><a href="/filament-tablekit/docs/colors-and-icons/">Color and icon pickers</a></h3><p>Pick from about 120 icons and 24 colors for your views.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h9M8.5 3v2M6 5c0 4 3 7 6 8M12 5c0 3-3 6-7 8"/><path d="M12 20l4-9 4 9M13.5 17h5"/></svg></span><h3><a href="/filament-tablekit/docs/colors-and-icons/#translations">RTL and translations</a></h3><p>English and Arabic are included, and the interface supports right-to-left layouts.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 010 5.5M18 14.5c1.8.6 3 2.3 3 4.5"/></svg></span><h3><a href="/filament-tablekit/docs/database/#tenancy">Multi-tenancy</a></h3><p>Views are scoped by user, table and tenant. Users never see each other's views.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg></span><h3><a href="/filament-tablekit/docs/colors-and-icons/#the-pickers">Dark mode</a></h3><p>The pickers and the bar have light and dark styles built in. No theme or CSS step is needed.</p></li>
+<li class="card"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 3L5 13h6l-1 8 8-10h-6z"/></svg></span><h3><a href="/filament-tablekit/docs/installation/">Simple setup</a></h3><p>Add one trait to a list page, a relation manager or a table widget. That is all.</p></li>
+</ul>
+</div>
+</section>
+
+<section class="section" id="versions" aria-labelledby="versions-h">
+<div class="wrap">
+<h2 id="versions-h">Works with Filament 3, 4 and 5</h2>
+<p class="sub">TableKit has one version for each Filament version. Composer picks the right one from the Filament you have installed, so the plain <code>composer require</code> is enough. All versions need PHP 8.2 or newer.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Supported versions, scrolls sideways"><table>
+<thead><tr><th scope="col">Filament</th><th scope="col">Livewire</th><th scope="col">TableKit</th><th scope="col">Branch</th><th scope="col">Laravel</th><th scope="col">Docs</th></tr></thead>
+<tbody>
+<tr><td><strong>Filament 5</strong></td><td>4</td><td><code>^5.0</code></td><td><code>main</code></td><td>11.28+, 12, 13</td><td><a href="/filament-tablekit/docs/">Filament 5 docs</a></td></tr>
+<tr><td><strong>Filament 4</strong></td><td>3</td><td><code>^4.0</code></td><td><code>filament-v4</code></td><td>11.28+, 12, 13</td><td><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></td></tr>
+<tr><td><strong>Filament 3</strong></td><td>3</td><td><code>^3.0</code></td><td><code>filament-v3</code></td><td>11.28+, 12</td><td><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></td></tr>
+</tbody></table></div>
+</div>
+</section>
+
+<section class="section alt" id="install" aria-labelledby="install-h">
+<div class="wrap">
+<h2 id="install-h">Install in three steps</h2>
+<p class="sub">You need an existing Filament panel.</p>
+<ol class="steps">
+<li><h3>Install the package</h3><div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">composer</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> require</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> tablekit/filament-tablekit</span></span></code></pre></div></li>
+<li><h3>Run the migrations</h3><p>They load by themselves.</p><div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">php</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> artisan</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> migrate</span></span></code></pre></div></li>
+<li><h3>Add the trait to a list page</h3><p>Works on list pages, relation managers and table widgets. The bar with <strong>Default</strong> and <strong>Save view</strong> appears above the table.</p><div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\Concerns\HasTableKit</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">class</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> ListOrders</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> extends</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> ListRecords</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> HasTableKit</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span></code></pre></div></li>
+</ol>
+<p class="actions"><a class="btn btn-primary" href="/filament-tablekit/docs/installation/">Read the installation guide</a> <a class="btn" href="/filament-tablekit/docs/presets/">Add your first preset</a></p>
+</div>
+</section>
+
+<section class="section" id="security" aria-labelledby="security-h">
+<div class="wrap">
+<div class="split">
+<div>
+<h2 id="security-h">Security and privacy</h2>
+<p class="sub flush">Read these before you ship. The details are in the <a href="/filament-tablekit/docs/database/">database guide</a> and the <a href="/filament-tablekit/docs/presets/#hidden-query">presets guide</a>.</p>
+</div>
+<ul class="check">
+<li>A preset's hidden query is a filter, <strong>not access control</strong>. Users can drop it at any time. Put real rules in your resource query, policies or global scopes.</li>
+<li>A view stores the search text and filter values the user typed. This can be personal data. Views are <strong>not</strong> deleted with the user, so delete them when you delete the account.</li>
+<li>The server checks ownership on every action. View ids and preset keys that come from the browser are checked again on the server.</li>
+<li>Views are scoped by user type, user id, tenant and table. Users never see each other's views.</li>
+</ul>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>

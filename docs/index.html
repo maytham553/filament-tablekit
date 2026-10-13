@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TableKit for Filament 5 documentation</title>
+<meta name="description" content="Documentation for TableKit on Filament 5: install the plugin, save table views, define presets, and use multi-sort, quick filters and column order.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/docs/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="TableKit for Filament 5 documentation">
+<meta property="og:description" content="Documentation for TableKit on Filament 5: install the plugin, save table views, define presets, and use multi-sort, quick filters and column order.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/docs/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TableKit for Filament 5 documentation">
+<meta name="twitter:description" content="Documentation for TableKit on Filament 5: install the plugin, save table views, define presets, and use multi-sort, quick filters and column order.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://maytham553.github.io/filament-tablekit/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://maytham553.github.io/filament-tablekit/docs/"}]},{"@type":"TechArticle","headline":"TableKit for Filament 5 documentation","description":"Documentation for TableKit on Filament 5: install the plugin, save table views, define presets, and use multi-sort, quick filters and column order.","url":"https://maytham553.github.io/filament-tablekit/docs/","inLanguage":"en","dateModified":"2026-10-13","author":{"@type":"Person","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@type":"WebSite","name":"TableKit","url":"https://maytham553.github.io/filament-tablekit/"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg"}]}</script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/" aria-current="true">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<div class="wrap docs has-toc">
+<div class="docs-side">
+<input type="checkbox" id="docs-nav-toggle" class="docs-nav-toggle" aria-label="Show documentation menu">
+<label for="docs-nav-toggle" class="menu-btn">Docs menu: Overview (Filament 5)</label>
+<nav class="sidebar" aria-label="Documentation">
+<span class="side-title">Filament version</span>
+<ul class="ver"><li><a href="/filament-tablekit/docs/" aria-current="true" hreflang="en">v5</a></li><li><a href="/filament-tablekit/docs/v4/" hreflang="en">v4</a></li><li><a href="/filament-tablekit/docs/v3/" hreflang="en">v3</a></li></ul>
+<div class="side-group"><span class="side-title">Getting started</span><ul><li><a href="/filament-tablekit/docs/" aria-current="page">Overview</a></li><li><a href="/filament-tablekit/docs/installation/">Installation</a></li><li><a href="/filament-tablekit/docs/configuration/">Configuration</a></li></ul></div>
+<div class="side-group"><span class="side-title">Using TableKit</span><ul><li><a href="/filament-tablekit/docs/views/">Views</a></li><li><a href="/filament-tablekit/docs/presets/">Preset views</a></li><li><a href="/filament-tablekit/docs/multi-sort/">Multi-sort</a></li><li><a href="/filament-tablekit/docs/quick-filters/">Quick filters</a></li><li><a href="/filament-tablekit/docs/columns/">Columns</a></li><li><a href="/filament-tablekit/docs/colors-and-icons/">Colors and icons</a></li></ul></div>
+<div class="side-group"><span class="side-title">Reference</span><ul><li><a href="/filament-tablekit/docs/database/">Database</a></li><li><a href="/filament-tablekit/docs/testing/">Testing</a></li><li><a href="/filament-tablekit/docs/limits/">Limits</a></li><li><a href="/filament-tablekit/docs/upgrading/">Upgrading</a></li></ul></div>
+</nav>
+</div>
+<main id="main" class="prose">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/filament-tablekit/">Home</a></li><li><span aria-current="page">Docs</span></li></ol></nav>
+
+<details class="toc toc-m"><summary>On this page</summary><ul><li class="l2"><a href="#what-you-get">What you get</a></li><li class="l2"><a href="#which-version">Which version?</a></li><li class="l2"><a href="#installation">Installation</a></li><li class="l2"><a href="#your-first-preset">Your first preset</a></li><li class="l2"><a href="#documentation">Documentation</a></li><li class="l2"><a href="#security-and-privacy">Security and privacy</a></li><li class="l2"><a href="#license">License</a></li></ul></details>
+<article>
+<h1 id="tablekit">TableKit for Filament 5</h1>
+<p>Saved views and power tools for Filament tables.</p>
+<a class="demo" href="https://youtu.be/sZXJRwCzboU" data-yt="sZXJRwCzboU" aria-label="Watch the TableKit demo on YouTube (77 seconds, with sound)">
+<picture>
+<source type="image/avif" srcset="/filament-tablekit/img/tablekit-demo-640.avif 640w, /filament-tablekit/img/tablekit-demo-960.avif 960w, /filament-tablekit/img/tablekit-demo-1600.avif 1600w" sizes="(min-width: 64rem) 960px, 100vw">
+<source type="image/webp" srcset="/filament-tablekit/img/tablekit-demo-640.webp 640w, /filament-tablekit/img/tablekit-demo-960.webp 960w, /filament-tablekit/img/tablekit-demo-1600.webp 1600w" sizes="(min-width: 64rem) 960px, 100vw">
+<img src="/filament-tablekit/img/tablekit-demo-960.jpg" srcset="/filament-tablekit/img/tablekit-demo-640.jpg 640w, /filament-tablekit/img/tablekit-demo-960.jpg 960w, /filament-tablekit/img/tablekit-demo-1600.jpg 1600w" sizes="(min-width: 64rem) 960px, 100vw" width="1600" height="1000" loading="lazy" decoding="async" alt="TableKit in a Filament Orders table: a favorites bar of saved views (All orders, Needs attention, High value, Top accounts, Save view) above the table, with sort, filter and search controls.">
+</picture>
+<span class="play" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 001.5.86l12.5-7.5a1 1 0 000-1.72L8.5 3.64A1 1 0 007 4.5z"/></svg></span></span>
+</a>
+<p><a href="https://youtu.be/sZXJRwCzboU">Watch the full demo on YouTube (77 s, with sound)</a></p>
+<p>TableKit (<code>tablekit/filament-tablekit</code>) lets your users save the state of a table as a named view and open it again in one click. A bar above the table shows their favorite views. You can also ship ready-made views of your own.</p>
+<p>You are reading the docs for <strong>Filament 5</strong>. See <a href="#which-version">Which version?</a> for the other branches.</p>
+<h2 id="what-you-get">What you get<a class="anchor" href="#what-you-get" aria-label="Link to section: What you get">#</a></h2>
+<ul>
+<li><strong>Saved views</strong>: save filters, search, column searches, sort, visible columns, column order and grouping under a name.</li>
+<li><strong>Preset views</strong>: views you define in code, with an optional hidden query, a badge and a tooltip.</li>
+<li><strong>View manager</strong>: a list to open, favorite, reorder, edit, delete and mark views as default.</li>
+<li><strong>Default view</strong>: each user can pick one start view per table, and you can set a default in code.</li>
+<li><strong>Multi-sort</strong>: sort by several columns, with a priority for each.</li>
+<li><strong>Quick filters</strong>: clickable filter chips, with favorite filters that stay visible.</li>
+<li><strong>Column order</strong>: the order from Filament&#39;s column manager is saved in views.</li>
+<li><strong>Color and icon pickers</strong>: about 120 icons and 24 colors for your views.</li>
+<li><strong>RTL and translations</strong>: English and Arabic included.</li>
+<li><strong>Multi-tenancy</strong>: views are scoped by user, table and tenant.</li>
+</ul>
+<h2 id="which-version">Which version?<a class="anchor" href="#which-version" aria-label="Link to section: Which version?">#</a></h2>
+<p>Use the TableKit version that matches your Filament version. Composer picks it for you from the Filament you have installed.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Which version?, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Filament</th>
+<th>Livewire</th>
+<th>TableKit</th>
+<th>Branch</th>
+<th>Laravel</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>5</td>
+<td>4</td>
+<td><code>^5.0</code></td>
+<td><code>main</code></td>
+<td>11.28+, 12, 13</td>
+</tr>
+<tr>
+<td>4</td>
+<td>3</td>
+<td><code>^4.0</code></td>
+<td><code>filament-v4</code></td>
+<td>11.28+, 12, 13</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td><code>^3.0</code></td>
+<td><code>filament-v3</code></td>
+<td>11.28+, 12</td>
+</tr>
+</tbody></table>
+</div>
+<p>All versions need PHP 8.2 or newer.
+Filament 5.0.0, 5.5.0, 5.7.0 and 5.8.0 fail the package tests before they reach plugin code, so they are excluded. The package is tested with Filament 5.10.1 and Livewire 4.4.7.</p>
+<h2 id="installation">Installation<a class="anchor" href="#installation" aria-label="Link to section: Installation">#</a></h2>
+<p>You need an existing Filament 5 panel.</p>
+<ol>
+<li><p>Install the package.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">composer</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> require</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> tablekit/filament-tablekit</span></span></code></pre></div>
+<p>Not on Packagist yet, or want a branch? See <a href="/filament-tablekit/docs/installation/#install-from-github">Install from GitHub</a>.</p>
+</li>
+<li><p>Run the migrations. They load by themselves. If your app owns its migrations, see <a href="/filament-tablekit/docs/database/#publish-the-migrations">Database</a>.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">php</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> artisan</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> migrate</span></span></code></pre></div>
+</li>
+<li><p>Add the trait to a list page, a relation manager or a table widget, for example <code>app/Filament/Resources/Orders/Pages/ListOrders.php</code>.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\Concerns\HasTableKit</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">class</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> ListOrders</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> extends</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> ListRecords</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> HasTableKit</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span></code></pre></div>
+<p>Open the table. The bar with <strong>Default</strong> and <strong>Save view</strong> is now above it. No theme or CSS step is needed.</p>
+</li>
+<li><p>Optional: register the plugin in your panel provider (<code>app/Providers/Filament/AdminPanelProvider.php</code>, inside <code>panel()</code>). You only need it to change options. Everything works without it.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\TableKitPlugin</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">$panel</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">plugin</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">TableKitPlugin</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">());</span></span></code></pre></div>
+</li>
+</ol>
+<h2 id="your-first-preset">Your first preset<a class="anchor" href="#your-first-preset" aria-label="Link to section: Your first preset">#</a></h2>
+<p>Return presets from the same class. Make the method <code>protected</code>. This one assumes a <code>status</code> filter and a sortable <code>ordered_at</code> column. A filter or column that does not exist is ignored.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\Presets\PresetTableView</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">protected</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> function</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> getPresetTableViews</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">:</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> array</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    return</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> [</span></span>
+<span class="line"><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">        'shipped'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> PresetTableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">label</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'Shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">icon</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'truck'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">color</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'success'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">favorite</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultFilters</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">([</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'status'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> [</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'value'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> 'shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">]])</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultSort</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'ordered_at'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'desc'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">),</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">    ];</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span></code></pre></div>
+<h2 id="documentation">Documentation<a class="anchor" href="#documentation" aria-label="Link to section: Documentation">#</a></h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Documentation, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Page</th>
+<th>What is in it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/filament-tablekit/docs/installation/">Installation</a></td>
+<td>Composer, GitHub, publish tags</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/configuration/">Configuration</a></td>
+<td>Every config key and plugin option</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/views/">Views</a></td>
+<td>Saved views, the bar, the manager, defaults, reload and the URL</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/presets/">Presets</a></td>
+<td>Every preset method, with examples</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/multi-sort/">Multi-sort</a></td>
+<td>Sort by several columns</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/quick-filters/">Quick filters</a></td>
+<td>Filter chips and favorite filters</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/columns/">Columns</a></td>
+<td>Column order in views and presets</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/colors-and-icons/">Colors and icons</a></td>
+<td>Pickers, icon aliases, Tabler remap, translations</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/database/">Database</a></td>
+<td>Tables, connection, tenancy, user keys, stored state</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/limits/">Limits</a></td>
+<td>Known limits</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/testing/">Testing</a></td>
+<td>Livewire test examples</td>
+</tr>
+<tr>
+<td><a href="/filament-tablekit/docs/upgrading/">Upgrading</a></td>
+<td>Upgrade notes</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="security-and-privacy">Security and privacy<a class="anchor" href="#security-and-privacy" aria-label="Link to section: Security and privacy">#</a></h2>
+<ul>
+<li>A preset&#39;s hidden query is a filter, <strong>not access control</strong>. Users can drop it at any time. Put real rules in your resource query, policies or global scopes.</li>
+<li>A view stores the search text and filter values the user typed. This can be personal data. Views are <strong>not</strong> deleted with the user, so delete them when you delete the account. See <a href="/filament-tablekit/docs/database/#delete-a-users-views">Database</a>.</li>
+<li>The server checks ownership on every action. View ids and preset keys that come from the browser are checked again on the server.</li>
+<li>Views are scoped by user type, user id, tenant and table. Users never see each other&#39;s views.</li>
+</ul>
+<h2 id="license">License<a class="anchor" href="#license" aria-label="Link to section: License">#</a></h2>
+<p>MIT. See <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">LICENSE</a>.</p>
+
+</article>
+<p class="edit">Docs for Filament 5 <span class="badge">latest</span>. Also available for <a href="/filament-tablekit/docs/v4/">Filament 4</a>, <a href="/filament-tablekit/docs/v3/">Filament 3</a>. <a href="https://github.com/maytham553/filament-tablekit/edit/main/README.md">Edit this page on GitHub</a>.</p>
+<nav class="pager" aria-label="Previous and next page">
+<span></span>
+<a class="next" rel="next" href="/filament-tablekit/docs/installation/"><small>Next</small><strong>Installation</strong></a>
+</nav>
+</main>
+<nav class="toc toc-d" aria-label="On this page"><span class="toc-title">On this page</span><ul><li class="l2"><a href="#what-you-get">What you get</a></li><li class="l2"><a href="#which-version">Which version?</a></li><li class="l2"><a href="#installation">Installation</a></li><li class="l2"><a href="#your-first-preset">Your first preset</a></li><li class="l2"><a href="#documentation">Documentation</a></li><li class="l2"><a href="#security-and-privacy">Security and privacy</a></li><li class="l2"><a href="#license">License</a></li></ul></nav>
+</div>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>

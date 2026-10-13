@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Preset views: TableKit for Filament 4 docs</title>
+<meta name="description" content="Define ready-made table views in code with PresetTableView for Filament 4: filters, sort, hidden query, badges, tooltips, defaults and custom icons.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/docs/v4/presets/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="Preset views: TableKit for Filament 4 docs">
+<meta property="og:description" content="Define ready-made table views in code with PresetTableView for Filament 4: filters, sort, hidden query, badges, tooltips, defaults and custom icons.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/docs/v4/presets/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Preset views: TableKit for Filament 4 docs">
+<meta name="twitter:description" content="Define ready-made table views in code with PresetTableView for Filament 4: filters, sort, hidden query, badges, tooltips, defaults and custom icons.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://maytham553.github.io/filament-tablekit/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://maytham553.github.io/filament-tablekit/docs/"},{"@type":"ListItem","position":3,"name":"Filament 4","item":"https://maytham553.github.io/filament-tablekit/docs/v4/"},{"@type":"ListItem","position":4,"name":"Preset views","item":"https://maytham553.github.io/filament-tablekit/docs/v4/presets/"}]},{"@type":"TechArticle","headline":"Preset views (TableKit for Filament 4)","description":"Define ready-made table views in code with PresetTableView for Filament 4: filters, sort, hidden query, badges, tooltips, defaults and custom icons.","url":"https://maytham553.github.io/filament-tablekit/docs/v4/presets/","inLanguage":"en","dateModified":"2026-10-13","author":{"@type":"Person","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@type":"WebSite","name":"TableKit","url":"https://maytham553.github.io/filament-tablekit/"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg"}]}</script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/" aria-current="true">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<div class="wrap docs has-toc">
+<div class="docs-side">
+<input type="checkbox" id="docs-nav-toggle" class="docs-nav-toggle" aria-label="Show documentation menu">
+<label for="docs-nav-toggle" class="menu-btn">Docs menu: Preset views (Filament 4)</label>
+<nav class="sidebar" aria-label="Documentation">
+<span class="side-title">Filament version</span>
+<ul class="ver"><li><a href="/filament-tablekit/docs/presets/" hreflang="en">v5</a></li><li><a href="/filament-tablekit/docs/v4/presets/" aria-current="true" hreflang="en">v4</a></li><li><a href="/filament-tablekit/docs/v3/presets/" hreflang="en">v3</a></li></ul>
+<div class="side-group"><span class="side-title">Getting started</span><ul><li><a href="/filament-tablekit/docs/v4/">Overview</a></li><li><a href="/filament-tablekit/docs/v4/installation/">Installation</a></li><li><a href="/filament-tablekit/docs/v4/configuration/">Configuration</a></li></ul></div>
+<div class="side-group"><span class="side-title">Using TableKit</span><ul><li><a href="/filament-tablekit/docs/v4/views/">Views</a></li><li><a href="/filament-tablekit/docs/v4/presets/" aria-current="page">Preset views</a></li><li><a href="/filament-tablekit/docs/v4/multi-sort/">Multi-sort</a></li><li><a href="/filament-tablekit/docs/v4/quick-filters/">Quick filters</a></li><li><a href="/filament-tablekit/docs/v4/columns/">Columns</a></li><li><a href="/filament-tablekit/docs/v4/colors-and-icons/">Colors and icons</a></li></ul></div>
+<div class="side-group"><span class="side-title">Reference</span><ul><li><a href="/filament-tablekit/docs/v4/database/">Database</a></li><li><a href="/filament-tablekit/docs/v4/testing/">Testing</a></li><li><a href="/filament-tablekit/docs/v4/limits/">Limits</a></li><li><a href="/filament-tablekit/docs/v4/upgrading/">Upgrading</a></li></ul></div>
+</nav>
+</div>
+<main id="main" class="prose">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/filament-tablekit/">Home</a></li><li><a href="/filament-tablekit/docs/">Docs</a></li><li><a href="/filament-tablekit/docs/v4/">Filament 4</a></li><li><span aria-current="page">Preset views</span></li></ol></nav>
+<p class="notice" role="note">You are viewing the <strong>Filament 4</strong> docs (TableKit <code>^4.0</code>). Using Filament 5? <a href="/filament-tablekit/docs/presets/">Open the latest version of this page</a>.</p>
+<details class="toc toc-m"><summary>On this page</summary><ul><li class="l2"><a href="#methods">Methods</a></li><li class="l2"><a href="#what-happens-when-a-preset-is-applied">What happens when a preset is applied</a></li><li class="l2"><a href="#default-preset">Default preset</a></li><li class="l2"><a href="#hidden-query">Hidden query</a></li><li class="l2"><a href="#badges-and-tooltips">Badges and tooltips</a></li><li class="l2"><a href="#preserve-parts">Preserve parts</a></li><li class="l2"><a href="#custom-icons">Custom icons</a></li><li class="l2"><a href="#storage">Storage</a></li></ul></details>
+<article>
+<h1 id="preset-views">Preset views</h1>
+<p>A preset is a view that you define in code. Users can apply, favorite and reorder presets, but not edit or delete them. A preset never touches the database.</p>
+<p>Return presets from the component that uses <code>HasTableKit</code>. Declare the method <code>protected</code>. A <code>public</code> method can be called from the browser. It would only return the presets, but there is no reason to expose it.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> App\Models\Order</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Illuminate\Database\Eloquent\Builder</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\Presets\PresetTableView</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">protected</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> function</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> getPresetTableViews</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">:</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> array</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    return</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> [</span></span>
+<span class="line"><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">        'shipped'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> PresetTableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">label</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">__</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'Shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">))</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">icon</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'truck'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">color</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'success'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">favorite</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultFilters</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">([</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'status'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> [</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'value'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> 'shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">]])</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultSort</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'ordered_at'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'desc'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultSearch</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'foo'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultColumnSearches</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">([</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'reference'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> 'ORD'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">])</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultToggledColumns</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">([</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'notes'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'customer.city'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">])</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultGrouping</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'status'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'asc'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">modifyQueryUsing</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">fn</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> (</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">Builder</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> $query) => $query</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'is_paid'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">true</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">))</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">badge</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">fn</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> () => </span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">Order</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'status'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">count</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">())</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">badgeColor</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'warning'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">cacheBadgeFor</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">60</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">tooltip</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'Orders on the way'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#646c76;--shiki-dark:#7b838c">            // Show the preset only to users who pass this check. It is not access control (see Hidden query).</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">            -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">visible</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">fn</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> () => </span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">auth</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">user</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">can</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'view-shipped'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)),</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">    ];</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span></code></pre></div>
+<p>This example shows every method at once. Some of them need something in the table:</p>
+<ul>
+<li><code>defaultGrouping(&#39;status&#39;, &#39;asc&#39;)</code> needs the group in the table: <code>-&gt;groups([Group::make(&#39;status&#39;)])</code>.</li>
+<li><code>defaultColumnSearches([...])</code> needs columns with <code>searchable(isIndividual: true)</code>.</li>
+<li><code>defaultToggledColumns([...])</code> only affects columns that are toggleable.</li>
+<li>Names that do not exist (a filter, a sort or grouping column, a toggleable column) are ignored.</li>
+<li><code>preserveSearch()</code> is left out of this example on purpose. It keeps the user&#39;s search, so it cancels <code>defaultSearch()</code> and <code>defaultColumnSearches()</code>. See <a href="#preserve-parts">Preserve parts</a>.</li>
+</ul>
+<p>The array key is the preset key. Keys are 1 to 100 letters, digits, <code>_</code>, <code>.</code>, <code>:</code> or <code>-</code>. A wrong key or value throws an error. Presets show in the order you return them, unless the user reordered them in the <a href="/filament-tablekit/docs/v4/views/#view-manager">manager</a>.</p>
+<h2 id="methods">Methods<a class="anchor" href="#methods" aria-label="Link to section: Methods">#</a></h2>
+<p>Every method returns the preset, so you can chain them.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Methods, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>make()</code></td>
+<td>Creates a preset.</td>
+</tr>
+<tr>
+<td><code>label(string|Closure|null)</code></td>
+<td>The button text. Without it, the key is turned into a headline.</td>
+</tr>
+<tr>
+<td><code>icon(?string)</code></td>
+<td>An icon <strong>key</strong> such as <code>truck</code>. It is resolved through the <code>tablekit::icons.&lt;key&gt;</code> alias. See <a href="/filament-tablekit/docs/v4/colors-and-icons/">Colors and icons</a>.</td>
+</tr>
+<tr>
+<td><code>color(?string)</code></td>
+<td>A color name, such as <code>success</code>.</td>
+</tr>
+<tr>
+<td><code>favorite(bool|Closure)</code></td>
+<td>Shows the preset in the favorites bar, unless the user unfavorites it.</td>
+</tr>
+<tr>
+<td><code>defaultFilters(?array)</code></td>
+<td>Raw <code>filters</code> state, per filter name. Laid over the table&#39;s filter defaults.</td>
+</tr>
+<tr>
+<td><code>defaultSort(string|array|null, string $direction = &#39;asc&#39;)</code></td>
+<td>One sort (<code>&#39;ordered_at&#39;, &#39;desc&#39;</code>) or several (<code>[&#39;amount&#39; =&gt; &#39;desc&#39;, &#39;ordered_at&#39; =&gt; &#39;asc&#39;]</code>). The first entry has the highest priority.</td>
+</tr>
+<tr>
+<td><code>defaultSearch(?string)</code></td>
+<td>The global search text.</td>
+</tr>
+<tr>
+<td><code>defaultColumnSearches(?array)</code></td>
+<td>Column search values, per column name.</td>
+</tr>
+<tr>
+<td><code>defaultToggledColumns(?array)</code></td>
+<td>The toggleable columns that are shown. The others are hidden. It changes visibility only and keeps the user&#39;s column order.</td>
+</tr>
+<tr>
+<td><code>defaultColumns(?array)</code></td>
+<td>Column order and visibility in one call. See <a href="/filament-tablekit/docs/v4/columns/">Columns</a>.</td>
+</tr>
+<tr>
+<td><code>defaultFavoriteFilters(?array)</code></td>
+<td>Filter names pinned as chips in the quick filter bar. Replaces the filters marked with <code>favorite()</code>. See <a href="/filament-tablekit/docs/v4/quick-filters/">Quick filters</a>.</td>
+</tr>
+<tr>
+<td><code>defaultGrouping(?string, string $direction = &#39;asc&#39;)</code></td>
+<td>The grouping column and direction.</td>
+</tr>
+<tr>
+<td><code>modifyQueryUsing(?Closure)</code></td>
+<td>A hidden query, active only while this preset is the active view. See <a href="#hidden-query">Hidden query</a>.</td>
+</tr>
+<tr>
+<td><code>badge(mixed)</code></td>
+<td>A badge value or a closure that returns one. Only a plain text or number value is shown.</td>
+</tr>
+<tr>
+<td><code>badgeColor(string|Closure|null)</code></td>
+<td>The badge color. The default is <code>primary</code>.</td>
+</tr>
+<tr>
+<td><code>cacheBadgeFor(?int $seconds)</code></td>
+<td>Keeps the badge value in the app cache, per user, tenant and table.</td>
+</tr>
+<tr>
+<td><code>tooltip(string|Closure|null)</code></td>
+<td>The button tooltip.</td>
+</tr>
+<tr>
+<td><code>visible(bool|Closure)</code></td>
+<td>Shows the preset when the condition is true.</td>
+</tr>
+<tr>
+<td><code>hidden(bool|Closure)</code></td>
+<td>Hides the preset when the condition is true.</td>
+</tr>
+<tr>
+<td><code>default(bool|Closure)</code></td>
+<td>Makes this the developer default preset.</td>
+</tr>
+<tr>
+<td><code>preserveAll(bool)</code></td>
+<td>Keeps every part as it is when the preset is applied.</td>
+</tr>
+<tr>
+<td><code>preserveFilters(bool)</code></td>
+<td>Keeps the filters. This also keeps the pinned filters.</td>
+</tr>
+<tr>
+<td><code>preserveToggledColumns(bool)</code></td>
+<td>Keeps the column visibility. This also keeps the column order.</td>
+</tr>
+<tr>
+<td><code>preserveSort(bool)</code></td>
+<td>Keeps the sort.</td>
+</tr>
+<tr>
+<td><code>preserveSearch(bool)</code></td>
+<td>Keeps the search and the column searches.</td>
+</tr>
+<tr>
+<td><code>key(string)</code></td>
+<td>Sets the key. Set for you from the array key.</td>
+</tr>
+<tr>
+<td><code>livewire(mixed)</code></td>
+<td>Passes the Livewire component to the hidden query. Set for you.</td>
+</tr>
+<tr>
+<td><code>cacheScope(string)</code></td>
+<td>Sets the table key for the badge cache, so tables never share a cached badge. Set for you.</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="what-happens-when-a-preset-is-applied">What happens when a preset is applied<a class="anchor" href="#what-happens-when-a-preset-is-applied" aria-label="Link to section: What happens when a preset is applied">#</a></h2>
+<ul>
+<li>Every part is first reset to the table defaults. Then the preset applies the parts it defines. Parts you keep with <code>preserve*</code> are left as they are.</li>
+<li>A preset that defines nothing is a plain reset.</li>
+<li>Filters are laid over the table&#39;s filter defaults, per filter name. <code>defaultFilters([])</code> therefore keeps the defaults. Name a filter to change it.</li>
+<li>The Default button puts the column order back to the code order, with or without a developer default preset.</li>
+</ul>
+<h2 id="default-preset">Default preset<a class="anchor" href="#default-preset" aria-label="Link to section: Default preset">#</a></h2>
+<ul>
+<li>Use <code>-&gt;default()</code> on one preset, or name a preset <code>default</code>.</li>
+<li>It applies at start even when <code>managed_default_views</code> is off (see <a href="/filament-tablekit/docs/v4/views/#default-views-and-the-start-view">start view order</a>).</li>
+<li>The preset keyed <code>default</code> also replaces the built-in Default button: its label, icon, color, tooltip and badge.</li>
+</ul>
+<h2 id="hidden-query">Hidden query<a class="anchor" href="#hidden-query" aria-label="Link to section: Hidden query">#</a></h2>
+<p><code>modifyQueryUsing</code> filters the table while the preset is the active view.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">PresetTableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">label</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'My open orders'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">modifyQueryUsing</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">fn</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> (</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">Builder</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> $query) => $query</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'assigned_to'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">auth</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">id</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">())</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'status'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'open'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">));</span></span></code></pre></div>
+<p>How it works:</p>
+<ul>
+<li><strong>It is a filter, not access control.</strong> The user can drop it at any time: apply their own view, press Default, or pick another preset. Never use it to hide data they must not see. Put authorization in the resource query, policies or global scopes.</li>
+<li>It is kept in locked server state (<code>activeTablePresetKey</code>). It survives Livewire requests, the browser cannot set it, and it ends when another view or Default is applied. It stops applying if the preset is hidden or removed.</li>
+<li>It applies to the filtered query, to exports and to summaries.</li>
+<li>It is added through <code>Table::configureUsing()</code>, so you do not change the component&#39;s <code>table()</code> method.</li>
+<li>The closure runs inside a nested where group on a fresh builder of the table&#39;s model. So <code>orWhere</code> inside it can never escape the table&#39;s own constraints (tenant scope, relation manager parent, Filament filters and search).</li>
+<li>Scopes the closure removes (<code>withoutGlobalScopes()</code>, <code>withoutGlobalScope()</code>, <code>withTrashed()</code>, <code>onlyTrashed()</code>) are not carried over, so a preset can never drop the tenant scope or a soft-delete scope. Use a Filament filter such as <code>TrashedFilter</code> for trashed rows.</li>
+<li>Only <code>where</code> constraints are carried over. Model scopes and <code>whereHas</code> work. Put ordering in <code>defaultSort()</code>, and joins and eager loads in the table query.</li>
+<li>The closure also runs when Filament resolves a record for a row action (it receives the same query scopes with <code>isResolvingRecord</code>). It cannot opt out. A two-step action that moves a record out of the active preset fails on its second step.</li>
+<li>The closure runs every time the table query is built, several times per request. Keep it cheap and free of side effects.</li>
+<li>A saved view never contains the hidden query. Quick Save is refused while such a preset is active, unless you set <code>preset_views.create_from_preset_with_query</code> (see <a href="/filament-tablekit/docs/v4/views/#quick-save">Views</a>).</li>
+</ul>
+<h2 id="badges-and-tooltips">Badges and tooltips<a class="anchor" href="#badges-and-tooltips" aria-label="Link to section: Badges and tooltips">#</a></h2>
+<ul>
+<li>The <code>badge()</code>, <code>badgeColor()</code> and <code>tooltip()</code> closures run at most once per request. They run only for presets shown in the bar, and only when the bar renders.</li>
+<li>Every Livewire request renders the bar again (search, sort, pagination, polling). A badge that queries the database therefore runs on each request.</li>
+<li>Add <code>-&gt;cacheBadgeFor($seconds)</code> to keep the value in the app cache, per user, tenant and table.</li>
+</ul>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">PresetTableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">badge</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">fn</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8"> () => </span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">Order</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">where</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'status'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'late'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">count</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">())</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">badgeColor</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'danger'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">cacheBadgeFor</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">60</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">);</span></span></code></pre></div>
+<h2 id="preserve-parts">Preserve parts<a class="anchor" href="#preserve-parts" aria-label="Link to section: Preserve parts">#</a></h2>
+<p>Use <code>preserve*</code> when a preset should leave some parts alone. This preset only changes the sort and keeps what the user already filtered:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'newest'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> PresetTableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">label</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'Newest first'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">defaultSort</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'created_at'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'desc'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">preserveFilters</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">preserveSearch</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(),</span></span></code></pre></div>
+<h2 id="custom-icons">Custom icons<a class="anchor" href="#custom-icons" aria-label="Link to section: Custom icons">#</a></h2>
+<p>Register your own icon alias in the <code>boot()</code> method of <code>AppServiceProvider</code>. Use a <strong>new</strong> key: the built-in keys (such as <code>rocket</code>) are already registered.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Filament\Support\Facades\FilamentIcon</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">FilamentIcon</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">register</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">([</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'tablekit::icons.rocket-x'</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> =></span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> 'heroicon-o-rocket-launch'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">]);</span></span></code></pre></div>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">PresetTableView</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">label</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'Launch'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">icon</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'rocket-x'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">);</span></span></code></pre></div>
+<p>A preset may use any registered alias. The <code>icons</code> list in the config (or <code>-&gt;icons([...])</code>) only controls what the icon picker offers for saved views. An unknown key shows no icon. See <a href="/filament-tablekit/docs/v4/colors-and-icons/">Colors and icons</a> for more.</p>
+<h2 id="storage">Storage<a class="anchor" href="#storage" aria-label="Link to section: Storage">#</a></h2>
+<p>Presets are pure configuration. Per-user choices (favorite, order, default, hidden) are stored in <code>tablekit_preferences</code>. Rows of presets that you remove from the code stay there until the user&#39;s rows are deleted. This is harmless and not cleaned up. There is no UI to hide a preset. <code>is_hidden</code> is honored when it is set in the database.</p>
+
+</article>
+<p class="edit">Docs for Filament 4. Also available for <a href="/filament-tablekit/docs/presets/">Filament 5</a>, <a href="/filament-tablekit/docs/v3/presets/">Filament 3</a>. <a href="https://github.com/maytham553/filament-tablekit/edit/filament-v4/docs/presets.md">Edit this page on GitHub</a>.</p>
+<nav class="pager" aria-label="Previous and next page">
+<a class="prev" rel="prev" href="/filament-tablekit/docs/v4/views/"><small>Previous</small><strong>Views</strong></a>
+<a class="next" rel="next" href="/filament-tablekit/docs/v4/multi-sort/"><small>Next</small><strong>Multi-sort</strong></a>
+</nav>
+</main>
+<nav class="toc toc-d" aria-label="On this page"><span class="toc-title">On this page</span><ul><li class="l2"><a href="#methods">Methods</a></li><li class="l2"><a href="#what-happens-when-a-preset-is-applied">What happens when a preset is applied</a></li><li class="l2"><a href="#default-preset">Default preset</a></li><li class="l2"><a href="#hidden-query">Hidden query</a></li><li class="l2"><a href="#badges-and-tooltips">Badges and tooltips</a></li><li class="l2"><a href="#preserve-parts">Preserve parts</a></li><li class="l2"><a href="#custom-icons">Custom icons</a></li><li class="l2"><a href="#storage">Storage</a></li></ul></nav>
+</div>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://maytham553.github.io/filament-tablekit/sitemap.xml

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Views: TableKit for Filament 3 docs</title>
+<meta name="description" content="How saved views work in TableKit for Filament 3: the favorites bar, Quick Save, the view manager, default and remembered views and the ?view= URL.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/docs/v3/views/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="Views: TableKit for Filament 3 docs">
+<meta property="og:description" content="How saved views work in TableKit for Filament 3: the favorites bar, Quick Save, the view manager, default and remembered views and the ?view= URL.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/docs/v3/views/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Views: TableKit for Filament 3 docs">
+<meta name="twitter:description" content="How saved views work in TableKit for Filament 3: the favorites bar, Quick Save, the view manager, default and remembered views and the ?view= URL.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://maytham553.github.io/filament-tablekit/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://maytham553.github.io/filament-tablekit/docs/"},{"@type":"ListItem","position":3,"name":"Filament 3","item":"https://maytham553.github.io/filament-tablekit/docs/v3/"},{"@type":"ListItem","position":4,"name":"Views","item":"https://maytham553.github.io/filament-tablekit/docs/v3/views/"}]},{"@type":"TechArticle","headline":"Views (TableKit for Filament 3)","description":"How saved views work in TableKit for Filament 3: the favorites bar, Quick Save, the view manager, default and remembered views and the ?view= URL.","url":"https://maytham553.github.io/filament-tablekit/docs/v3/views/","inLanguage":"en","dateModified":"2026-10-13","author":{"@type":"Person","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@type":"WebSite","name":"TableKit","url":"https://maytham553.github.io/filament-tablekit/"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg"}]}</script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/" aria-current="true">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<div class="wrap docs has-toc">
+<div class="docs-side">
+<input type="checkbox" id="docs-nav-toggle" class="docs-nav-toggle" aria-label="Show documentation menu">
+<label for="docs-nav-toggle" class="menu-btn">Docs menu: Views (Filament 3)</label>
+<nav class="sidebar" aria-label="Documentation">
+<span class="side-title">Filament version</span>
+<ul class="ver"><li><a href="/filament-tablekit/docs/views/" hreflang="en">v5</a></li><li><a href="/filament-tablekit/docs/v4/views/" hreflang="en">v4</a></li><li><a href="/filament-tablekit/docs/v3/views/" aria-current="true" hreflang="en">v3</a></li></ul>
+<div class="side-group"><span class="side-title">Getting started</span><ul><li><a href="/filament-tablekit/docs/v3/">Overview</a></li><li><a href="/filament-tablekit/docs/v3/installation/">Installation</a></li><li><a href="/filament-tablekit/docs/v3/configuration/">Configuration</a></li></ul></div>
+<div class="side-group"><span class="side-title">Using TableKit</span><ul><li><a href="/filament-tablekit/docs/v3/views/" aria-current="page">Views</a></li><li><a href="/filament-tablekit/docs/v3/presets/">Preset views</a></li><li><a href="/filament-tablekit/docs/v3/multi-sort/">Multi-sort</a></li><li><a href="/filament-tablekit/docs/v3/quick-filters/">Quick filters</a></li><li><a href="/filament-tablekit/docs/v3/columns/">Columns</a></li><li><a href="/filament-tablekit/docs/v3/colors-and-icons/">Colors and icons</a></li></ul></div>
+<div class="side-group"><span class="side-title">Reference</span><ul><li><a href="/filament-tablekit/docs/v3/database/">Database</a></li><li><a href="/filament-tablekit/docs/v3/testing/">Testing</a></li><li><a href="/filament-tablekit/docs/v3/limits/">Limits</a></li><li><a href="/filament-tablekit/docs/v3/upgrading/">Upgrading</a></li></ul></div>
+</nav>
+</div>
+<main id="main" class="prose">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/filament-tablekit/">Home</a></li><li><a href="/filament-tablekit/docs/">Docs</a></li><li><a href="/filament-tablekit/docs/v3/">Filament 3</a></li><li><span aria-current="page">Views</span></li></ol></nav>
+<p class="notice" role="note">You are viewing the <strong>Filament 3</strong> docs (TableKit <code>^3.0</code>). Using Filament 5? <a href="/filament-tablekit/docs/views/">Open the latest version of this page</a>.</p>
+<details class="toc toc-m"><summary>On this page</summary><ul><li class="l2"><a href="#what-a-view-holds">What a view holds</a></li><li class="l2"><a href="#the-favorites-bar">The favorites bar</a></li><li class="l2"><a href="#quick-save">Quick Save</a></li><li class="l2"><a href="#the-default-button">The Default button</a></li><li class="l2"><a href="#view-manager">View manager</a></li><li class="l3"><a href="#drag-and-drop-and-keyboard">Drag and drop and keyboard</a></li><li class="l3"><a href="#where-choices-are-stored">Where choices are stored</a></li><li class="l2"><a href="#default-views-and-the-start-view">Default views and the start view</a></li><li class="l2"><a href="#remembered-view">Remembered view</a></li><li class="l2"><a href="#the-view-url-marker">The ?view= URL marker</a></li><li class="l2"><a href="#styling">Styling</a></li></ul></details>
+<article>
+<h1 id="views">Views</h1>
+<p>A view is a saved table state with a name. Users open it again in one click.</p>
+<h2 id="what-a-view-holds">What a view holds<a class="anchor" href="#what-a-view-holds" aria-label="Link to section: What a view holds">#</a></h2>
+<ul>
+<li>filters</li>
+<li>global search and column searches</li>
+<li>sort (one column or several, see <a href="/filament-tablekit/docs/v3/multi-sort/">Multi-sort</a>)</li>
+<li>which toggleable columns are shown</li>
+<li>column order (see <a href="/filament-tablekit/docs/v3/columns/">Columns</a>)</li>
+<li>pinned quick filters (see <a href="/filament-tablekit/docs/v3/quick-filters/">Quick filters</a>)</li>
+<li>grouping</li>
+<li>the list page&#39;s active tab, only when <code>state.tab</code> is on</li>
+</ul>
+<p>A view never holds a preset&#39;s hidden query. Records per page and the reordering switch are not saved either. Applying a view turns reordering off.</p>
+<h2 id="the-favorites-bar">The favorites bar<a class="anchor" href="#the-favorites-bar" aria-label="Link to section: The favorites bar">#</a></h2>
+<p>The bar sits in the table header. On table widgets it sits below the heading. Elsewhere it sits above the header content.</p>
+<ul>
+<li><strong>Default</strong> resets the table to its own state (see <a href="#the-default-button">Default button</a>).</li>
+<li>One button per favorite view, in the user&#39;s order.</li>
+<li><strong>Save view</strong> opens Quick Save.</li>
+<li>The active view is highlighted. When the table changes after the view was applied, the view shows a &quot;modified&quot; mark.</li>
+</ul>
+<p>The bar is drawn in the table header. A table with no header content (no heading, search, filters, grouping, column toggle or actions) shows no bar.</p>
+<h2 id="quick-save">Quick Save<a class="anchor" href="#quick-save" aria-label="Link to section: Quick Save">#</a></h2>
+<p>Quick Save asks for:</p>
+<ul>
+<li>a <strong>name</strong>, unique per user, table and tenant (case-insensitive);</li>
+<li>a <strong>color</strong> and an optional <strong>icon</strong>, from the <a href="/filament-tablekit/docs/v3/colors-and-icons/">pickers</a>;</li>
+<li>whether to <strong>add it to the favorites bar</strong>.</li>
+</ul>
+<p>Quick Save opens in a modal. Use <code>quickSaveSlideOver()</code> for a slide-over.</p>
+<p>Quick Save is refused with an error on the name field when:</p>
+<ul>
+<li>the user already has <code>max_views_per_table</code> views for this table (default 100). Editing, deleting and applying are never blocked;</li>
+<li>the view is larger than <code>state.max_bytes</code> (default 64 KB);</li>
+<li>a preset with a hidden query is active. A notification explains it. Set <code>preset_views.create_from_preset_with_query</code> to allow it. The saved view then holds the visible state only.</li>
+</ul>
+<h2 id="the-default-button">The Default button<a class="anchor" href="#the-default-button" aria-label="Link to section: The Default button">#</a></h2>
+<ul>
+<li>With a developer default preset (<code>-&gt;default()</code>, or a preset keyed <code>default</code>), it applies that preset.</li>
+<li>Otherwise it resets the table to Filament&#39;s own defaults.</li>
+<li>It also resets the column visibility and the column order.</li>
+<li>A preset keyed <code>default</code> replaces the button&#39;s label, icon, color, tooltip and badge.</li>
+</ul>
+<h2 id="view-manager">View manager<a class="anchor" href="#view-manager" aria-label="Link to section: View manager">#</a></h2>
+<p>The manager button sits in the bar. <code>view_manager.position</code> puts it at the <code>end</code> (after Save view) or at the <code>start</code>. It opens a dropdown, or a slide-over with <code>view_manager.slide_over</code>.</p>
+<p>The list has three sections. Empty sections are hidden.</p>
+<ol>
+<li><strong>Favorites</strong>: favorite presets first, then favorite user views, each in the user&#39;s order.</li>
+<li><strong>My views</strong>: user views that are not favorites.</li>
+<li><strong>Preset views</strong>: visible presets that are not favorites.</li>
+</ol>
+<p>Each row lets the user:</p>
+<ul>
+<li>apply the view (click);</li>
+<li>add or remove it from favorites;</li>
+<li>set or remove it as default (only with managed defaults);</li>
+<li>edit or delete it (user views only);</li>
+<li>drag it to a new place inside its section. The handle shows when the section has two or more views. Favorite presets and favorite user views are two separate lists, so presets stay before user views.</li>
+</ul>
+<p>A search box shows above 8 views. Use <code>view_manager.search</code> to force it on or off.</p>
+<p>Edit uses the same checks as Quick Save. Delete asks for confirmation. Deleting the active view clears the active marker and leaves the table as it is.</p>
+<p>How it behaves:</p>
+<ul>
+<li>The list loads only when the user opens the manager, so a closed manager costs no queries.</li>
+<li>Every change checks ownership on the server. View ids go through a scoped query and preset keys must belong to a visible preset. Anything else is silently ignored.</li>
+<li>In slide-over mode, a change (favorite, default, order, edit, delete) refreshes the bar behind it.</li>
+<li>The dropdown is fixed-positioned, so the table card cannot clip it. It has a 24rem maximum height and its own scroll.</li>
+</ul>
+<h3 id="drag-and-drop-and-keyboard">Drag and drop and keyboard<a class="anchor" href="#drag-and-drop-and-keyboard" aria-label="Link to section: Drag and drop and keyboard">#</a></h3>
+<p>Dragging uses the <code>x-sortable</code> directive (SortableJS) that Filament already ships. There is nothing to install or load from a CDN.</p>
+<ul>
+<li>After a drop, the browser sends the whole new order of that list to the server. The server accepts it only when it holds exactly the keys the user may reorder in that list, each once. Anything else is ignored without an error.</li>
+<li>The handle is a focusable button. ArrowUp and ArrowDown on it move the row one place and keep the focus on the handle.</li>
+<li>When <code>preset_views.manageable</code> is <code>false</code>, users cannot reorder or unfavorite presets.</li>
+</ul>
+<h3 id="where-choices-are-stored">Where choices are stored<a class="anchor" href="#where-choices-are-stored" aria-label="Link to section: Where choices are stored">#</a></h3>
+<ul>
+<li>User views keep <code>is_favorite</code> and <code>sort</code> in <code>tablekit_views</code>.</li>
+<li>Presets keep their choices in <code>tablekit_preferences</code> (<code>is_favorite</code>, <code>sort</code>, <code>is_hidden</code>). <code>is_favorite</code> set to <code>null</code> means &quot;use the preset&#39;s own default&quot;.</li>
+<li><code>is_default</code> lives in <code>tablekit_preferences</code> for both kinds.</li>
+<li>A reorder writes the whole order of that kind.</li>
+</ul>
+<h2 id="default-views-and-the-start-view">Default views and the start view<a class="anchor" href="#default-views-and-the-start-view" aria-label="Link to section: Default views and the start view">#</a></h2>
+<p>Turn on <code>managed_default_views</code> and each user can mark one view per table, a preset or their own, as their default.</p>
+<p>On a fresh load of the table, with no table state in the URL, the start view is picked in this order:</p>
+<ol>
+<li>The view the user chose last, remembered in the session. This needs <code>persist_active_view_in_session</code>. An explicit press of Default counts as a choice (stored as <code>none</code>).</li>
+<li>The user&#39;s managed default.</li>
+<li>The developer default preset (<code>-&gt;default()</code> or the preset keyed <code>default</code>). It applies even when managed defaults are off.</li>
+<li>Filament&#39;s own defaults.</li>
+</ol>
+<p>Rules to know:</p>
+<ul>
+<li>The session only holds views the user picked or saved. A view that the start step applied is not remembered as a choice.</li>
+<li>Choosing or removing a default in the manager is itself a new choice. It clears the remembered entry. The new default applies on the next fresh load. The view on screen stays as it is.</li>
+<li>A deleted view, or a preset that is hidden or removed, is skipped without an error.</li>
+<li>The default applies on every fresh load, not once per session.</li>
+<li>A start view overrides state Filament restored from <code>persist*InSession</code> (filters, search). The exception is state the user changed on their own: column visibility, column order, pinned filters and sorts are put back on top.</li>
+<li>What a view apply left in the session is not a user change. A changed default therefore brings its own columns, order, pins and sorts on the next visit. A value the user set back to exactly what the last view wrote, or to the table default, cannot be told apart from &quot;never changed&quot;.</li>
+<li>Column toggles are compared as a map, so moving a column does not count as a change.</li>
+</ul>
+<h2 id="remembered-view">Remembered view<a class="anchor" href="#remembered-view" aria-label="Link to section: Remembered view">#</a></h2>
+<p>With <code>persist_active_view_in_session</code>, the view the user last applied or saved is applied again on the next fresh load of that table.</p>
+<ul>
+<li>It is not applied when the URL already carries table state: <code>tableFilters</code>, <code>tableSearch</code>, <code>tableSortColumn</code>, <code>tableSortDirection</code>, <code>tableGrouping</code>, <code>tableGroupingDirection</code> or <code>activeTab</code>.</li>
+<li>A deleted view is forgotten.</li>
+<li>It is restored on reload only where the table state is URL-bound (a <code>ListRecords</code> page). Relation managers and table widgets have no URL, so only the session decides there.</li>
+</ul>
+<p>When a view is applied on load (startup default or remembered view), the plugin asks the browser to always write the table state that the view set. A reload then shows the same screen, even after edits that land back on the view&#39;s values or clear them. Livewire would otherwise drop a URL parameter that equals its default after mount.</p>
+<h2 id="the-view-url-marker">The <code>?view=</code> URL marker<a class="anchor" href="#the-view-url-marker" aria-label="Link to section: The ?view= URL marker">#</a></h2>
+<p>On a <code>ListRecords</code> page the active view is mirrored in the URL:</p>
+<ul>
+<li><code>?view=preset:&lt;key&gt;</code> for a preset;</li>
+<li><code>?view=user:&lt;id&gt;</code> for a user view;</li>
+<li><code>?view=</code> (empty) after Default was pressed. It means &quot;no view, do not apply the startup view&quot;.</li>
+</ul>
+<p>The marker is written by the server and locked against Livewire updates.</p>
+<p>On a fresh load the marker is read back through the same checks as applying a view. Only visible presets and the user&#39;s own views count. Anything else is ignored and the normal start view applies.</p>
+<p>Then the table state in the URL (filters, sort, search, grouping, tab) is put back on top of the view. So the URL state wins, and only the active marker and a preset&#39;s hidden query come back. A link with only <code>?view=</code> marks the view (and a preset&#39;s hidden query) as active. The table shows what the URL says, or its defaults. The view&#39;s own filters and search are not applied from a bare marker. The marker still beats the startup default.</p>
+<p>Relation managers, table widgets and custom Livewire classes without <code>#[Url]</code> table state have no URL for the marker. A reload there starts from the usual start view.</p>
+<h2 id="styling">Styling<a class="anchor" href="#styling" aria-label="Link to section: Styling">#</a></h2>
+<p>The plugin views use only the Tailwind classes that Filament 3&#39;s default theme already ships. Everything else is an inline style or a CSS variable (such as <code>rgb(var(--primary-500))</code>). No theme or CSS step is needed.</p>
+<p>A custom theme that builds Filament&#39;s own views already has the same classes. Only if you want your own Tailwind build to cover the plugin views too, add this to the <code>content</code> list in your theme&#39;s <code>tailwind.config.js</code> (optional):</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'./vendor/tablekit/filament-tablekit/resources/views/**/*.blade.php'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">,</span></span></code></pre></div>
+
+</article>
+<p class="edit">Docs for Filament 3. Also available for <a href="/filament-tablekit/docs/views/">Filament 5</a>, <a href="/filament-tablekit/docs/v4/views/">Filament 4</a>. <a href="https://github.com/maytham553/filament-tablekit/edit/filament-v3/docs/views.md">Edit this page on GitHub</a>.</p>
+<nav class="pager" aria-label="Previous and next page">
+<a class="prev" rel="prev" href="/filament-tablekit/docs/v3/configuration/"><small>Previous</small><strong>Configuration</strong></a>
+<a class="next" rel="next" href="/filament-tablekit/docs/v3/presets/"><small>Next</small><strong>Preset views</strong></a>
+</nav>
+</main>
+<nav class="toc toc-d" aria-label="On this page"><span class="toc-title">On this page</span><ul><li class="l2"><a href="#what-a-view-holds">What a view holds</a></li><li class="l2"><a href="#the-favorites-bar">The favorites bar</a></li><li class="l2"><a href="#quick-save">Quick Save</a></li><li class="l2"><a href="#the-default-button">The Default button</a></li><li class="l2"><a href="#view-manager">View manager</a></li><li class="l3"><a href="#drag-and-drop-and-keyboard">Drag and drop and keyboard</a></li><li class="l3"><a href="#where-choices-are-stored">Where choices are stored</a></li><li class="l2"><a href="#default-views-and-the-start-view">Default views and the start view</a></li><li class="l2"><a href="#remembered-view">Remembered view</a></li><li class="l2"><a href="#the-view-url-marker">The ?view= URL marker</a></li><li class="l2"><a href="#styling">Styling</a></li></ul></nav>
+</div>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Configuration: TableKit for Filament 4 docs</title>
+<meta name="description" content="Every TableKit plugin option and config key for Filament 4, how to turn features off for one table, and the component hooks you can override.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://maytham553.github.io/filament-tablekit/docs/v4/configuration/">
+<meta name="author" content="Maytham Mahdi">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/filament-tablekit/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/filament-tablekit/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/filament-tablekit/icons/apple-touch-icon.png">
+<link rel="manifest" href="/filament-tablekit/site.webmanifest">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TableKit">
+<meta property="og:title" content="Configuration: TableKit for Filament 4 docs">
+<meta property="og:description" content="Every TableKit plugin option and config key for Filament 4, how to turn features off for one table, and the component hooks you can override.">
+<meta property="og:url" content="https://maytham553.github.io/filament-tablekit/docs/v4/configuration/">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Configuration: TableKit for Filament 4 docs">
+<meta name="twitter:description" content="Every TableKit plugin option and config key for Filament 4, how to turn features off for one table, and the component hooks you can override.">
+<meta name="twitter:image" content="https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg">
+<meta name="twitter:image:alt" content="TableKit: saved views and power tools for Filament tables, shown beside a Filament orders table with a favorites bar.">
+<link rel="stylesheet" href="/filament-tablekit/assets/site.css?v=293add06">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://maytham553.github.io/filament-tablekit/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://maytham553.github.io/filament-tablekit/docs/"},{"@type":"ListItem","position":3,"name":"Filament 4","item":"https://maytham553.github.io/filament-tablekit/docs/v4/"},{"@type":"ListItem","position":4,"name":"Configuration","item":"https://maytham553.github.io/filament-tablekit/docs/v4/configuration/"}]},{"@type":"TechArticle","headline":"Configuration (TableKit for Filament 4)","description":"Every TableKit plugin option and config key for Filament 4, how to turn features off for one table, and the component hooks you can override.","url":"https://maytham553.github.io/filament-tablekit/docs/v4/configuration/","inLanguage":"en","dateModified":"2026-10-13","author":{"@type":"Person","name":"Maytham Mahdi","url":"https://github.com/maytham553"},"isPartOf":{"@type":"WebSite","name":"TableKit","url":"https://maytham553.github.io/filament-tablekit/"},"image":"https://maytham553.github.io/filament-tablekit/img/tablekit-social.jpg"}]}</script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="/filament-tablekit/" aria-label="TableKit home"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#4f46e5"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><g transform="translate(4 4)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="15.5" cy="14.5" r="1.4" fill="#fff" stroke="none"/></g></svg><span>Table<b>Kit</b></span></a>
+<nav class="top-nav" aria-label="Main">
+<a href="/filament-tablekit/docs/" aria-current="true">Docs</a>
+<a href="https://github.com/maytham553/filament-tablekit">GitHub</a>
+<a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a>
+</nav>
+</div>
+</header>
+<div class="wrap docs has-toc">
+<div class="docs-side">
+<input type="checkbox" id="docs-nav-toggle" class="docs-nav-toggle" aria-label="Show documentation menu">
+<label for="docs-nav-toggle" class="menu-btn">Docs menu: Configuration (Filament 4)</label>
+<nav class="sidebar" aria-label="Documentation">
+<span class="side-title">Filament version</span>
+<ul class="ver"><li><a href="/filament-tablekit/docs/configuration/" hreflang="en">v5</a></li><li><a href="/filament-tablekit/docs/v4/configuration/" aria-current="true" hreflang="en">v4</a></li><li><a href="/filament-tablekit/docs/v3/configuration/" hreflang="en">v3</a></li></ul>
+<div class="side-group"><span class="side-title">Getting started</span><ul><li><a href="/filament-tablekit/docs/v4/">Overview</a></li><li><a href="/filament-tablekit/docs/v4/installation/">Installation</a></li><li><a href="/filament-tablekit/docs/v4/configuration/" aria-current="page">Configuration</a></li></ul></div>
+<div class="side-group"><span class="side-title">Using TableKit</span><ul><li><a href="/filament-tablekit/docs/v4/views/">Views</a></li><li><a href="/filament-tablekit/docs/v4/presets/">Preset views</a></li><li><a href="/filament-tablekit/docs/v4/multi-sort/">Multi-sort</a></li><li><a href="/filament-tablekit/docs/v4/quick-filters/">Quick filters</a></li><li><a href="/filament-tablekit/docs/v4/columns/">Columns</a></li><li><a href="/filament-tablekit/docs/v4/colors-and-icons/">Colors and icons</a></li></ul></div>
+<div class="side-group"><span class="side-title">Reference</span><ul><li><a href="/filament-tablekit/docs/v4/database/">Database</a></li><li><a href="/filament-tablekit/docs/v4/testing/">Testing</a></li><li><a href="/filament-tablekit/docs/v4/limits/">Limits</a></li><li><a href="/filament-tablekit/docs/v4/upgrading/">Upgrading</a></li></ul></div>
+</nav>
+</div>
+<main id="main" class="prose">
+<nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/filament-tablekit/">Home</a></li><li><a href="/filament-tablekit/docs/">Docs</a></li><li><a href="/filament-tablekit/docs/v4/">Filament 4</a></li><li><span aria-current="page">Configuration</span></li></ol></nav>
+<p class="notice" role="note">You are viewing the <strong>Filament 4</strong> docs (TableKit <code>^4.0</code>). Using Filament 5? <a href="/filament-tablekit/docs/configuration/">Open the latest version of this page</a>.</p>
+<details class="toc toc-m"><summary>On this page</summary><ul><li class="l2"><a href="#plugin-options">Plugin options</a></li><li class="l2"><a href="#config-file">Config file</a></li><li class="l2"><a href="#turn-features-off-for-one-table">Turn features off for one table</a></li><li class="l2"><a href="#other-hooks-on-the-component">Other hooks on the component</a></li><li class="l2"><a href="#table-wide-notes">Table-wide notes</a></li></ul></details>
+<article>
+<h1 id="configuration">Configuration</h1>
+<p>You can configure TableKit in two places:</p>
+<ul>
+<li>the config file, <code>config/tablekit.php</code>, for app-wide defaults;</li>
+<li>the plugin, <code>TableKitPlugin::make()</code>, per panel.</li>
+</ul>
+<p>The plugin wins over the config file. Every option is optional. The favorites bar also works without the plugin (config only).</p>
+<p>Publish the config file if you want to change it:</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">php</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> artisan</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff"> vendor:publish</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> --tag=tablekit-config</span></span></code></pre></div>
+<h2 id="plugin-options">Plugin options<a class="anchor" href="#plugin-options" aria-label="Link to section: Plugin options">#</a></h2>
+<p>All options are optional. Options marked <code>bool|Closure</code> also accept a closure that returns a boolean. The chain below shows many options at once. Use only the ones you need. <code>connection()</code> is commented out because it throws an error when the connection you name does not exist.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> App\Models\User</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\TableKitPlugin</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">$panel</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">-></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">plugin</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span></span>
+<span class="line"><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">    TableKitPlugin</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">make</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">favoritesBar</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">quickSaveSlideOver</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">colors</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">([</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'primary'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'success'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'rose'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">])</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">icons</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">([</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'star'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'flag'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">])</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">userModel</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">User</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">::class</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">persistActiveViewInSession</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span></span>
+<span class="line"><span style="--shiki-light:#646c76;--shiki-dark:#7b838c">        // ->connection('reporting')   // only if a "reporting" connection exists in config/database.php</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">maxViewsPerTable</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">100</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">viewManager</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">enabled</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">: </span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">true</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">slideOver</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">: </span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">position</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">: </span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'end'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">presetViewsManageable</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">true</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">newPresetViewSortPosition</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#032f62;--shiki-dark:#9ecbff">'after'</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">presetViewLockIcon</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">true</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">favoritesBarDivider</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">true</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">managedDefaultViews</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">createFromPresetWithQuery</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">multiSort</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">true</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">max</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">: </span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">5</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">quickFilters</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">limitIndicatorLabels</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">2</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">        -></span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">columnReordering</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">(</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff">true</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">)</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">);</span></span></code></pre></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Plugin options, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Config key</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>favoritesBar(bool|Closure)</code></td>
+<td><code>favorites_bar.enabled</code></td>
+<td><code>true</code></td>
+<td>Shows the bar above the table.</td>
+</tr>
+<tr>
+<td><code>favoritesBarDivider(bool|Closure)</code></td>
+<td><code>favorites_bar.divider</code></td>
+<td><code>true</code></td>
+<td>Draws a divider between preset views and the user&#39;s own views.</td>
+</tr>
+<tr>
+<td><code>quickSaveSlideOver(bool|Closure)</code></td>
+<td><code>quick_save.slide_over</code></td>
+<td><code>false</code></td>
+<td>Opens Quick Save in a slide-over instead of a modal.</td>
+</tr>
+<tr>
+<td><code>viewManager(enabled, slideOver, position)</code></td>
+<td><code>view_manager.enabled</code>, <code>view_manager.slide_over</code>, <code>view_manager.position</code></td>
+<td><code>true</code>, <code>false</code>, <code>&#39;end&#39;</code></td>
+<td>Turns the view manager on, opens it as a slide-over, and places its button at <code>&#39;start&#39;</code> or <code>&#39;end&#39;</code>.</td>
+</tr>
+<tr>
+<td><code>presetViewsManageable(bool|Closure)</code></td>
+<td><code>preset_views.manageable</code></td>
+<td><code>true</code></td>
+<td><code>false</code> means users cannot reorder or unfavorite presets.</td>
+</tr>
+<tr>
+<td><code>newPresetViewSortPosition(&#39;before&#39;|&#39;after&#39;)</code></td>
+<td><code>preset_views.new_sort_position</code></td>
+<td><code>&#39;after&#39;</code></td>
+<td>Where presets the user has not ranked yet go.</td>
+</tr>
+<tr>
+<td><code>presetViewLockIcon(bool|Closure)</code></td>
+<td><code>preset_views.lock_icon</code></td>
+<td><code>true</code></td>
+<td>Shows a lock icon on preset rows in the manager.</td>
+</tr>
+<tr>
+<td><code>createFromPresetWithQuery(bool|Closure)</code></td>
+<td><code>preset_views.create_from_preset_with_query</code></td>
+<td><code>false</code></td>
+<td>Allows Quick Save while a preset with a hidden query is active. The hidden query is not saved.</td>
+</tr>
+<tr>
+<td><code>managedDefaultViews(bool|Closure)</code></td>
+<td><code>managed_default_views</code></td>
+<td><code>false</code></td>
+<td>Lets each user mark one view per table as their default.</td>
+</tr>
+<tr>
+<td><code>multiSort(enabled, max)</code></td>
+<td><code>multi_sort.enabled</code>, <code>multi_sort.max</code></td>
+<td><code>true</code>, <code>5</code></td>
+<td>Turns multi-sort on and sets the most sort columns. <code>max</code> is kept between 2 and 20.</td>
+</tr>
+<tr>
+<td><code>quickFilters(bool|Closure)</code></td>
+<td><code>quick_filters.enabled</code></td>
+<td><code>false</code></td>
+<td>Replaces Filament&#39;s indicator bar with clickable filter chips.</td>
+</tr>
+<tr>
+<td><code>limitIndicatorLabels(?int)</code></td>
+<td><code>quick_filters.limit_labels</code></td>
+<td><code>2</code></td>
+<td>A multi-select chip shows this many values, then &quot;&amp; N more&quot;. <code>0</code> or <code>null</code> shows all.</td>
+</tr>
+<tr>
+<td><code>columnReordering(bool|Closure)</code></td>
+<td><code>column_reordering.enabled</code></td>
+<td><code>true</code></td>
+<td>Saves and applies column order in views and presets.</td>
+</tr>
+<tr>
+<td><code>maxViewsPerTable(int)</code></td>
+<td><code>max_views_per_table</code></td>
+<td><code>100</code></td>
+<td>Most views one user can save per table and tenant.</td>
+</tr>
+<tr>
+<td><code>colors(array)</code></td>
+<td><code>colors</code></td>
+<td>24 names</td>
+<td>Color names offered in the color picker.</td>
+</tr>
+<tr>
+<td><code>icons(array)</code></td>
+<td><code>icons</code></td>
+<td>about 120 keys</td>
+<td>Icon keys offered in the icon picker.</td>
+</tr>
+<tr>
+<td><code>userModel(string)</code></td>
+<td><code>user.model</code></td>
+<td><code>null</code></td>
+<td>User model class. Only used by the <code>TableView::user()</code> relation. Falls back to the model of your default auth guard.</td>
+</tr>
+<tr>
+<td><code>persistActiveViewInSession(bool)</code></td>
+<td><code>persist_active_view_in_session</code></td>
+<td><code>false</code></td>
+<td>Applies the user&#39;s last view again on the next fresh load.</td>
+</tr>
+<tr>
+<td><code>connection(?string)</code></td>
+<td><code>connection</code></td>
+<td><code>null</code></td>
+<td>Database connection that holds the TableKit tables.</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="config-file">Config file<a class="anchor" href="#config-file" aria-label="Link to section: Config file">#</a></h2>
+<p>These keys are in <code>config/tablekit.php</code>.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Config file, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>table</code></td>
+<td><code>&#39;tablekit_views&#39;</code></td>
+<td>Name of the views table. Config only, because the migration reads it.</td>
+</tr>
+<tr>
+<td><code>preferences_table</code></td>
+<td><code>&#39;tablekit_preferences&#39;</code></td>
+<td>Name of the per-user preferences table. Config only, because the migration reads it.</td>
+</tr>
+<tr>
+<td><code>connection</code></td>
+<td><code>null</code></td>
+<td><code>null</code> means the app&#39;s default connection at the moment of use. See <a href="/filament-tablekit/docs/v4/database/#database-connection">Database</a>.</td>
+</tr>
+<tr>
+<td><code>load_migrations</code></td>
+<td><code>true</code></td>
+<td>Set to <code>false</code> if your app owns the migrations. See <a href="/filament-tablekit/docs/v4/database/#publish-the-migrations">Database</a>.</td>
+</tr>
+<tr>
+<td><code>user.model</code></td>
+<td><code>null</code></td>
+<td>User model class. Only used by the <code>TableView::user()</code> relation.</td>
+</tr>
+<tr>
+<td><code>favorites_bar.enabled</code></td>
+<td><code>true</code></td>
+<td>Shows the favorites bar.</td>
+</tr>
+<tr>
+<td><code>favorites_bar.divider</code></td>
+<td><code>true</code></td>
+<td>Divider between preset views and the user&#39;s own views.</td>
+</tr>
+<tr>
+<td><code>view_manager.enabled</code></td>
+<td><code>true</code></td>
+<td>Shows the view manager button.</td>
+</tr>
+<tr>
+<td><code>view_manager.slide_over</code></td>
+<td><code>false</code></td>
+<td>Opens the manager as a slide-over instead of a dropdown.</td>
+</tr>
+<tr>
+<td><code>view_manager.position</code></td>
+<td><code>&#39;end&#39;</code></td>
+<td><code>&#39;start&#39;</code> puts the button before Default. <code>&#39;end&#39;</code> puts it after Save view.</td>
+</tr>
+<tr>
+<td><code>view_manager.search</code></td>
+<td><code>null</code></td>
+<td><code>null</code> shows the search box when there are more than 8 views. <code>true</code> or <code>false</code> forces it. Config only.</td>
+</tr>
+<tr>
+<td><code>preset_views.manageable</code></td>
+<td><code>true</code></td>
+<td><code>false</code> means users cannot reorder or unfavorite presets.</td>
+</tr>
+<tr>
+<td><code>preset_views.new_sort_position</code></td>
+<td><code>&#39;after&#39;</code></td>
+<td><code>&#39;before&#39;</code> or <code>&#39;after&#39;</code> the ranked presets.</td>
+</tr>
+<tr>
+<td><code>preset_views.lock_icon</code></td>
+<td><code>true</code></td>
+<td>Lock icon on preset rows in the manager.</td>
+</tr>
+<tr>
+<td><code>preset_views.create_from_preset_with_query</code></td>
+<td><code>false</code></td>
+<td>Allow Quick Save while a preset with a hidden query is active.</td>
+</tr>
+<tr>
+<td><code>managed_default_views</code></td>
+<td><code>false</code></td>
+<td>Let each user mark one view per table as their default.</td>
+</tr>
+<tr>
+<td><code>multi_sort.enabled</code></td>
+<td><code>true</code></td>
+<td>Turns multi-sort on.</td>
+</tr>
+<tr>
+<td><code>multi_sort.max</code></td>
+<td><code>5</code></td>
+<td>Most sort columns. Kept between 2 and 20.</td>
+</tr>
+<tr>
+<td><code>quick_filters.enabled</code></td>
+<td><code>false</code></td>
+<td>Turns quick filters on.</td>
+</tr>
+<tr>
+<td><code>quick_filters.limit_labels</code></td>
+<td><code>2</code></td>
+<td>Values a multi-select chip shows before &quot;&amp; N more&quot;. <code>0</code> shows all.</td>
+</tr>
+<tr>
+<td><code>column_reordering.enabled</code></td>
+<td><code>true</code></td>
+<td>Saves and applies column order in views and presets.</td>
+</tr>
+<tr>
+<td><code>quick_save.slide_over</code></td>
+<td><code>false</code></td>
+<td>Opens Quick Save in a slide-over.</td>
+</tr>
+<tr>
+<td><code>quick_save.max_name_length</code></td>
+<td><code>100</code></td>
+<td>Longest view name. Kept between 1 and 100. Config only.</td>
+</tr>
+<tr>
+<td><code>max_views_per_table</code></td>
+<td><code>100</code></td>
+<td>Most views one user can save per table and tenant.</td>
+</tr>
+<tr>
+<td><code>colors</code></td>
+<td>24 names</td>
+<td>Colors in the picker, in this order. See <a href="/filament-tablekit/docs/v4/colors-and-icons/">Colors and icons</a>.</td>
+</tr>
+<tr>
+<td><code>icons</code></td>
+<td>about 120 keys</td>
+<td>Icons in the picker, in this order. See <a href="/filament-tablekit/docs/v4/colors-and-icons/">Colors and icons</a>.</td>
+</tr>
+<tr>
+<td><code>persist_active_view_in_session</code></td>
+<td><code>false</code></td>
+<td>Applies the user&#39;s last view again on the next fresh load.</td>
+</tr>
+<tr>
+<td><code>state.tab</code></td>
+<td><code>false</code></td>
+<td>Also saves and applies the list page&#39;s active tab. Config only.</td>
+</tr>
+<tr>
+<td><code>state.max_bytes</code></td>
+<td><code>65536</code></td>
+<td>Most bytes one saved view can hold. Quick Save refuses a larger view with a name field error. Config only.</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="turn-features-off-for-one-table">Turn features off for one table<a class="anchor" href="#turn-features-off-for-one-table" aria-label="Link to section: Turn features off for one table">#</a></h2>
+<p>Override a static method on the page, relation manager or widget that uses the trait. These methods can only turn a feature <strong>off</strong> for that table. They default to <code>true</code>, and the result is combined with the global setting: a feature runs only when both say yes. Returning <code>true</code> does not turn a feature on when the config or plugin has it off.</p>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">public</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> static</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> function</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> multiSortTableViews</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">:</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> bool</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    return</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">public</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> static</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> function</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> quickFiltersTableViews</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">:</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> bool</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    return</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">public</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> static</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> function</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> columnOrderTableViews</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">()</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">:</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> bool</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    return</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> false</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span></code></pre></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Turn features off for one table, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>multiSortTableViews()</code></td>
+<td>The Sort button. <code>false</code> turns it off for this table.</td>
+</tr>
+<tr>
+<td><code>quickFiltersTableViews()</code></td>
+<td>The quick filter chips. <code>false</code> keeps Filament&#39;s own indicator bar for this table.</td>
+</tr>
+<tr>
+<td><code>columnOrderTableViews()</code></td>
+<td>Saving and applying column order. <code>false</code> turns it off for this table.</td>
+</tr>
+</tbody></table>
+</div>
+<p>To use a feature on only some tables, turn it on globally and return <code>false</code> on the others.</p>
+<h2 id="other-hooks-on-the-component">Other hooks on the component<a class="anchor" href="#other-hooks-on-the-component" aria-label="Link to section: Other hooks on the component">#</a></h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table: Other hooks on the component, scrolls sideways"><table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>getPresetTableViews()</code></td>
+<td>Returns the preset views. Declare it <code>protected</code>. See <a href="/filament-tablekit/docs/v4/presets/">Presets</a>.</td>
+</tr>
+<tr>
+<td><code>getTableViewsResourceKey()</code></td>
+<td>The key views are stored under. The default is the component class. Override it (protected) to share views between two classes.</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="table-wide-notes">Table-wide notes<a class="anchor" href="#table-wide-notes" aria-label="Link to section: Table-wide notes">#</a></h2>
+<ul>
+<li>Views are stored per user, per tenant (<code>Filament::getTenant()</code>) and per component class.</li>
+<li><code>ListRecords</code>, relation managers and <code>TableWidget</code> already have everything TableKit needs.</li>
+<li>A custom Livewire component needs the table, actions and schemas contracts and traits (the example below).</li>
+<li>Without the actions contract and trait, Quick Save and the other modal actions fail with a &quot;property not found&quot; error.</li>
+<li>Declare <code>InteractsWithTable</code> before <code>HasTableKit</code>. This is advice: it has not been proven to matter, but the remembered-view restore is skipped when the table is not ready yet.</li>
+</ul>
+<div class="code"><pre class="shiki shiki-themes github-light github-dark" tabindex="0"><code><span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Filament\Actions\Concerns\InteractsWithActions</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Filament\Actions\Contracts\HasActions</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Filament\Schemas\Concerns\InteractsWithSchemas</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Filament\Schemas\Contracts\HasSchemas</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Filament\Tables\Concerns\InteractsWithTable</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Filament\Tables\Contracts\HasTable</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> Livewire\Component</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> TableKit\Concerns\HasTableKit</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">class</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> OrdersTable</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> extends</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> Component</span><span style="--shiki-light:#ca3745;--shiki-dark:#f97583"> implements</span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0"> HasActions</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">HasSchemas</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">, </span><span style="--shiki-light:#6f42c1;--shiki-dark:#b392f0">HasTable</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">{</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> InteractsWithActions</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> InteractsWithSchemas</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> InteractsWithTable</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#ca3745;--shiki-dark:#f97583">    use</span><span style="--shiki-light:#005cc5;--shiki-dark:#79b8ff"> HasTableKit</span><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">;</span></span>
+<span class="line"><span style="--shiki-light:#24292e;--shiki-dark:#e1e4e8">}</span></span></code></pre></div>
+
+</article>
+<p class="edit">Docs for Filament 4. Also available for <a href="/filament-tablekit/docs/configuration/">Filament 5</a>, <a href="/filament-tablekit/docs/v3/configuration/">Filament 3</a>. <a href="https://github.com/maytham553/filament-tablekit/edit/filament-v4/docs/configuration.md">Edit this page on GitHub</a>.</p>
+<nav class="pager" aria-label="Previous and next page">
+<a class="prev" rel="prev" href="/filament-tablekit/docs/v4/installation/"><small>Previous</small><strong>Installation</strong></a>
+<a class="next" rel="next" href="/filament-tablekit/docs/v4/views/"><small>Next</small><strong>Views</strong></a>
+</nav>
+</main>
+<nav class="toc toc-d" aria-label="On this page"><span class="toc-title">On this page</span><ul><li class="l2"><a href="#plugin-options">Plugin options</a></li><li class="l2"><a href="#config-file">Config file</a></li><li class="l2"><a href="#turn-features-off-for-one-table">Turn features off for one table</a></li><li class="l2"><a href="#other-hooks-on-the-component">Other hooks on the component</a></li><li class="l2"><a href="#table-wide-notes">Table-wide notes</a></li></ul></nav>
+</div>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<h2>TableKit</h2>
+<p>Saved views and power tools for Filament tables. An open-source plugin for Filament 3, 4 and 5.</p>
+</div>
+<div>
+<h2>Documentation</h2>
+<ul>
+<li><a href="/filament-tablekit/docs/">Filament 5 docs</a></li>
+<li><a href="/filament-tablekit/docs/v4/">Filament 4 docs</a></li>
+<li><a href="/filament-tablekit/docs/v3/">Filament 3 docs</a></li>
+<li><a href="/filament-tablekit/docs/installation/">Installation</a></li>
+</ul>
+</div>
+<div>
+<h2>Project</h2>
+<ul>
+<li><a href="https://github.com/maytham553/filament-tablekit">GitHub</a></li>
+<li><a href="https://packagist.org/packages/tablekit/filament-tablekit">Packagist</a></li>
+<li><a href="https://github.com/maytham553/filament-tablekit/issues">Report an issue</a></li>
+<li><a href="https://youtu.be/sZXJRwCzboU">Demo video</a></li>
+</ul>
+</div>
+<div>
+<h2>Author</h2>
+<ul>
+<li><a href="https://github.com/maytham553">Maytham Mahdi</a></li>
+</ul>
+</div>
+</div>
+<p class="legal">Released under the <a href="https://github.com/maytham553/filament-tablekit/blob/main/LICENSE">MIT license</a>. Copyright Maytham Mahdi.</p>
+</div>
+</footer>
+<script src="/filament-tablekit/assets/site.js?v=269b292a" defer></script>
+</body>
+</html>
