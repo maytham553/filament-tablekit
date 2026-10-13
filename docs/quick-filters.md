@@ -10,14 +10,23 @@ Quick filters are **off by default**.
 | --- | --- |
 | Config | `quick_filters.enabled` set to `true` |
 | Plugin | `TableKitPlugin::make()->quickFilters()` |
-| One table | Override `public static function quickFiltersTableViews(): bool` on the component |
+
+## Turn them off for one table
+
+Quick filters are on for a table only when the global setting is on **and** the table allows them. The per-table method can only turn them **off** (its default is `true`):
+
+| Where | How |
+| --- | --- |
+| One table | Override `public static function quickFiltersTableViews(): bool` on the component and return `false` |
 
 ```php
 public static function quickFiltersTableViews(): bool
 {
-    return true;
+    return false;
 }
 ```
+
+Returning `true` does not turn them on when the global setting is off.
 
 The bar needs a visible table header toolbar. A table with no search, filters, grouping or column toggle hides the toolbar, and the chip bar with it.
 

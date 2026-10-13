@@ -36,8 +36,8 @@
         @if ($inDropdown) x-on:click="close($event)" @endif
     >
         <span
-            class="fi-color-custom h-2.5 w-2.5 shrink-0 rounded-full bg-custom-500"
-            style="{{ \Filament\Support\get_color_css_variables($item->color, shades: [500]) }}"
+            class="fi-color-custom shrink-0 rounded-full"
+            style="{{ \Filament\Support\get_color_css_variables($item->color, shades: [500]) }}; width: 0.625rem; height: 0.625rem; background-color: rgb(var(--c-500))"
             aria-hidden="true"
         ></span>
 

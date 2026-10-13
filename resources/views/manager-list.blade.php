@@ -46,7 +46,7 @@
     @foreach ($sections as $section => $groups)
         @if (collect($groups)->contains(fn (array $group): bool => $group['items']->isNotEmpty()))
             <div class="p-2" wire:key="tablekit-manager-section-{{ $section }}">
-                <h4 class="px-2 py-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <h4 class="fi-tablekit-manager-heading px-2 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400" style="text-transform: uppercase">
                     {{ __('tablekit::manager.sections.' . $section) }}
                 </h4>
 
@@ -71,4 +71,9 @@
             </div>
         @endif
     @endforeach
+
+    <style>
+        .fi-tablekit-manager-heading { letter-spacing: 0.05em; }
+        [dir="rtl"] .fi-tablekit-manager-heading { letter-spacing: normal; text-transform: none !important; }
+    </style>
 </div>

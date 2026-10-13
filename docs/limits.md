@@ -4,7 +4,7 @@ These are the known limits of TableKit for Filament 3.
 
 ## What a view can hold
 
-- Records per page and the reordering switch (`isTableReordering`) are not saved. Applying a view turns reordering off.
+- Records per page are not saved in a view. Row reordering mode (`isTableReordering`, dragging records to change their position) is not saved either: applying a view turns it off. This is about rows, not columns: column order **is** saved in views (see [Columns](columns.md)).
 - A saved view never contains a preset's hidden query.
 - Each view can hold up to `state.max_bytes` (64 KB by default).
 - A column added after a view was saved is shown or hidden by its own default. Names that are no longer toggleable columns are dropped.
@@ -39,7 +39,6 @@ These are the known limits of TableKit for Filament 3.
 ## Columns
 
 - Only tables with a flat list of columns are supported. Column groups, layout components (Split, Stack, Panel) and collapsible layouts are left alone.
-- A component that calls Filament's `resetTable()` rebuilds the table without the custom column order and multi-sort for the rest of that request.
 
 ## Quick filters
 
@@ -55,4 +54,4 @@ These are the known limits of TableKit for Filament 3.
 ## Internals
 
 - The trait's lifecycle hooks (`mountHasTableKit`, `bootedHasTableKit`, `renderingHasTableKit`) are public because Livewire needs that. A browser request that names them is ignored by `callHasTableKit`.
-- The bar's utility classes must be covered by the panel theme. The default Filament theme is enough. The color and icon pickers bring their own inline styles.
+- The plugin views use only classes that Filament 3's default theme ships, and inline styles for everything else, so they do not depend on your theme. A test checks the rendered HTML against Filament's compiled CSS.

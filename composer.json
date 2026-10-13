@@ -6,12 +6,12 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "^3.3",
-        "illuminate/support": "^11.0",
+        "illuminate/support": "^11.28|^12.0",
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
         "laravel/pint": "^1.13",
-        "orchestra/testbench": "^9.0",
+        "orchestra/testbench": "^9.0|^10.0",
         "pestphp/pest": "^3.0",
         "pestphp/pest-plugin-laravel": "^3.0"
     },
@@ -30,6 +30,9 @@
         "format": "vendor/bin/pint"
     },
     "extra": {
+        "branch-alias": {
+            "dev-filament-v3": "3.x-dev"
+        },
         "laravel": {
             "providers": [
                 "TableKit\\TableKitServiceProvider"

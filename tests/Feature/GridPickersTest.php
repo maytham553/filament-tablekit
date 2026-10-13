@@ -3,7 +3,9 @@
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
 use Filament\Support\Facades\FilamentIcon;
+use Illuminate\Container\Container;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\HtmlString;
 use Livewire\Livewire;
 use TableKit\Forms\ColorGridPicker;
@@ -317,6 +319,8 @@ describe('colors', function () {
     });
 
     it('registers the palette before the app boots, so app and panel colors win', function () {
+        $previous = Container::getInstance();
+
         $app = new class(sys_get_temp_dir()) extends Application
         {
             public array $capturedBooting = [];
@@ -332,7 +336,12 @@ describe('colors', function () {
             }
         };
 
-        (new TableKitServiceProvider($app))->packageRegistered();
+        try {
+            (new TableKitServiceProvider($app))->packageRegistered();
+        } finally {
+            Container::setInstance($previous);
+            Facade::setFacadeApplication($previous);
+        }
 
         expect($app->capturedBooting)->toHaveCount(1);
     });

@@ -13,5 +13,5 @@
     x-on:keydown.arrow-up.prevent="moveItem($el, -1)"
     x-on:keydown.arrow-down.prevent="moveItem($el, 1)"
     data-tablekit-reorder-handle
-    class="cursor-grab active:cursor-grabbing"
+    style="cursor: grab"
 />

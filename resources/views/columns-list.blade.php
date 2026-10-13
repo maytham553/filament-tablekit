@@ -39,7 +39,7 @@
                             <span class="truncate">{{ $column->getLabel() }}</span>
                         </label>
                     @else
-                        <span class="min-w-0 flex-1 truncate ps-7 text-sm text-gray-500 dark:text-gray-400" title="{{ __('tablekit::columns.always_shown') }}">{{ $column->getLabel() }}</span>
+                        <span class="min-w-0 flex-1 truncate text-sm text-gray-500 dark:text-gray-400" style="padding-inline-start: 1.75rem" title="{{ __('tablekit::columns.always_shown') }}">{{ $column->getLabel() }}</span>
                     @endif
                 </div>
             @endforeach

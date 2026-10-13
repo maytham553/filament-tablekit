@@ -25,7 +25,7 @@ Reordering is drag and drop. ArrowUp and ArrowDown on a handle move the column o
 
 Filament rebuilds the table on every request and renders headers, cells and summaries from the table's column list. So the order is applied once per request, on the freshly built table: the same `Column` objects, pushed again in the saved order. Column actions, summaries, grouping, bulk selection and record URLs are untouched.
 
-The column list changes Filament's state through its public API only (wrapped sort closures, `Table::columns()`, the cached `toggleTableColumnForm`), so it never collides with `InteractsWithTable`. A component that calls Filament's `resetTable()` rebuilds the table without the custom order for the rest of that request.
+The column list changes Filament's state through its public API only (wrapped sort closures, `Table::columns()`, the cached `toggleTableColumnForm`), so it never collides with `InteractsWithTable`.
 
 ## In views
 

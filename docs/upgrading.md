@@ -6,7 +6,7 @@ Notes for Filament 3.
 
 TableKit has one branch per Filament version. See the README for the table. Do not mix them: each branch needs its own Filament and Livewire version.
 
-- This branch needs Filament `^3.3` and Laravel 11.
+- This branch needs Filament `^3.3` and Laravel 11.28 or 12.
 - The Filament 4 version lives on `filament-v4`. The Filament 5 version lives on `main`.
 
 ## Moving to Filament 4 or 5
@@ -19,7 +19,7 @@ The column list of this branch is replaced on Filament 4 and 5 by Filament's own
 
 If you started with only saved views and now add presets, the view manager or managed defaults:
 
-1. Run the new migration, `tablekit_preferences`, before you deploy code that defines presets or turns on managed defaults. It follows the same `tablekit.connection` rule as `tablekit_views` (`php artisan migrate --database=<connection>` for a pinned connection). It adds a unique index through raw SQL on Postgres and SQLite only.
+1. Run the new migration, `tablekit_preferences`, before you deploy code that defines presets or turns on managed defaults. It follows the same `tablekit.connection` rule as `tablekit_views` (`php artisan migrate --database=<connection> --path=vendor/tablekit/filament-tablekit/database/migrations` for a pinned connection). It adds a unique index through raw SQL on Postgres and SQLite only.
 2. If your app owns its migrations, publish with `--tag=tablekit-migrations` and copy the new file.
 3. Remap the new icon aliases if you use another icon set. See [Colors and icons](colors-and-icons.md).
 4. Components without presets behave as before and run no preferences query.

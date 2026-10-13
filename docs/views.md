@@ -136,10 +136,16 @@ The marker is written by the server and locked against Livewire updates.
 
 On a fresh load the marker is read back through the same checks as applying a view. Only visible presets and the user's own views count. Anything else is ignored and the normal start view applies.
 
-Then the table state in the URL (filters, sort, search, grouping, tab) is put back on top of the view. So the URL state wins, and only the active marker and a preset's hidden query come back. A link with `view` but no other table state restores the view, and it beats the startup default. Absent table parameters mean the table's own defaults.
+Then the table state in the URL (filters, sort, search, grouping, tab) is put back on top of the view. So the URL state wins, and only the active marker and a preset's hidden query come back. A link with only `?view=` marks the view (and a preset's hidden query) as active. The table shows what the URL says, or its defaults. The view's own filters and search are not applied from a bare marker. The marker still beats the startup default.
 
 Relation managers, table widgets and custom Livewire classes without `#[Url]` table state have no URL for the marker. A reload there starts from the usual start view.
 
 ## Styling
 
-The bar uses Tailwind utility classes, so your panel theme must include them. The default Filament theme is enough. For a custom theme, add the plugin views to the Tailwind `content` list (see the README). The color and icon pickers bring their own inline styles.
+The plugin views use only the Tailwind classes that Filament 3's default theme already ships. Everything else is an inline style or a CSS variable (such as `rgb(var(--primary-500))`). No theme or CSS step is needed.
+
+A custom theme that builds Filament's own views already has the same classes. Only if you want your own Tailwind build to cover the plugin views too, add this to the `content` list in your theme's `tailwind.config.js` (optional):
+
+```js
+'./vendor/tablekit/filament-tablekit/resources/views/**/*.blade.php',
+```

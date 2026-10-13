@@ -61,7 +61,8 @@
                             {{ $chip['label'] }}
                             <x-filament::icon
                                 :icon="FilamentIcon::resolve('tablekit::quick-filters.chevron')"
-                                class="inline h-3.5 w-3.5 align-text-bottom opacity-60"
+                                class="inline h-3.5 w-3.5"
+                                style="vertical-align: text-bottom; opacity: 0.6"
                             />
 
                             @if ($chip['remove'] !== null)

@@ -78,7 +78,7 @@
     @endforeach
 
     @if ($options->favoritesBarDivider() && $favoritePresets->isNotEmpty() && $views->isNotEmpty())
-        <div aria-hidden="true" class="fi-tablekit-divider h-6 w-px bg-gray-200 dark:bg-white/20"></div>
+        <div aria-hidden="true" class="fi-tablekit-divider h-6 w-px" style="background-color: currentColor; opacity: 0.2"></div>
     @endif
 
     @foreach ($views as $view)
