@@ -1,5 +1,7 @@
 <?php
 
+use Elite\TableViews\Support\IconCatalog;
+
 function flattenKeys(array $array, string $prefix = ''): array
 {
     $keys = [];
@@ -66,6 +68,19 @@ it('covers every configured color and icon', function () {
         ->and(array_diff($config['icons'], array_keys($icons)))->toBe([]);
 });
 
+it('translates every catalog icon, its keywords and every color in en and ar', function () {
+    foreach (['en', 'ar'] as $locale) {
+        $icons = require __DIR__."/../../resources/lang/{$locale}/icons.php";
+        $keywords = require __DIR__."/../../resources/lang/{$locale}/icon-keywords.php";
+        $colors = require __DIR__."/../../resources/lang/{$locale}/colors.php";
+
+        expect(array_diff(array_keys(IconCatalog::ICONS), array_keys($icons)))->toBe([], "{$locale} icon labels")
+            ->and(array_diff(array_keys(IconCatalog::ICONS), array_keys($keywords)))->toBe([], "{$locale} icon keywords")
+            ->and(array_diff(array_keys($icons), array_keys(IconCatalog::ICONS)))->toBe([], "{$locale} stray icon labels")
+            ->and(array_diff(config('table-views.colors'), array_keys($colors)))->toBe([], "{$locale} colors");
+    }
+});
+
 it('renders arabic labels when the locale is ar', function () {
     app()->setLocale('ar');
 
@@ -81,7 +96,7 @@ it('uses every translation key and every icon alias', function () {
         $source .= file_get_contents($file);
     }
 
-    foreach (['favorites-bar', 'quick-save', 'validation', 'manager', 'reorder'] as $group) {
+    foreach (['favorites-bar', 'quick-save', 'validation', 'manager', 'reorder', 'sort', 'quick-filters'] as $group) {
         foreach (flattenKeys(require "{$root}/resources/lang/en/{$group}.php") as $key) {
             $parent = str_contains($key, '.') ? substr($key, 0, strrpos($key, '.')) : null;
             $used = str_contains($source, "table-views::{$group}.{$key}")

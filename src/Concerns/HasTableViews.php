@@ -2,6 +2,7 @@
 
 namespace Elite\TableViews\Concerns;
 
+use Closure;
 use Elite\TableViews\Actions\DeleteTableViewAction;
 use Elite\TableViews\Actions\EditTableViewAction;
 use Elite\TableViews\Actions\ManageTableViewsAction;
@@ -32,8 +33,12 @@ use Livewire\Features\SupportQueryString\BaseUrl;
  */
 trait HasTableViews
 {
+    use HasColumnOrderTableViews;
+    use HasMultiSortTableViews;
+    use HasQuickFilterTableViews;
+
     private const TABLE_VIEW_URL_PROPERTIES = [
-        'tableFilters', 'tableSearch', 'tableSort', 'tableGrouping', 'activeTab', 'isTableReordering', 'tableViewUrl',
+        'tableFilters', 'tableSearch', 'tableSort', 'tableGrouping', 'activeTab', 'isTableReordering', 'tableViewUrl', 'tableViewSortsUrl',
     ];
 
     #[Locked]
@@ -60,6 +65,30 @@ trait HasTableViews
 
     protected ?TableViewCatalog $cachedTableViewCatalog = null;
 
+    /**
+     * Livewire lets the browser call any public method except a few lifecycle names, so the trait hooks, which must be public, are refused here.
+     */
+    public function callHasTableViews(string $methodName, array $params, Closure $returnEarly): void
+    {
+        if (in_array($methodName, ['mountHasTableViews', 'bootedHasTableViews', 'renderingHasTableViews', 'callHasTableViews'], true)) {
+            $returnEarly();
+        }
+    }
+
+    /** The table can be rebuilt in the middle of a request (`resetTable()`), so what this plugin changes on it is put back before it renders. */
+    public function renderingHasTableViews(): void
+    {
+        if (! isset($this->table)) {
+            return;
+        }
+
+        $this->installTableViewSortWrapper();
+
+        if ($this->isTableViewQuickFiltersEnabled()) {
+            $this->getTable()->hiddenFilterIndicators();
+        }
+    }
+
     public function mountHasTableViews(): void
     {
         $this->shouldMountHasTableViews = true;
@@ -67,7 +96,14 @@ trait HasTableViews
 
     public function bootedHasTableViews(): void
     {
-        if (! isset($this->table) || ! $this->shouldMountHasTableViews) {
+        if (! isset($this->table)) {
+            return;
+        }
+
+        $this->bootTableViewSorts();
+        $this->bootTableViewQuickFilters();
+
+        if (! $this->shouldMountHasTableViews) {
             return;
         }
 
@@ -75,6 +111,9 @@ trait HasTableViews
 
         $requested = $this->tableViewUrl;
         $this->tableViewUrl = null;
+
+        $this->restoreTableViewSortsFromUrl($this->tableViewSortsUrl);
+        $this->tableViewSortsUrl = null;
 
         if ($this->restoreTableViewFromUrl($requested)) {
             return;
@@ -104,16 +143,20 @@ trait HasTableViews
     }
 
     /**
-     * What the USER left in the session for this table when the page loads, before a view is applied during mount: column toggles and the sort.
-     * Filament writes the session on every first request and a view apply writes it too, so a value only counts when it is not the table default
-     * and not what the last applied view wrote (see markTableViewWrittenParts). Toggles are compared as maps: moving a column is not a toggle change.
+     * What the USER left in the session for this table when the page loads, before a view is applied during mount: the column toggles and order, the pinned
+     * filters and the sorts. Filament writes the session on every first request and a view apply writes it too, so a value only counts when it is not the
+     * table default and not what the last applied view wrote (see markTableViewWrittenParts). Toggles are compared as maps: moving a column is not a toggle change.
      *
-     * @return array{toggles: array<string, bool>|null, sort: string|null}
+     * `orderMark` is the order the last view apply left in the session (null: none was applied), the baseline an order change is measured from.
+     *
+     * @return array{toggles: array<string, bool>|null, order: array<int, string>|null, orderMark: array<int, string>|null, pins: array{0: array<int, string>|null}|null, sort: array<int, array{column: string, direction: string}>|null}
      */
     protected function snapshotPersistedTableViewParts(): array
     {
         $table = $this->getTable();
         $toggles = $this->captureTableViewToggles();
+        $order = $this->captureTableViewColumnOrder();
+        $sorts = $this->effectiveTableViewSorts();
         $written = session()->get($this->getTableViewWrittenSessionKey());
         $written = is_array($written) ? $written : [];
 
@@ -121,13 +164,26 @@ trait HasTableViews
             && $this->tableViewTogglesHash($toggles) !== $this->tableViewTogglesHash($this->defaultTableViewToggles())
             && $this->tableViewTogglesHash($toggles) !== ($written['columns'] ?? null);
 
+        $orderMark = is_array($written['order'] ?? null) ? $written['order'] : null;
+
+        $orderChanged = $table->persistsColumnsInSession()
+            && $order !== []
+            && $order !== $orderMark;
+
+        $pinsChanged = $this->isTableViewQuickFiltersEnabled()
+            && $this->tableViewFavoriteFilters !== null
+            && md5(json_encode($this->tableViewFavoriteFilters)) !== ($written['pins'] ?? null);
+
         $sortChanged = $table->persistsSortInSession()
-            && filled($this->tableSort)
-            && $this->tableSort !== ($written['sort'] ?? null);
+            && $sorts !== []
+            && md5(json_encode($sorts)) !== ($written['sort'] ?? null);
 
         return [
             'toggles' => $togglesChanged ? $toggles : null,
-            'sort' => $sortChanged ? $this->tableSort : null,
+            'order' => $orderChanged ? $order : null,
+            'orderMark' => $orderMark,
+            'pins' => $pinsChanged ? [$this->tableViewFavoriteFilters] : null,
+            'sort' => $sortChanged ? $sorts : null,
         ];
     }
 
@@ -147,8 +203,8 @@ trait HasTableViews
     }
 
     /**
-     * Remembers what a view apply left in the session (column toggles as a hash, the sort string), so a later page load can tell it from a change the user made.
-     * A part the view preserved was not written by the view and keeps its earlier mark.
+     * Remembers what a view apply left in the session (column toggles and order, pinned filters and sorts, each as a hash), so a later page load can tell it
+     * from a change the user made. A part the view preserved was not written by the view and keeps its earlier mark.
      *
      * @param  array<string>  $preserved
      */
@@ -160,10 +216,15 @@ trait HasTableViews
 
         if (! in_array(PresetTableView::PART_COLUMNS, $preserved, true)) {
             $written['columns'] = $this->tableViewTogglesHash($this->captureTableViewToggles());
+            $written['order'] = $this->captureTableViewColumnOrder();
+        }
+
+        if (! in_array(PresetTableView::PART_FILTERS, $preserved, true)) {
+            $written['pins'] = md5(json_encode($this->tableViewFavoriteFilters));
         }
 
         if (! in_array(PresetTableView::PART_SORT, $preserved, true)) {
-            $written['sort'] = $this->tableSort;
+            $written['sort'] = md5(json_encode($this->effectiveTableViewSorts()));
         }
 
         session()->put($key, $written);
@@ -173,7 +234,7 @@ trait HasTableViews
      * A view applied while the page loads must not undo what the user changed after applying it and the session kept.
      * The view stays for everything that is not stored: its marker, a preset's hidden query and the parts the session knows nothing about.
      *
-     * @param  array{toggles: array<string, bool>|null, sort: string|null}  $persisted
+     * @param  array<string, mixed>  $persisted  see snapshotPersistedTableViewParts()
      */
     protected function restorePersistedTableViewParts(array $persisted): void
     {
@@ -181,14 +242,66 @@ trait HasTableViews
             return;
         }
 
-        if ($persisted['toggles'] !== null) {
-            $this->applyTableViewToggles($persisted['toggles']);
+        if ($persisted['toggles'] !== null || $persisted['order'] !== null) {
+            $this->applyTableViewColumns($persisted['toggles'], $persisted['order']);
+        }
+
+        if ($persisted['pins'] !== null && $this->isTableViewQuickFiltersEnabled()) {
+            $this->setTableViewFavoriteFilters($persisted['pins'][0]);
         }
 
         if ($persisted['sort'] !== null) {
-            $this->tableSort = $persisted['sort'];
+            $this->setTableViewSorts($persisted['sort']);
             $this->updatedTableSort();
             $this->flushCachedTableRecords();
+        }
+
+        $this->rebaseTableViewOrder($persisted);
+    }
+
+    /**
+     * A view that saved no order leaves the user's order in place, so the baseline taken while it was applied holds that order. When the session's order is a
+     * change the user made after the last apply, the baseline has to be the order of that apply, or the view would stop showing as modified after a reload.
+     *
+     * @param  array<string, mixed>  $persisted  see snapshotPersistedTableViewParts()
+     */
+    protected function rebaseTableViewOrder(array $persisted): void
+    {
+        if ($persisted['order'] === null || $persisted['orderMark'] === null || ($this->activeTableViewId === null && $this->activeTablePresetKey === null)) {
+            return;
+        }
+
+        $session = session();
+        $key = $this->getTableViewWrittenSessionKey();
+        $written = $session->get($key);
+
+        if (is_array($written)) {
+            $session->put($key, [...$written, 'order' => $persisted['orderMark']]);
+        }
+
+        $state = $this->captureTableViewState()->toArray();
+        $state['columnOrder'] = $persisted['orderMark'];
+
+        $this->activeTableViewHash = TableViewState::fromArray($state)->hash();
+    }
+
+    /**
+     * The state read back from the URL replaces the view's columns, order and pins with what the page had before the view: the session's value when it
+     * stored one, otherwise the table defaults. In the second case the view's own value is the better answer.
+     *
+     * @param  array<string, mixed>  $persisted  see snapshotPersistedTableViewParts()
+     */
+    protected function keepUnpersistedTableViewParts(array $persisted, TableViewState $viewState): void
+    {
+        $toggles = $persisted['toggles'] === null ? $viewState->toggledColumns : null;
+        $order = $persisted['order'] === null ? $viewState->columnOrder : null;
+
+        if ($toggles !== null || $order !== null) {
+            $this->applyTableViewColumns($toggles, $order);
+        }
+
+        if ($persisted['pins'] === null && $this->isTableViewQuickFiltersEnabled()) {
+            $this->setTableViewFavoriteFilters($viewState->favoriteFilters);
         }
     }
 
@@ -217,9 +330,11 @@ trait HasTableViews
     protected function keepChangedTableViewUrlProperties(array $before): void
     {
         foreach ($this->getTableViewUrlAttributes() as $name => $attribute) {
-            $changed = $name === 'tableViewUrl'
-                ? $this->activeTablePresetKey !== null || $this->activeTableViewId !== null
-                : ($before[$name] ?? null) !== json_encode($this->{$name});
+            $changed = match ($name) {
+                'tableViewUrl' => $this->activeTablePresetKey !== null || $this->activeTableViewId !== null,
+                'tableViewSortsUrl' => count($this->tableViewSorts) >= 2,
+                default => ($before[$name] ?? null) !== json_encode($this->{$name}),
+            };
 
             if ($changed) {
                 $attribute->keep = true;
@@ -278,12 +393,18 @@ trait HasTableViews
     protected function queryStringHasTableViews(): array
     {
         return $this->hasUrlBoundTableState()
-            ? ['tableViewUrl' => ['as' => 'view', 'history' => false]]
+            ? ['tableViewUrl' => ['as' => 'view', 'history' => false], 'tableViewSortsUrl' => ['as' => 'sorts', 'history' => false]]
             : [];
     }
 
     public function dehydrateHasTableViews(): void
     {
+        if (isset($this->table)) {
+            // A sort list that no longer starts with the current sort is dead: forget it so it cannot come back when that sort is chosen again.
+            $this->tableViewSorts = count($sorts = $this->effectiveTableViewSorts()) >= 2 ? $sorts : [];
+            $this->persistTableViewSorts();
+        }
+
         if (! $this->hasUrlBoundTableState()) {
             return;
         }
@@ -293,6 +414,8 @@ trait HasTableViews
             $this->activeTableViewId !== null => 'user:'.$this->activeTableViewId,
             default => null,
         };
+
+        $this->tableViewSortsUrl = isset($this->table) ? $this->serializeTableViewSortsForUrl() : null;
     }
 
     protected function hasUrlBoundTableState(): bool
@@ -333,10 +456,8 @@ trait HasTableViews
         $viewState = $this->captureTableViewState();
 
         $this->applyTableViewState($urlState);
-
-        if ($persisted['toggles'] === null) {
-            $this->applyTableViewToggles($viewState->toggledColumns);
-        }
+        $this->keepUnpersistedTableViewParts($persisted, $viewState);
+        $this->rebaseTableViewOrder($persisted);
 
         return true;
     }
@@ -412,6 +533,7 @@ trait HasTableViews
         $preset = $this->resolveDeveloperDefaultPreset();
 
         if ($preset) {
+            $this->resetTableViewColumnOrderToCode();
             $this->activateTablePreset($preset);
             $this->closeTableViewsManagerModal();
 
@@ -653,6 +775,7 @@ trait HasTableViews
     {
         $sortColumn = $this->getTableSortColumn();
         $grouped = filled($this->tableGrouping);
+        $sorts = $this->effectiveTableViewSorts();
 
         return TableViewState::fromArray([
             'v' => TableViewState::VERSION,
@@ -665,7 +788,10 @@ trait HasTableViews
                 'column' => filled($sortColumn) ? $sortColumn : null,
                 'direction' => filled($sortColumn) ? $this->getTableSortDirection() : null,
             ],
+            'sorts' => count($sorts) >= 2 ? $sorts : [],
             'toggledColumns' => $this->captureTableViewToggles(),
+            'columnOrder' => $this->captureTableViewColumnOrder(),
+            'favoriteFilters' => $this->isTableViewQuickFiltersEnabled() ? $this->tableViewFavoriteFilters : null,
             'grouping' => [
                 'column' => $grouped ? (string) str($this->tableGrouping)->before(':') : null,
                 'direction' => $grouped ? $this->getTableGroupingDirection() : null,
@@ -689,6 +815,7 @@ trait HasTableViews
         if (in_array(PresetTableView::PART_FILTERS, $parts, true)) {
             $this->getTableFiltersForm()->fill();
             $this->applyTableViewFilters();
+            $this->setTableViewFavoriteFilters(null);
         }
 
         if (in_array(PresetTableView::PART_SEARCH, $parts, true)) {
@@ -697,13 +824,14 @@ trait HasTableViews
         }
 
         if (in_array(PresetTableView::PART_SORT, $parts, true)) {
+            $this->tableViewSorts = [];
             $this->tableSort = null;
             $this->updatedTableSort();
         }
 
         if (in_array(PresetTableView::PART_COLUMNS, $parts, true)) {
             $keepColumnOrder
-                ? $this->applyTableViewToggles($this->defaultTableViewToggles())
+                ? $this->applyTableViewColumns($this->defaultTableViewToggles())
                 : $this->resetTableColumnManager();
         }
 
@@ -738,6 +866,10 @@ trait HasTableViews
             $filters = Arr::only($state->filters, array_keys($table->getFilters(withHidden: true)));
             $this->getTableFiltersForm()->fill($filters);
             $this->applyTableViewFilters();
+
+            if ($this->isTableViewQuickFiltersEnabled()) {
+                $this->setTableViewFavoriteFilters($state->favoriteFilters);
+            }
         }
 
         if (in_array(PresetTableView::PART_SEARCH, $parts, true)) {
@@ -750,13 +882,12 @@ trait HasTableViews
         }
 
         if (in_array(PresetTableView::PART_SORT, $parts, true)) {
-            $sortable = $state->sortColumn !== null ? $table->getSortableVisibleColumn($state->sortColumn) : null;
-            $this->tableSort = $sortable ? $sortable->getName().':'.($state->sortDirection === 'desc' ? 'desc' : 'asc') : null;
+            $this->setTableViewSorts($state->sortEntries());
             $this->updatedTableSort();
         }
 
         if (in_array(PresetTableView::PART_COLUMNS, $parts, true)) {
-            $this->applyTableViewToggles($state->toggledColumns);
+            $this->applyTableViewColumns($state->toggledColumns, $state->columnOrder);
         }
 
         if (in_array(PresetTableView::PART_GROUPING, $parts, true)) {
@@ -779,33 +910,6 @@ trait HasTableViews
     protected function applyTableViewFilters(): void
     {
         $this->getTable()->hasDeferredFilters() ? $this->applyTableFilters() : $this->handleTableFilterUpdates();
-    }
-
-    /**
-     * Saved values win; toggleable columns missing from the saved state keep their default, so a column added later is not hidden.
-     * Names that are no longer toggleable columns are dropped. The current column order is kept.
-     *
-     * @param  array<string, mixed>  $saved  column name => shown (a nested map from Filament 3 is flattened)
-     */
-    protected function applyTableViewToggles(array $saved): void
-    {
-        if ($this->getTable()->hasColumnsLayout()) {
-            return;
-        }
-
-        $saved = Arr::dot($saved);
-        $defaults = $this->defaultTableViewToggles();
-
-        $this->applyTableColumnManager($this->mapTableViewColumnItems(
-            $this->tableColumns,
-            function (array $item) use ($saved, $defaults): array {
-                if ($item['isToggleable'] && array_key_exists($item['name'], $defaults)) {
-                    $item['isToggled'] = array_key_exists($item['name'], $saved) ? (bool) $saved[$item['name']] : $defaults[$item['name']];
-                }
-
-                return $item;
-            },
-        ));
     }
 
     /**
@@ -853,7 +957,7 @@ trait HasTableViews
      * @param  array<int, array<string, mixed>>  $items
      * @return array<int, array<string, mixed>>
      */
-    protected function mapTableViewColumnItems(array $items, \Closure $map): array
+    protected function mapTableViewColumnItems(array $items, Closure $map): array
     {
         return array_map(function (array $item) use ($map): array {
             if (($item['type'] ?? null) === self::TABLE_COLUMN_MANAGER_GROUP_TYPE) {
@@ -1043,7 +1147,12 @@ trait HasTableViews
 
     protected function getActiveTableViewSessionKey(): string
     {
-        return 'table-views.'.md5($this->getTableViewsResourceKey().'|'.CurrentContext::tenantType().'|'.CurrentContext::tenantId()).'.active';
+        return $this->getTableViewSessionKey('active');
+    }
+
+    protected function getTableViewSessionKey(string $name): string
+    {
+        return 'table-views.'.md5($this->getTableViewsResourceKey().'|'.CurrentContext::tenantType().'|'.CurrentContext::tenantId()).'.'.$name;
     }
 
     protected function forgetActiveTableView(): void
@@ -1095,9 +1204,9 @@ trait HasTableViews
     }
 
     /**
-     * @param  \Closure(TableViewPreferences): bool  $change
+     * @param  Closure(TableViewPreferences): bool  $change
      */
-    protected function changeTableViewPreferences(\Closure $change): void
+    protected function changeTableViewPreferences(Closure $change): void
     {
         $this->forgetCachedTableViews();
 

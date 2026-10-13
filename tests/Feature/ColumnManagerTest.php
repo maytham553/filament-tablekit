@@ -60,14 +60,18 @@ describe('toggled columns in the Filament 4 column manager', function () {
             ->and(headerCells($source->html()))->toBe(['reference', 'amount', 'notes']);
     });
 
-    it('does not save the column order, only what is shown', function () {
+    it('saves the column order next to what is shown, only when it differs from the table order', function () {
         $source = Livewire::test(ListOrdersReorderableColumns::class);
         $items = $source->get('tableColumns');
+
+        expect(array_keys(quickSave($source, 'Plain')->state->toArray()))->not->toContain('columnOrder');
+
         $source->call('applyTableColumnManager', [$items[0], $items[2], $items[1], $items[3]], true);
 
         $view = quickSave($source, 'Reordered');
 
-        expect(array_keys(json_decode($view->getRawOriginal('state'), true)))->toBe(['v', 'filters', 'search', 'columnSearches', 'sort', 'toggledColumns', 'grouping'])
+        expect(array_keys(json_decode($view->getRawOriginal('state'), true)))->toBe(['v', 'filters', 'search', 'columnSearches', 'sort', 'toggledColumns', 'grouping', 'columnOrder'])
+            ->and($view->state->columnOrder)->toBe(['reference', 'amount', 'status', 'notes'])
             ->and(array_keys($view->state->toggledColumns))->toBe(['amount', 'status', 'notes']);
     });
 

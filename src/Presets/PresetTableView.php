@@ -54,6 +54,9 @@ class PresetTableView
 
     protected ?string $defaultSortDirection = null;
 
+    /** @var array<int, array{column: string, direction: string}> */
+    protected array $defaultSorts = [];
+
     protected ?string $defaultSearch = null;
 
     /** @var array<string, mixed>|null */
@@ -61,6 +64,12 @@ class PresetTableView
 
     /** @var array<string>|null */
     protected ?array $defaultToggledColumns = null;
+
+    /** @var array<string>|null */
+    protected ?array $defaultColumnOrder = null;
+
+    /** @var array<string>|null */
+    protected ?array $defaultFavoriteFilters = null;
 
     protected ?string $defaultGroupingColumn = null;
 
@@ -157,18 +166,25 @@ class PresetTableView
     }
 
     /**
-     * @param  string|array<string, string>  $column  a column name, or `['column' => 'direction', ...]`: only the first pair is used
+     * @param  string|array<string, string>  $column  a column name, or `['column' => 'direction', ...]` for a multi-sort (first = highest priority)
      */
     public function defaultSort(string|array|null $column, string $direction = 'asc'): static
     {
+        $sorts = [];
+
         if (is_array($column)) {
-            $name = array_key_first($column);
-            $direction = is_string($name) ? (string) $column[$name] : 'asc';
-            $column = is_string($name) ? $name : null;
+            foreach ($column as $name => $sortDirection) {
+                if (is_string($name) && $name !== '' && ! isset($sorts[$name])) {
+                    $sorts[$name] = ['column' => $name, 'direction' => strtolower((string) $sortDirection) === 'desc' ? 'desc' : 'asc'];
+                }
+            }
+        } elseif (is_string($column) && $column !== '') {
+            $sorts[$column] = ['column' => $column, 'direction' => strtolower($direction) === 'desc' ? 'desc' : 'asc'];
         }
 
-        $this->defaultSortColumn = is_string($column) && $column !== '' ? $column : null;
-        $this->defaultSortDirection = $this->defaultSortColumn === null ? null : (strtolower($direction) === 'desc' ? 'desc' : 'asc');
+        $this->defaultSorts = array_values($sorts);
+        $this->defaultSortColumn = $this->defaultSorts[0]['column'] ?? null;
+        $this->defaultSortDirection = $this->defaultSorts[0]['direction'] ?? null;
 
         return $this;
     }
@@ -192,6 +208,32 @@ class PresetTableView
     public function defaultToggledColumns(?array $columns): static
     {
         $this->defaultToggledColumns = $columns === null ? null : array_values(array_map('strval', $columns));
+
+        return $this;
+    }
+
+    /**
+     * Column order and visibility in one call: the listed columns first, in this order. Toggleable columns that are not listed are hidden,
+     * the other unlisted columns are appended in their code order.
+     *
+     * @param  array<string>|null  $columns
+     */
+    public function defaultColumns(?array $columns): static
+    {
+        $this->defaultToggledColumns($columns);
+        $this->defaultColumnOrder = $columns === null ? null : array_values(array_unique(array_map('strval', $columns)));
+
+        return $this;
+    }
+
+    /**
+     * The filters whose chip is pinned in the quick filter bar while this preset is active. Replaces the filters marked with `favorite()`.
+     *
+     * @param  array<string>|null  $filters  filter names
+     */
+    public function defaultFavoriteFilters(?array $filters): static
+    {
+        $this->defaultFavoriteFilters = $filters === null ? null : array_values(array_unique(array_map('strval', $filters)));
 
         return $this;
     }
@@ -409,7 +451,7 @@ class PresetTableView
     public function getDefinedParts(): array
     {
         return array_keys(array_filter([
-            self::PART_FILTERS => $this->defaultFilters !== null,
+            self::PART_FILTERS => $this->defaultFilters !== null || $this->defaultFavoriteFilters !== null,
             self::PART_SEARCH => $this->defaultSearch !== null || $this->defaultColumnSearches !== null,
             self::PART_SORT => $this->defaultSortColumn !== null,
             self::PART_COLUMNS => $this->defaultToggledColumns !== null,
@@ -430,7 +472,10 @@ class PresetTableView
             'search' => $this->defaultSearch ?? '',
             'columnSearches' => $this->defaultColumnSearches ?? [],
             'sort' => ['column' => $this->defaultSortColumn, 'direction' => $this->defaultSortDirection],
+            'sorts' => $this->defaultSorts,
             'grouping' => ['column' => $this->defaultGroupingColumn, 'direction' => $this->defaultGroupingDirection],
+            'columnOrder' => $this->defaultColumnOrder ?? [],
+            'favoriteFilters' => $this->defaultFavoriteFilters,
         ]);
     }
 

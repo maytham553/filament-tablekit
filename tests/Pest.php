@@ -3,7 +3,9 @@
 use Elite\TableViews\Models\TablePreference;
 use Elite\TableViews\Models\TableView;
 use Elite\TableViews\Support\TableViewState;
+use Elite\TableViews\Tests\Fixtures\Order;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
+use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Elite\TableViews\Tests\TestCase;
 use Livewire\Features\SupportTesting\Testable;
@@ -178,4 +180,187 @@ function browserUrl(Testable $mounted, array $pageQuery = []): Closure
 
         return $parsed;
     };
+}
+
+/**
+ * Sets the presets returned by the ListOrdersPhase3Presets fixture.
+ */
+function phase3Presets(array|Closure $presets): void
+{
+    ListOrdersPhase3Presets::$presets = $presets;
+}
+
+function sortColumnOf(Testable $component): ?string
+{
+    return $component->instance()->getTableSortColumn();
+}
+
+function sortDirectionOf(Testable $component): ?string
+{
+    return $component->instance()->getTableSortDirection();
+}
+
+/**
+ * The references in the order the table query returns them, ignoring pagination.
+ *
+ * @return array<int, string>
+ */
+function queryReferences(Testable $component): array
+{
+    return $component->instance()->getFilteredSortedTableQuery()->pluck('reference')->all();
+}
+
+/**
+ * What the database order should be for a status rank, an amount and the reference as the last tie-break (the rank mirrors the fixture's sort closure).
+ *
+ * @param  array<int, array{0: string, 1: string}>  $keys  [field, direction] pairs, field = rank|amount|reference|customer_name|id
+ * @return array<int, string>
+ */
+function expectedReferences(array $keys): array
+{
+    $rank = ['paid' => 1, 'shipped' => 2, 'pending' => 3];
+
+    return Order::query()->get()
+        ->sort(function ($a, $b) use ($keys, $rank): int {
+            foreach ($keys as [$field, $direction]) {
+                $valueA = $field === 'rank' ? ($rank[$a->status] ?? 4) : $a->{$field};
+                $valueB = $field === 'rank' ? ($rank[$b->status] ?? 4) : $b->{$field};
+                $result = $valueA <=> $valueB;
+
+                if ($result !== 0) {
+                    return $direction === 'desc' ? -$result : $result;
+                }
+            }
+
+            return 0;
+        })
+        ->pluck('reference')
+        ->values()
+        ->all();
+}
+
+/**
+ * One column of the rows in the order the table query returns them, ignoring pagination.
+ *
+ * @return array<int, mixed>
+ */
+function queryColumn(Testable $component, string $column): array
+{
+    return $component->instance()->getFilteredSortedTableQuery()->pluck($column)->all();
+}
+
+function isSortedAscending(array $values): bool
+{
+    $sorted = $values;
+    sort($sorted);
+
+    return $sorted === $values;
+}
+
+/**
+ * The markup of one chip, from its marker to the next chip (or the end of the header).
+ */
+function chipHtml(string $html, string $name): string
+{
+    $start = strpos($html, 'data-quick-filter="'.$name.'"');
+
+    if ($start === false) {
+        return '';
+    }
+
+    $next = strpos($html, 'data-quick-filter="', $start + 10);
+    $end = strpos($html, 'wire:loading.attr="aria-busy"', $start);
+    $next = $next === false ? $end : ($end === false ? $next : min($next, $end));
+
+    return substr($html, $start, ($next === false ? strlen($html) : $next) - $start);
+}
+
+/**
+ * The filter-state bindings (wire:model, or $wire.$entangle for the JS select) inside a chip's markup (its popover): path => modifier ('.live' or '').
+ *
+ * @return array<string, string>
+ */
+function popoverBindings(string $html, string $name): array
+{
+    preg_match_all('/wire:model(\.[a-z.]+)?="((?:tableViewQuickFilterState|tableFilters|tableDeferredFilters)[^"]*)"/', chipHtml($html, $name), $matches);
+
+    $bindings = array_combine($matches[2], $matches[1]);
+
+    preg_match_all('/\$entangle\(\'((?:tableViewQuickFilterState|tableFilters|tableDeferredFilters)[^\']*)\', (true|false)\)/', chipHtml($html, $name), $entangled);
+
+    foreach ($entangled[1] as $index => $path) {
+        $bindings[$path] ??= $entangled[2][$index] === 'true' ? '.live' : '';
+    }
+
+    return $bindings;
+}
+
+/**
+ * Values that occur more than once for an attribute (`id`, `wire:key`) in the rendered HTML.
+ *
+ * @return array<int, string>
+ */
+function duplicateAttributeValues(string $html, string $attribute): array
+{
+    preg_match_all('/\s'.preg_quote($attribute, '/').'="([^"]+)"/', $html, $matches);
+
+    return array_keys(array_filter(array_count_values($matches[1]), fn (int $count): bool => $count > 1));
+}
+
+function chipNames(string $html): array
+{
+    preg_match_all('/data-quick-filter="([^"]+)"/', $html, $matches);
+
+    return $matches[1];
+}
+
+/**
+ * The column names of the table header, left to right.
+ *
+ * @return array<int, string>
+ */
+function headerOrder(string $html): array
+{
+    preg_match_all('/<th[^>]*?fi-ta-header-cell-(?!sorted)([a-z0-9-]+)/', $html, $matches);
+
+    return $matches[1];
+}
+
+/**
+ * Column names in the order of the column manager state.
+ *
+ * @return array<int, string>
+ */
+function managerOrder(Testable $component): array
+{
+    $names = function (array $items) use (&$names): array {
+        return array_merge(...array_map(fn (array $item): array => $item['type'] === 'group' ? $names($item['columns']) : [$item['name']], $items));
+    };
+
+    return $names($component->get('tableColumns'));
+}
+
+/**
+ * Does what the column manager does when the user drags a column: sends the whole list back in the given name order (a group moves with its columns).
+ *
+ * @param  array<int, string>  $order
+ */
+function reorderColumns(Testable $component, array $order): Testable
+{
+    $items = $component->get('tableColumns');
+    $score = fn (array $item): int => $item['type'] === 'group'
+        ? min(array_map(fn (array $column): int => (int) array_search($column['name'], $order, true), $item['columns']))
+        : (int) array_search($item['name'], $order, true);
+
+    usort($items, fn (array $a, array $b): int => $score($a) <=> $score($b));
+
+    $items = array_map(function (array $item) use ($order): array {
+        if ($item['type'] === 'group') {
+            usort($item['columns'], fn (array $a, array $b): int => array_search($a['name'], $order, true) <=> array_search($b['name'], $order, true));
+        }
+
+        return $item;
+    }, $items);
+
+    return $component->call('applyTableColumnManager', $items, true);
 }

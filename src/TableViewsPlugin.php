@@ -46,6 +46,16 @@ class TableViewsPlugin implements Plugin
 
     protected bool|Closure|null $managedDefaultViews = null;
 
+    protected bool|Closure|null $multiSort = null;
+
+    protected ?int $maxSorts = null;
+
+    protected bool|Closure|null $quickFilters = null;
+
+    protected ?int $indicatorLabelLimit = null;
+
+    protected bool|Closure|null $columnReordering = null;
+
     public static function make(): static
     {
         return app(static::class);
@@ -180,6 +190,72 @@ class TableViewsPlugin implements Plugin
         $this->managedDefaultViews = $condition;
 
         return $this;
+    }
+
+    /**
+     * Sort by several columns at once (a Sort button next to the grouping selector). A header click still replaces it with that single sort.
+     */
+    public function multiSort(bool|Closure $enabled = true, ?int $max = null): static
+    {
+        $this->multiSort = $enabled;
+        $this->maxSorts = $max;
+
+        return $this;
+    }
+
+    /**
+     * Replaces Filament's filter indicator bar with clickable chips (a popover with the filter's fields) and keeps favorite filters visible.
+     */
+    public function quickFilters(bool|Closure $enabled = true): static
+    {
+        $this->quickFilters = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Shorten a multi-select chip to "A, B & 3 more" after this many values. 0 or null = show all.
+     */
+    public function limitIndicatorLabels(?int $count = 2): static
+    {
+        $this->indicatorLabelLimit = $count ?? 0;
+
+        return $this;
+    }
+
+    /**
+     * Save and apply the column order (made in Filament's column manager) in views and presets.
+     */
+    public function columnReordering(bool|Closure $enabled = true): static
+    {
+        $this->columnReordering = $enabled;
+
+        return $this;
+    }
+
+    public function isMultiSortEnabled(): ?bool
+    {
+        return $this->evaluateNullableBool($this->multiSort);
+    }
+
+    public function getMaxSorts(): ?int
+    {
+        return $this->maxSorts;
+    }
+
+    public function areQuickFiltersEnabled(): ?bool
+    {
+        return $this->evaluateNullableBool($this->quickFilters);
+    }
+
+    public function getIndicatorLabelLimit(): ?int
+    {
+        return $this->indicatorLabelLimit;
+    }
+
+    public function isColumnReorderingEnabled(): ?bool
+    {
+        return $this->evaluateNullableBool($this->columnReordering);
     }
 
     public function isFavoritesBarEnabled(): ?bool
