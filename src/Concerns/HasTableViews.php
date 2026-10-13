@@ -60,6 +60,9 @@ trait HasTableViews
 
     protected bool $shouldMountHasTableViews = false;
 
+    /** Livewire lets a browser call `boot*`/`booted*`/`mount*` hooks by name: each of ours runs once per request, in the order Livewire runs them. */
+    protected bool $hasBootedTableViews = false;
+
     /** @var array<string, PresetTableView>|null */
     protected ?array $cachedTablePresets = null;
 
@@ -67,14 +70,18 @@ trait HasTableViews
 
     public function mountHasTableViews(): void
     {
-        $this->shouldMountHasTableViews = true;
+        if (! $this->hasBootedTableViews) {
+            $this->shouldMountHasTableViews = true;
+        }
     }
 
     public function bootedHasTableViews(): void
     {
-        if (! isset($this->table)) {
+        if ($this->hasBootedTableViews || ! isset($this->table)) {
             return;
         }
+
+        $this->hasBootedTableViews = true;
 
         $this->bootTableViewColumnOrder();
         $this->bootTableViewSorts();

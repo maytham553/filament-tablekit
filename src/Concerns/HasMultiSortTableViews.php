@@ -5,6 +5,7 @@ namespace Elite\TableViews\Concerns;
 use Elite\TableViews\Support\ReorderedKeys;
 use Elite\TableViews\Support\TableViewsOptions;
 use Filament\Tables\Columns\Column;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Locked;
 
@@ -32,6 +33,9 @@ trait HasMultiSortTableViews
     /** @var array<string, Column>|null */
     protected ?array $cachedTableViewSortableColumns = null;
 
+    /** The table the wrapper was installed on: a second install would wrap the wrappers. */
+    protected ?Table $tableViewSortsTable = null;
+
     /** Return false from a component to turn multi-sort off for its table. */
     public static function multiSortTableViews(): bool
     {
@@ -58,6 +62,11 @@ trait HasMultiSortTableViews
 
     protected function bootTableViewSorts(): void
     {
+        if ($this->tableViewSortsTable === $this->getTable()) {
+            return;
+        }
+
+        $this->tableViewSortsTable = $this->getTable();
         $this->tableViewOriginalSortColumns = [];
         $this->cachedTableViewSortableColumns = null;
 
@@ -67,10 +76,10 @@ trait HasMultiSortTableViews
 
         foreach ($this->getTableViewSortableColumns() as $name => $column) {
             $name = (string) $name;
-            $this->tableViewOriginalSortColumns[$name] = clone $column;
+            $this->tableViewOriginalSortColumns[$name] = $original = clone $column;
 
-            $column->sortable(true, function (Builder $query, string $direction) use ($name): void {
-                $this->tableViewOriginalSortColumns[$name]->applySort($query, $direction);
+            $column->sortable(true, function (Builder $query, string $direction) use ($name, $original): void {
+                $original->applySort($query, $direction);
 
                 foreach ($this->getTableViewExtraSorts($name, $direction) as $sort) {
                     $this->tableViewOriginalSortColumns[$sort['column']]->applySort($query, $sort['direction']);

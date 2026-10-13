@@ -669,3 +669,46 @@ describe('switches', function () {
         $component->assertCanSeeTableRecords(Order::orderByDesc('amount')->take(25)->get(), inOrder: true);
     });
 });
+
+describe('lifecycle hooks called from the browser', function () {
+    it('keeps the sorts working when a client calls a boot hook', function (string $hook) {
+        $component = Livewire::test(ListOrdersPhase3::class)
+            ->call('addTableViewSort', 'customer_name')
+            ->call('addTableViewSort', 'amount')
+            ->call('setTableViewSortDirection', 'amount', 'desc');
+
+        $expected = expectedReferences([['customer_name', 'asc'], ['amount', 'desc']]);
+
+        $component->call($hook)->call($hook)->call('$refresh');
+
+        expect(sortsOf($component))->toHaveCount(2)
+            ->and(queryReferences($component))->toBe($expected)
+            ->and($component->html())->not->toBeEmpty();
+    })->with(['bootedHasTableViews', 'mountHasTableViews']);
+
+    it('installs the sort wrapper once per table object', function () {
+        $component = Livewire::test(ListOrdersPhase3::class)->call('addTableViewSort', 'customer_name');
+        $originals = fn (): array => (new ReflectionProperty($component->instance(), 'tableViewOriginalSortColumns'))->getValue($component->instance());
+        $before = $originals();
+
+        callProtected($component, 'bootTableViewSorts');
+        callProtected($component, 'bootTableViewSorts');
+
+        expect($before)->not->toBe([])
+            ->and($originals())->toBe($before)
+            ->and(queryReferences($component))->toBe(expectedReferences([['customer_name', 'asc']]));
+    });
+});
+
+it('ignores a client call of the mount hook once the component has booted', function () {
+    $instance = Livewire::test(ListOrdersPhase3::class)->instance();
+    $property = new ReflectionProperty($instance, 'shouldMountHasTableViews');
+
+    $instance->mountHasTableViews();
+
+    expect($property->getValue($instance))->toBeFalse();
+
+    $instance->bootedHasTableViews();
+
+    expect($property->getValue($instance))->toBeFalse();
+});

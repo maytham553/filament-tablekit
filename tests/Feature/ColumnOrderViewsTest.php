@@ -184,6 +184,24 @@ describe('Default and presets', function () {
         expect(headerOrder($component->html()))->toBe(['reference', 'customer-name', 'amount', 'status', 'team', 'ordered-at', 'plain']);
     });
 
+    it('renders the code order after Default with a developer default preset that sets no columns', function () {
+        phase3Presets(['start' => PresetTableView::make()->default()->defaultSearch('')]);
+
+        $component = Livewire::test(ListOrdersPhase3Presets::class)->call('reorderTableViewColumn', 'amount', 'up')->call('applyDefaultTableView');
+
+        expect($component->get('tableViewColumnOrder'))->toBe([])
+            ->and(headerOrder($component->html()))->toBe(CODE_HEADERS);
+    });
+
+    it('renders the code order for a preset whose columns equal the code order', function () {
+        phase3Presets(['same' => PresetTableView::make()->defaultColumns(['reference', 'customer_name', 'status', 'amount', 'internal', 'team.name', 'notes', 'ordered_at', 'plain'])]);
+
+        $component = Livewire::test(ListOrdersPhase3Presets::class)->call('reorderTableViewColumn', 'amount', 'up')->call('applyTablePresetView', 'same');
+
+        expect($component->get('tableViewColumnOrder'))->toBe([])
+            ->and(headerOrder($component->html()))->toBe(['reference', 'customer-name', 'status', 'amount', 'team', 'notes', 'ordered-at', 'plain']);
+    });
+
     it('applies the columns of a developer default preset on the first load', function () {
         phase3Presets(['start' => PresetTableView::make()->default()->defaultColumns(['status', 'reference'])]);
 
