@@ -4,6 +4,9 @@ return [
     // The migration creates this table, so it is config only.
     'table' => 'table_views',
 
+    // Per user preferences (favorites, order, managed default). Also config only, the migration reads it.
+    'preferences_table' => 'table_view_preferences',
+
     // null = the app's default connection at the time of use. In an app that switches the default connection
     // per panel or module, pin one connection here or per panel with TableViewsPlugin::connection().
     // The table must exist on that connection (php artisan migrate --database=<connection>).
@@ -19,7 +22,32 @@ return [
 
     'favorites_bar' => [
         'enabled' => true,
+        // A divider between preset views and the user's own views.
+        'divider' => true,
     ],
+
+    'view_manager' => [
+        'enabled' => true,
+        'slide_over' => false,
+        // 'start' = before the Default button, 'end' = after Save view.
+        'position' => 'end',
+        // null = show the search box when there are more than 8 views.
+        'search' => null,
+    ],
+
+    'preset_views' => [
+        // false = users cannot reorder or unfavorite presets.
+        'manageable' => true,
+        // Where presets the user has not ranked yet go: 'before' or 'after' the ranked ones.
+        'new_sort_position' => 'after',
+        // Lock icon on preset rows in the manager.
+        'lock_icon' => true,
+        // Allow Quick Save while a preset with a modifyQueryUsing is active. The hidden query is not saved.
+        'create_from_preset_with_query' => false,
+    ],
+
+    // Let each user mark one view per table as their default.
+    'managed_default_views' => false,
 
     'quick_save' => [
         'slide_over' => false,

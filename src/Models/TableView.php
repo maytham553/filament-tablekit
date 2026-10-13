@@ -46,6 +46,17 @@ class TableView extends Model
         'sort' => 'integer',
     ];
 
+    protected static function booted(): void
+    {
+        static::deleted(function (self $view): void {
+            TablePreference::query()
+                ->ofType(TablePreference::TYPE_USER)
+                ->where('view_key', (string) $view->getKey())
+                ->where('resource', $view->resource)
+                ->delete();
+        });
+    }
+
     public function getTable(): string
     {
         return TableViewsOptions::resolve()->tableName();

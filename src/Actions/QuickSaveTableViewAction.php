@@ -52,4 +52,24 @@ class QuickSaveTableViewAction
                     ->send();
             });
     }
+
+    /**
+     * Shown instead of the real action while a preset with a hidden query is active: that query would not be part of the saved view.
+     */
+    public static function blocked(): Action
+    {
+        return Action::make('quickSaveTableView')
+            ->label(__('table-views::quick-save.label'))
+            ->icon(FilamentIcon::resolve('table-views::quick-save'))
+            ->color('gray')
+            ->size(Size::Small)
+            ->outlined()
+            ->action(function (): void {
+                Notification::make()
+                    ->title(__('table-views::quick-save.preset_with_query_title'))
+                    ->body(__('table-views::quick-save.preset_with_query_body'))
+                    ->warning()
+                    ->send();
+            });
+    }
 }

@@ -55,7 +55,7 @@ it('marks only the active view as modified, with text a screen reader can read',
 
     $html = $component->set('tableSearch', 'ORD-02')->html();
 
-    expect($html)->toContain('<span class="sr-only">'.__('table-views::favorites-bar.modified').'</span>')
+    expect($html)->toContain('<span class="fi-sr-only">'.__('table-views::favorites-bar.modified').'</span>')
         ->and(viewButton($html, $view->id))->toContain('title="'.__('table-views::favorites-bar.modified').'"');
 });
 

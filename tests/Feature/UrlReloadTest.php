@@ -2,6 +2,7 @@
 
 use Elite\TableViews\Tests\Fixtures\Order;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
+use Illuminate\Support\Arr;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
 
@@ -45,11 +46,12 @@ describe('reload reproduces what the user saw after a remembered view was applie
 
         $always = collect($mounted->effects['url'])->filter(fn ($entry) => $entry['alwaysShow'])->keys()->sort()->values()->all();
 
-        expect($always)->toBe(['tableFilters', 'tableGrouping', 'tableSort'])
+        expect($always)->toBe(['tableFilters', 'tableGrouping', 'tableSort', 'tableViewUrl'])
             ->and(browserUrl($mounted)($mounted))->toMatchArray([
                 'filters' => ['status' => ['value' => 'shipped'], 'big' => ['isActive' => 'true']],
                 'sort' => 'ordered_at:desc',
                 'grouping' => 'status:desc',
+                'view' => 'user:'.$this->shipped->id,
             ])->not->toHaveKey('search');
     });
 
@@ -111,9 +113,9 @@ describe('reload reproduces what the user saw after a remembered view was applie
         expectSameScreen($mounted, $reloaded);
     });
 
-    it('does not apply the remembered view again when the url carries table state', function () {
+    it('does not apply the remembered view again when the url carries table state and no view marker', function () {
         $mounted = Livewire::test(ListOrders::class);
-        $reloaded = reloadOrders(browserUrl($mounted)($mounted));
+        $reloaded = reloadOrders(Arr::except(browserUrl($mounted)($mounted), 'view'));
 
         expect($reloaded->get('activeTableViewId'))->toBeNull();
     });
