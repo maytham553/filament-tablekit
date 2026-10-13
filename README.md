@@ -6,6 +6,8 @@ Saved views and power tools for Filament tables.
 
 [Watch the full demo on YouTube (77 s, with sound)](https://youtu.be/sZXJRwCzboU)
 
+Website and full documentation: https://maytham553.github.io/filament-tablekit/
+
 TableKit (`tablekit/filament-tablekit`) lets your users save the state of a table as a named view and open it again in one click. A bar above the table shows their favorite views. You can also ship ready-made views of your own.
 
 You are reading the docs for **Filament 5**. See [Which version?](#which-version) for the other branches.
