@@ -703,7 +703,7 @@ describe('the browser cannot re-run the lifecycle hooks', function () {
 
         $before = orderBySql($component);
 
-        expect(fn () => $component->call($hook))->toThrow(\Livewire\Exceptions\DirectlyCallingLifecycleHooksNotAllowedException::class)
+        expect(fn () => $component->call($hook))->toThrow('Unable to call lifecycle method')
             ->and(orderBySql($component))->toBe($before);
     })->with(['mountHasTableViews', 'bootedHasTableViews']);
 
