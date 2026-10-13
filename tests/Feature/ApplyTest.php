@@ -1,11 +1,11 @@
 <?php
 
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersDeferred;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithTabs;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersDeferred;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithTabs;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -186,7 +186,7 @@ it('applies the saved tab only when the flag is on', function () {
         ->call('applyTableView', $view->id)
         ->assertSet('activeTab', 'all');
 
-    config(['table-views.state.tab' => true]);
+    config(['tablekit.state.tab' => true]);
 
     $component->call('applyTableView', $view->id)
         ->assertSet('activeTab', 'paid')
@@ -194,7 +194,7 @@ it('applies the saved tab only when the flag is on', function () {
 });
 
 it('ignores a saved tab that no longer exists', function () {
-    config(['table-views.state.tab' => true]);
+    config(['tablekit.state.tab' => true]);
 
     $view = storeView($this->user->id, ['tab' => 'gone'], ['resource' => ListOrdersWithTabs::class]);
 
@@ -218,7 +218,7 @@ it('ignores a view id that is not a plain bigint without querying for it', funct
         ->call('applyTableView', $id)
         ->assertSet('activeTableViewId', null);
 
-    $lookups = collect(DB::getQueryLog())->pluck('query')->filter(fn (string $sql) => str_contains($sql, 'table_views') && str_contains($sql, '"id" ='));
+    $lookups = collect(DB::getQueryLog())->pluck('query')->filter(fn (string $sql) => str_contains($sql, 'tablekit_views') && str_contains($sql, '"id" ='));
 
     expect($lookups)->toBeEmpty();
 })->with([

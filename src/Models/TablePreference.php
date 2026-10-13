@@ -1,12 +1,12 @@
 <?php
 
-namespace Elite\TableViews\Models;
+namespace TableKit\Models;
 
-use Elite\TableViews\Support\CurrentContext;
-use Elite\TableViews\Support\TableViewsOptions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\UniqueConstraintViolationException;
+use TableKit\Support\CurrentContext;
+use TableKit\Support\TableKitOptions;
 
 /**
  * @property int $id
@@ -51,12 +51,12 @@ class TablePreference extends Model
 
     public function getTable(): string
     {
-        return TableViewsOptions::resolve()->preferencesTableName();
+        return TableKitOptions::resolve()->preferencesTableName();
     }
 
     public function getConnectionName(): ?string
     {
-        return TableViewsOptions::resolve()->connection();
+        return TableKitOptions::resolve()->connection();
     }
 
     public function scopeOwnedBy(Builder $query, int|string $userId, ?Model $tenant = null): Builder

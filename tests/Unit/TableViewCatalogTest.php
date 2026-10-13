@@ -1,10 +1,10 @@
 <?php
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Support\TableViewCatalog;
 use Illuminate\Support\Collection;
+use TableKit\Models\TablePreference;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
+use TableKit\Support\TableViewCatalog;
 
 function makePresets(array $keys): array
 {

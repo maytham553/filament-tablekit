@@ -1,6 +1,6 @@
 <?php
 
-use Elite\TableViews\Support\IconCatalog;
+use TableKit\Support\IconCatalog;
 
 function flattenKeys(array $array, string $prefix = ''): array
 {
@@ -62,7 +62,7 @@ it('has no empty translations', function () {
 it('covers every configured color and icon', function () {
     $colors = require __DIR__.'/../../resources/lang/en/colors.php';
     $icons = require __DIR__.'/../../resources/lang/en/icons.php';
-    $config = require __DIR__.'/../../config/table-views.php';
+    $config = require __DIR__.'/../../config/tablekit.php';
 
     expect(array_diff($config['colors'], array_keys($colors)))->toBe([])
         ->and(array_diff($config['icons'], array_keys($icons)))->toBe([]);
@@ -77,15 +77,15 @@ it('translates every catalog icon, its keywords and every color in en and ar', f
         expect(array_diff(array_keys(IconCatalog::ICONS), array_keys($icons)))->toBe([], "{$locale} icon labels")
             ->and(array_diff(array_keys(IconCatalog::ICONS), array_keys($keywords)))->toBe([], "{$locale} icon keywords")
             ->and(array_diff(array_keys($icons), array_keys(IconCatalog::ICONS)))->toBe([], "{$locale} stray icon labels")
-            ->and(array_diff(config('table-views.colors'), array_keys($colors)))->toBe([], "{$locale} colors");
+            ->and(array_diff(config('tablekit.colors'), array_keys($colors)))->toBe([], "{$locale} colors");
     }
 });
 
 it('renders arabic labels when the locale is ar', function () {
     app()->setLocale('ar');
 
-    expect(__('table-views::favorites-bar.default'))->toBe('الافتراضي')
-        ->and(__('table-views::quick-save.fields.name'))->toBe('الاسم');
+    expect(__('tablekit::favorites-bar.default'))->toBe('الافتراضي')
+        ->and(__('tablekit::quick-save.fields.name'))->toBe('الاسم');
 });
 
 it('uses every translation key and every icon alias', function () {
@@ -99,14 +99,14 @@ it('uses every translation key and every icon alias', function () {
     foreach (['favorites-bar', 'quick-save', 'validation', 'manager', 'reorder', 'sort', 'quick-filters'] as $group) {
         foreach (flattenKeys(require "{$root}/resources/lang/en/{$group}.php") as $key) {
             $parent = str_contains($key, '.') ? substr($key, 0, strrpos($key, '.')) : null;
-            $used = str_contains($source, "table-views::{$group}.{$key}")
-                || ($parent !== null && (str_contains($source, "table-views::{$group}.{$parent}.'") || str_contains($source, "table-views::{$group}.{$parent}.\"")));
+            $used = str_contains($source, "tablekit::{$group}.{$key}")
+                || ($parent !== null && (str_contains($source, "tablekit::{$group}.{$parent}.'") || str_contains($source, "tablekit::{$group}.{$parent}.\"")));
 
             expect($used)->toBeTrue("{$group}.{$key} is never used");
         }
     }
 
-    preg_match_all("/'(table-views::(?!icons\\.)[a-z.-]+)' =>/", file_get_contents("{$root}/src/TableViewsServiceProvider.php"), $aliases);
+    preg_match_all("/'(tablekit::(?!icons\\.)[a-z.-]+)' =>/", file_get_contents("{$root}/src/TableKitServiceProvider.php"), $aliases);
 
     expect($aliases[1])->not->toBeEmpty();
 

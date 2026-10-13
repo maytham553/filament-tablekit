@@ -1,23 +1,23 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPersistent;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersReorderableColumnsPresets;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPersistent;
+use TableKit\Tests\Fixtures\Pages\ListOrdersReorderableColumnsPresets;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
 
 beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
 
-    config(['table-views.managed_default_views' => true]);
+    config(['tablekit.managed_default_views' => true]);
 
     $this->viewA = storeView($this->user->id, ['toggledColumns' => ['notes' => true, 'ordered_at' => false]], ['name' => 'A', 'resource' => ListOrdersWithPresets::class]);
     $this->viewB = storeView($this->user->id, ['toggledColumns' => ['notes' => false, 'ordered_at' => true]], ['name' => 'B', 'resource' => ListOrdersWithPresets::class]);
 
     $this->setDefault = function ($view, string $page = ListOrdersWithPresets::class) {
-        DB::table('table_view_preferences')->delete();
+        DB::table('tablekit_preferences')->delete();
         storePreference($this->user->id, 'user', (string) $view->id, ['is_default' => true, 'resource' => $page]);
     };
 });

@@ -1,17 +1,17 @@
 <?php
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
-use Elite\TableViews\Tests\Fixtures\Team;
-use Elite\TableViews\Tests\Fixtures\UlidUser;
-use Elite\TableViews\Tests\Fixtures\User;
 use Filament\Facades\Filament;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
+use TableKit\Models\TablePreference;
+use TableKit\Presets\PresetTableView;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\Team;
+use TableKit\Tests\Fixtures\UlidUser;
+use TableKit\Tests\Fixtures\User;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -30,8 +30,8 @@ function preference(array $attributes = []): array
 }
 
 it('stores the user id and keys in string columns', function () {
-    expect(Schema::getColumnType('table_view_preferences', 'user_id'))->toBe('varchar')
-        ->and(Schema::getColumnType('table_view_preferences', 'view_key'))->toBe('varchar');
+    expect(Schema::getColumnType('tablekit_preferences', 'user_id'))->toBe('varchar')
+        ->and(Schema::getColumnType('tablekit_preferences', 'view_key'))->toBe('varchar');
 });
 
 it('defaults a new row to no favorite choice, not hidden, no sort, not default', function () {
@@ -102,7 +102,7 @@ describe('upsert', function () {
             if (! $raced) {
                 $raced = true;
 
-                DB::table('table_view_preferences')->insert([
+                DB::table('tablekit_preferences')->insert([
                     'user_id' => (string) $this->user->id, 'resource' => 'res', 'view_type' => 'preset', 'view_key' => 'a',
                     'is_hidden' => false, 'is_default' => false, 'sort' => 9,
                 ]);
@@ -175,31 +175,31 @@ describe('connection', function () {
 
     it('uses the configured connection while the default is another one', function () {
         preferencesOn('views', 'elsewhere');
-        config(['table-views.connection' => 'views']);
-        (require __DIR__.'/../../database/migrations/2026_01_01_000001_create_table_view_preferences_table.php')->up();
+        config(['tablekit.connection' => 'views']);
+        (require __DIR__.'/../../database/migrations/2026_01_01_000001_create_tablekit_preferences_table.php')->up();
 
         DB::setDefaultConnection('elsewhere');
 
         $row = TablePreference::create(preference());
 
         expect($row->getConnectionName())->toBe('views')
-            ->and(DB::connection('views')->table('table_view_preferences')->count())->toBe(1)
-            ->and(DB::connection('testing')->table('table_view_preferences')->count())->toBe(0);
+            ->and(DB::connection('views')->table('tablekit_preferences')->count())->toBe(1)
+            ->and(DB::connection('testing')->table('tablekit_preferences')->count())->toBe(0);
     });
 
     it('lets the plugin connection win', function () {
         preferencesOn('plugin');
-        config(['table-views.connection' => 'plugin']);
-        (require __DIR__.'/../../database/migrations/2026_01_01_000001_create_table_view_preferences_table.php')->up();
-        config(['table-views.connection' => null]);
+        config(['tablekit.connection' => 'plugin']);
+        (require __DIR__.'/../../database/migrations/2026_01_01_000001_create_tablekit_preferences_table.php')->up();
+        config(['tablekit.connection' => null]);
 
-        TableViewsPlugin::get()->connection('plugin');
+        TableKitPlugin::get()->connection('plugin');
 
         expect(TablePreference::create(preference())->getConnectionName())->toBe('plugin');
     });
 
     it('reads the table name from config only', function () {
-        config(['table-views.preferences_table' => 'custom_preferences']);
+        config(['tablekit.preferences_table' => 'custom_preferences']);
 
         expect((new TablePreference)->getTable())->toBe('custom_preferences');
     });

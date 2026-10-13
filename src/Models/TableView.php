@@ -1,15 +1,15 @@
 <?php
 
-namespace Elite\TableViews\Models;
+namespace TableKit\Models;
 
-use Elite\TableViews\Support\CurrentContext;
-use Elite\TableViews\Support\TableViewsOptions;
-use Elite\TableViews\Support\TableViewState;
-use Elite\TableViews\Support\TableViewStateCast;
 use Filament\Support\Facades\FilamentColor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use TableKit\Support\CurrentContext;
+use TableKit\Support\TableKitOptions;
+use TableKit\Support\TableViewState;
+use TableKit\Support\TableViewStateCast;
 
 /**
  * @property int $id
@@ -59,17 +59,17 @@ class TableView extends Model
 
     public function getTable(): string
     {
-        return TableViewsOptions::resolve()->tableName();
+        return TableKitOptions::resolve()->tableName();
     }
 
     public function getConnectionName(): ?string
     {
-        return TableViewsOptions::resolve()->connection();
+        return TableKitOptions::resolve()->connection();
     }
 
     public function user(): BelongsTo
     {
-        $model = TableViewsOptions::resolve()->userModel();
+        $model = TableKitOptions::resolve()->userModel();
 
         return $this->belongsTo($model, 'user_id', (new $model)->getKeyName());
     }

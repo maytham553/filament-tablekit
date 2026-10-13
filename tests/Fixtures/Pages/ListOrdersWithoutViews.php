@@ -1,9 +1,9 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\Pages;
+namespace TableKit\Tests\Fixtures\Pages;
 
-use Elite\TableViews\Tests\Fixtures\OrderResource;
 use Filament\Resources\Pages\ListRecords;
+use TableKit\Tests\Fixtures\OrderResource;
 
 class ListOrdersWithoutViews extends ListRecords
 {

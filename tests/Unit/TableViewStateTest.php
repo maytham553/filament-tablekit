@@ -1,7 +1,7 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Support\TableViewState;
+use TableKit\Models\TableView;
+use TableKit\Support\TableViewState;
 
 function sampleState(): TableViewState
 {

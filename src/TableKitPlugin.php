@@ -1,14 +1,14 @@
 <?php
 
-namespace Elite\TableViews;
+namespace TableKit;
 
 use Closure;
-use Elite\TableViews\Support\TableViewsOptions;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
+use TableKit\Support\TableKitOptions;
 
-class TableViewsPlugin implements Plugin
+class TableKitPlugin implements Plugin
 {
     use EvaluatesClosures;
 
@@ -64,17 +64,17 @@ class TableViewsPlugin implements Plugin
     public static function get(): static
     {
         /** @var static */
-        return filament('table-views');
+        return filament('tablekit');
     }
 
-    public static function resolve(): TableViewsOptions
+    public static function resolve(): TableKitOptions
     {
-        return new TableViewsOptions(TableViewsOptions::currentPlugin());
+        return new TableKitOptions(TableKitOptions::currentPlugin());
     }
 
     public function getId(): string
     {
-        return 'table-views';
+        return 'tablekit';
     }
 
     public function register(Panel $panel): void {}
@@ -126,7 +126,7 @@ class TableViewsPlugin implements Plugin
     }
 
     /**
-     * The database connection that holds the views table for this panel. Wins over config('table-views.connection').
+     * The database connection that holds the views table for this panel. Wins over config('tablekit.connection').
      */
     public function connection(?string $connection): static
     {

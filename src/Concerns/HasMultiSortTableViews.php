@@ -1,13 +1,13 @@
 <?php
 
-namespace Elite\TableViews\Concerns;
+namespace TableKit\Concerns;
 
-use Elite\TableViews\Support\ReorderedKeys;
-use Elite\TableViews\Support\TableViewsOptions;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Locked;
+use TableKit\Support\ReorderedKeys;
+use TableKit\Support\TableKitOptions;
 
 /**
  * Sort by several columns. Filament keeps one sort (the `tableSort` string `column:direction`); that stays the primary sort and the others ride on it:
@@ -45,7 +45,7 @@ trait HasMultiSortTableViews
     protected function isTableViewMultiSortEnabled(): bool
     {
         return static::multiSortTableViews()
-            && TableViewsOptions::resolve()->multiSortEnabled()
+            && TableKitOptions::resolve()->multiSortEnabled()
             && count($this->getTableViewSortableColumns()) >= 2;
     }
 
@@ -110,7 +110,7 @@ trait HasMultiSortTableViews
      */
     protected function restoreTableViewSortsFromSession(): void
     {
-        if (! $this->shouldMountHasTableViews || ! $this->getTable()->persistsSortInSession() || ! filled($this->getTableSortColumn())) {
+        if (! $this->shouldMountHasTableKit || ! $this->getTable()->persistsSortInSession() || ! filled($this->getTableSortColumn())) {
             return;
         }
 
@@ -186,7 +186,7 @@ trait HasMultiSortTableViews
         }
 
         return array_values(array_filter(
-            array_slice($list, 1, TableViewsOptions::resolve()->maxSorts() - 1),
+            array_slice($list, 1, TableKitOptions::resolve()->maxSorts() - 1),
             fn (array $sort): bool => isset($this->tableViewOriginalSortColumns[$sort['column']]),
         ));
     }
@@ -256,7 +256,7 @@ trait HasMultiSortTableViews
             return;
         }
 
-        if (count($sorts) >= TableViewsOptions::resolve()->maxSorts()) {
+        if (count($sorts) >= TableKitOptions::resolve()->maxSorts()) {
             return;
         }
 
@@ -356,7 +356,7 @@ trait HasMultiSortTableViews
      */
     protected function commitTableViewSorts(array $sorts): void
     {
-        $sorts = array_slice(array_values($sorts), 0, TableViewsOptions::resolve()->maxSorts());
+        $sorts = array_slice(array_values($sorts), 0, TableKitOptions::resolve()->maxSorts());
 
         $this->setTableViewSorts($sorts);
 
@@ -392,7 +392,7 @@ trait HasMultiSortTableViews
             }
         }
 
-        $limit = $this->isTableViewMultiSortEnabled() ? TableViewsOptions::resolve()->maxSorts() : 1;
+        $limit = $this->isTableViewMultiSortEnabled() ? TableKitOptions::resolve()->maxSorts() : 1;
 
         return array_slice(array_values($valid), 0, $limit);
     }

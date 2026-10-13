@@ -43,7 +43,7 @@
             x-sortable
             x-on:end.stop="$event.oldIndex !== $event.newIndex && saveOrder($el.sortable.toArray())"
         @endunless
-        data-table-views-sortable
+        data-tablekit-sortable
     >
         {{ $slot }}
     </{{ $tag }}>

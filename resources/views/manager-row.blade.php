@@ -1,10 +1,10 @@
 @php
-    use Elite\TableViews\Support\TableViewsOptions;
+    use TableKit\Support\TableKitOptions;
     use Filament\Support\Enums\IconSize;
     use Filament\Support\Facades\FilamentIcon;
     use Illuminate\Support\Js;
 
-    $options = TableViewsOptions::resolve();
+    $options = TableKitOptions::resolve();
     $isPreset = $item->isPreset();
     $canManage = ! $isPreset || $options->presetViewsManageable();
     $isActive = $isPreset
@@ -18,18 +18,18 @@
 @endphp
 
 <li
-    wire:key="table-views-manager-row-{{ $item->type }}-{{ $item->key }}"
+    wire:key="tablekit-manager-row-{{ $item->type }}-{{ $item->key }}"
     data-name="{{ mb_strtolower($item->label) }}"
     data-type="{{ $item->type }}"
     @if ($sortable) x-sortable-item="{{ $item->key }}" @endif
     x-show="! search || $el.dataset.name.includes(search.toLowerCase())"
-    class="fi-table-views-manager-row"
+    class="fi-tablekit-manager-row"
     style="list-style: none"
 >
     {{-- Alpine's x-show drops an inline display value from its own element, so the flex layout lives one level down. --}}
     <div style="display: flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; border-radius: 0.5rem">
     @if ($sortable)
-        <x-table-views::sortable-handle :name="$item->label" />
+        <x-tablekit::sortable-handle :name="$item->label" />
     @endif
 
     <button
@@ -44,7 +44,7 @@
             aria-hidden="true"
         ></span>
 
-        @if ($item->icon && ($icon = FilamentIcon::resolve('table-views::icons.' . $item->icon)))
+        @if ($item->icon && ($icon = FilamentIcon::resolve('tablekit::icons.' . $item->icon)))
             <x-filament::icon :icon="$icon" :size="IconSize::Small" style="flex-shrink: 0; color: var(--gray-400)" />
         @endif
 
@@ -52,39 +52,39 @@
 
         @if ($isActive)
             <x-filament::icon
-                :icon="FilamentIcon::resolve('table-views::manager.active')"
+                :icon="FilamentIcon::resolve('tablekit::manager.active')"
                 :size="IconSize::Small"
                 style="flex-shrink: 0; color: var(--primary-600)"
             />
-            <span class="fi-sr-only">{{ __('table-views::manager.active') }}</span>
+            <span class="fi-sr-only">{{ __('tablekit::manager.active') }}</span>
         @endif
     </button>
 
     @if ($isPreset)
         @if ($options->presetViewLockIcon())
             <x-filament::icon
-                :icon="FilamentIcon::resolve('table-views::manager.preset')"
+                :icon="FilamentIcon::resolve('tablekit::manager.preset')"
                 :size="IconSize::Small"
                 style="flex-shrink: 0; color: var(--gray-400)"
             />
-            <span class="fi-sr-only">{{ __('table-views::manager.type.preset') }}</span>
+            <span class="fi-sr-only">{{ __('tablekit::manager.type.preset') }}</span>
         @endif
     @else
         <x-filament::icon
-            :icon="FilamentIcon::resolve('table-views::manager.user-view')"
+            :icon="FilamentIcon::resolve('tablekit::manager.user-view')"
             :size="IconSize::Small"
             style="flex-shrink: 0; color: var(--gray-400)"
         />
-        <span class="fi-sr-only">{{ __('table-views::manager.type.user') }}</span>
+        <span class="fi-sr-only">{{ __('tablekit::manager.type.user') }}</span>
     @endif
 
     @if ($canManage)
         <x-filament::icon-button
             size="sm"
             color="gray"
-            :icon="FilamentIcon::resolve($item->isFavorite ? 'table-views::manager.favorite' : 'table-views::manager.unfavorite')"
-            :label="$item->isFavorite ? __('table-views::manager.actions.unfavorite') : __('table-views::manager.actions.favorite')"
-            :tooltip="$item->isFavorite ? __('table-views::manager.actions.unfavorite') : __('table-views::manager.actions.favorite')"
+            :icon="FilamentIcon::resolve($item->isFavorite ? 'tablekit::manager.favorite' : 'tablekit::manager.unfavorite')"
+            :label="$item->isFavorite ? __('tablekit::manager.actions.unfavorite') : __('tablekit::manager.actions.favorite')"
+            :tooltip="$item->isFavorite ? __('tablekit::manager.actions.unfavorite') : __('tablekit::manager.actions.favorite')"
             wire:click="toggleTableViewFavorite({{ $targetArguments }})"
         />
     @endif
@@ -93,9 +93,9 @@
         <x-filament::icon-button
             size="sm"
             :color="$item->isDefault ? 'warning' : 'gray'"
-            :icon="FilamentIcon::resolve($item->isDefault ? 'table-views::manager.remove-default' : 'table-views::manager.default')"
-            :label="$item->isDefault ? __('table-views::manager.actions.remove_default') : __('table-views::manager.actions.default')"
-            :tooltip="$item->isDefault ? __('table-views::manager.actions.remove_default') : __('table-views::manager.actions.default')"
+            :icon="FilamentIcon::resolve($item->isDefault ? 'tablekit::manager.remove-default' : 'tablekit::manager.default')"
+            :label="$item->isDefault ? __('tablekit::manager.actions.remove_default') : __('tablekit::manager.actions.default')"
+            :tooltip="$item->isDefault ? __('tablekit::manager.actions.remove_default') : __('tablekit::manager.actions.default')"
             wire:click="toggleTableViewDefault({{ $targetArguments }})"
         />
     @endif
@@ -104,9 +104,9 @@
         <x-filament::icon-button
             size="sm"
             color="gray"
-            :icon="FilamentIcon::resolve('table-views::manager.edit')"
-            :label="__('table-views::manager.actions.edit')"
-            :tooltip="__('table-views::manager.actions.edit')"
+            :icon="FilamentIcon::resolve('tablekit::manager.edit')"
+            :label="__('tablekit::manager.actions.edit')"
+            :tooltip="__('tablekit::manager.actions.edit')"
             wire:click="mountAction('editTableView', { viewId: {{ (int) $item->key }} })"
             :x-on:click="$closeDropdown"
         />
@@ -114,9 +114,9 @@
         <x-filament::icon-button
             size="sm"
             color="danger"
-            :icon="FilamentIcon::resolve('table-views::manager.delete')"
-            :label="__('table-views::manager.actions.delete')"
-            :tooltip="__('table-views::manager.actions.delete')"
+            :icon="FilamentIcon::resolve('tablekit::manager.delete')"
+            :label="__('tablekit::manager.actions.delete')"
+            :tooltip="__('tablekit::manager.actions.delete')"
             wire:click="mountAction('deleteTableView', { viewId: {{ (int) $item->key }} })"
             :x-on:click="$closeDropdown"
         />

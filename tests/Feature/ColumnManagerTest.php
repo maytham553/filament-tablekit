@@ -1,11 +1,11 @@
 <?php
 
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersColumnGroups;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersDottedColumn;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersReorderableColumns;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersSplit;
 use Livewire\Livewire;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersColumnGroups;
+use TableKit\Tests\Fixtures\Pages\ListOrdersDottedColumn;
+use TableKit\Tests\Fixtures\Pages\ListOrdersReorderableColumns;
+use TableKit\Tests\Fixtures\Pages\ListOrdersSplit;
 
 beforeEach(function () {
     $this->user = $this->signIn();

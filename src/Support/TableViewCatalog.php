@@ -1,12 +1,12 @@
 <?php
 
-namespace Elite\TableViews\Support;
+namespace TableKit\Support;
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
 use Filament\Support\Facades\FilamentColor;
 use Illuminate\Support\Collection;
+use TableKit\Models\TablePreference;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
 
 /**
  * Merges developer presets, the user's own views and the user's preference rows into ordered items and manager sections.

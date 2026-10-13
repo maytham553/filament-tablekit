@@ -1,10 +1,10 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPersistent;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPersistent;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
 
 function reloadWithUrl(Testable $mounted, Closure $url, string $page = ListOrdersWithPresets::class): Testable
 {
@@ -72,7 +72,7 @@ describe('a url reload keeps what the session persisted on top of the view', fun
 describe('a fresh load that applies a view by itself keeps the session state', function () {
     it('keeps the toggles over the managed default view', function () {
         ($this->makeDefault)('user', (string) $this->notesView->id);
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $first = Livewire::test(ListOrdersWithPresets::class);
 
@@ -102,7 +102,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
     });
 
     it('keeps the toggles over the remembered preset', function () {
-        config(['table-views.persist_active_view_in_session' => true]);
+        config(['tablekit.persist_active_view_in_session' => true]);
         presets(fn () => ['notes' => PresetTableView::make()->label('Notes')->favorite()->defaultToggledColumns(['notes'])]);
 
         $first = Livewire::test(ListOrdersWithPresets::class)->call('applyTablePresetView', 'notes');
@@ -114,7 +114,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
     });
 
     it('keeps a persisted sort over the startup view', function () {
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $default = storeView($this->user->id, ['sort' => ['column' => 'reference', 'direction' => 'asc']], ['resource' => ListOrdersPersistent::class]);
         storePreference($this->user->id, 'user', (string) $default->id, ['is_default' => true, 'resource' => ListOrdersPersistent::class]);
@@ -132,7 +132,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
 
     it('applies the startup view in full when the session stored nothing', function () {
         ($this->makeDefault)('user', (string) $this->notesView->id);
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $mounted = Livewire::test(ListOrdersWithPresets::class);
 

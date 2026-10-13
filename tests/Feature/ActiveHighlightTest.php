@@ -1,7 +1,7 @@
 <?php
 
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Livewire\Livewire;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -51,12 +51,12 @@ it('marks only the active view as modified, with text a screen reader can read',
 
     $component = Livewire::test(ListOrders::class)->call('applyTableView', $view->id);
 
-    expect($component->html())->not->toContain(__('table-views::favorites-bar.modified'));
+    expect($component->html())->not->toContain(__('tablekit::favorites-bar.modified'));
 
     $html = $component->set('tableSearch', 'ORD-02')->html();
 
-    expect($html)->toContain('<span class="fi-sr-only">'.__('table-views::favorites-bar.modified').'</span>')
-        ->and(viewButton($html, $view->id))->toContain('title="'.__('table-views::favorites-bar.modified').'"');
+    expect($html)->toContain('<span class="fi-sr-only">'.__('tablekit::favorites-bar.modified').'</span>')
+        ->and(viewButton($html, $view->id))->toContain('title="'.__('tablekit::favorites-bar.modified').'"');
 });
 
 it('uses a color-independent ring, so an active gray view is still visible', function () {

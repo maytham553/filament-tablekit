@@ -1,13 +1,13 @@
 <?php
 
-namespace Elite\TableViews\Actions;
+namespace TableKit\Actions;
 
 use Closure;
-use Elite\TableViews\Models\TableView;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\Width;
+use TableKit\Models\TableView;
 
 class EditTableViewAction
 {
@@ -21,8 +21,8 @@ class EditTableViewAction
     public static function make(string $resourceKey, Closure $find, Closure $changed): Action
     {
         return Action::make('editTableView')
-            ->modalHeading(__('table-views::manager.edit.heading'))
-            ->modalSubmitActionLabel(__('table-views::manager.edit.submit'))
+            ->modalHeading(__('tablekit::manager.edit.heading'))
+            ->modalSubmitActionLabel(__('tablekit::manager.edit.submit'))
             ->modalWidth(Width::Medium)
             ->mountUsing(function (Action $action, ?Schema $schema) use ($find): void {
                 $view = $find($action->getArguments()['viewId'] ?? null);
@@ -56,7 +56,7 @@ class EditTableViewAction
 
                 $changed();
 
-                Notification::make()->title(__('table-views::manager.edit.saved'))->success()->send();
+                Notification::make()->title(__('tablekit::manager.edit.saved'))->success()->send();
             });
     }
 }

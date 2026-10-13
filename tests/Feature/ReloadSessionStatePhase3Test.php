@@ -1,12 +1,12 @@
 <?php
 
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Columns;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3ColumnsPersistent;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3ColumnsPresets;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
+use TableKit\Models\TablePreference;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Columns;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3ColumnsPersistent;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3ColumnsPresets;
 
 function reloadColumnsWithUrl(Testable $mounted, Closure $url, string $page = ListOrdersPhase3Columns::class): Testable
 {
@@ -27,7 +27,7 @@ beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
 
-    config(['table-views.quick_filters.enabled' => true]);
+    config(['tablekit.quick_filters.enabled' => true]);
 
     $this->view = storeView($this->user->id, [
         'filters' => ['status' => ['value' => 'shipped']],
@@ -130,7 +130,7 @@ describe('a url reload keeps what the session persisted on top of the view', fun
 describe('a fresh load that applies a view by itself keeps the session state', function () {
     it('keeps order, toggles and pins over the managed default view', function () {
         ($this->makeDefault)($this->richView->id);
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $first = Livewire::test(ListOrdersPhase3Columns::class);
 
@@ -151,7 +151,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
     });
 
     it('keeps order, toggles and pins over the remembered view', function () {
-        config(['table-views.persist_active_view_in_session' => true]);
+        config(['tablekit.persist_active_view_in_session' => true]);
 
         $first = Livewire::test(ListOrdersPhase3Columns::class)->call('applyTableView', $this->richView->id);
         moveAmountUp($first);
@@ -167,7 +167,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
     });
 
     it('keeps the persisted sorts over the startup view', function () {
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
         $default = storeView($this->user->id, ['sort' => ['column' => 'reference', 'direction' => 'asc']], ['resource' => ListOrdersPhase3ColumnsPersistent::class]);
         ($this->makeDefault)($default->id, ListOrdersPhase3ColumnsPersistent::class);
 
@@ -186,7 +186,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
 
     it('applies the startup view in full when the session stored nothing', function () {
         ($this->makeDefault)($this->richView->id);
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $mounted = Livewire::test(ListOrdersPhase3Columns::class);
 
@@ -199,7 +199,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
 
 describe('what a view wrote is not the user\'s change', function () {
     it('applies the next managed default\'s order, pins and sorts instead of the previous view\'s', function () {
-        config(['table-views.managed_default_views' => true]);
+        config(['tablekit.managed_default_views' => true]);
 
         $a = storeView($this->user->id, ['columnOrder' => ['plain', 'reference'], 'favoriteFilters' => ['multi']], ['name' => 'A', 'resource' => ListOrdersPhase3ColumnsPersistent::class]);
         $b = storeView($this->user->id, ['columnOrder' => ['notes', 'amount'], 'favoriteFilters' => ['big'], 'sort' => ['column' => 'amount', 'direction' => 'desc']], ['name' => 'B', 'resource' => ListOrdersPhase3ColumnsPersistent::class]);

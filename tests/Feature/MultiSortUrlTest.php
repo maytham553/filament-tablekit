@@ -1,10 +1,10 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
-use Elite\TableViews\Tests\Fixtures\Widgets\OrdersWidget;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
+use TableKit\Tests\Fixtures\Widgets\OrdersWidget;
 
 function reloadPhase3(array $query): Testable
 {
@@ -92,7 +92,7 @@ describe('ignored when they do not fit', function () {
     });
 
     it('applies the configured maximum', function () {
-        config(['table-views.multi_sort.max' => 2]);
+        config(['tablekit.multi_sort.max' => 2]);
 
         $reloaded = reloadPhase3(['sort' => 'amount:asc', 'sorts' => 'amount:asc,reference:desc,status:asc']);
 
@@ -100,7 +100,7 @@ describe('ignored when they do not fit', function () {
     });
 
     it('ignores the parameter when multi-sort is off', function () {
-        config(['table-views.multi_sort.enabled' => false]);
+        config(['tablekit.multi_sort.enabled' => false]);
 
         $reloaded = reloadPhase3(['sort' => 'amount:asc', 'sorts' => 'amount:asc,reference:desc']);
 

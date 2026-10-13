@@ -1,10 +1,10 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures;
+namespace TableKit\Tests\Fixtures;
 
-use Elite\TableViews\Tests\Fixtures\Pages\ListTeamOrders;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
+use TableKit\Tests\Fixtures\Pages\ListTeamOrders;
 
 /**
  * Same table as OrderResource, but scoped to the current tenant (whereBelongsTo on orders.team_id).

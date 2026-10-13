@@ -1,8 +1,8 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use TableKit\Presets\PresetTableView;
 
 it('has sane defaults', function () {
     $preset = PresetTableView::make()->key('shipped_orders');

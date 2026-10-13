@@ -1,9 +1,9 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Support\TableViewState;
-use Elite\TableViews\Tests\Fixtures\Team;
-use Elite\TableViews\Tests\Fixtures\User;
+use TableKit\Models\TableView;
+use TableKit\Support\TableViewState;
+use TableKit\Tests\Fixtures\Team;
+use TableKit\Tests\Fixtures\User;
 
 function makeView(array $attributes = []): TableView
 {
@@ -102,7 +102,7 @@ it('falls back to primary for an unknown color', function () {
 });
 
 it('uses the configured table name', function () {
-    expect((new TableView)->getTable())->toBe('table_views');
+    expect((new TableView)->getTable())->toBe('tablekit_views');
 });
 
 it('resolves the user relation', function () {

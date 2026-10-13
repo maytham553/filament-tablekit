@@ -1,18 +1,18 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Support\TableViewState;
-use Elite\TableViews\TableViewsPlugin;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersColumnGroupsReorderable;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersReorderableColumns;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersReorderableColumnsOff;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersReorderableColumnsPresets;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersSplit;
 use Livewire\Exceptions\MethodNotFoundException;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
+use TableKit\Support\TableViewState;
+use TableKit\TableKitPlugin;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\Pages\ListOrdersColumnGroupsReorderable;
+use TableKit\Tests\Fixtures\Pages\ListOrdersReorderableColumns;
+use TableKit\Tests\Fixtures\Pages\ListOrdersReorderableColumnsOff;
+use TableKit\Tests\Fixtures\Pages\ListOrdersReorderableColumnsPresets;
+use TableKit\Tests\Fixtures\Pages\ListOrdersSplit;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -332,7 +332,7 @@ describe('switches', function () {
     });
 
     it('saves and applies no order when the plugin turns column ordering off', function () {
-        TableViewsPlugin::get()->columnReordering(false);
+        TableKitPlugin::get()->columnReordering(false);
 
         $view = orderedView(['columnOrder' => ['notes', 'amount']]);
         $target = Livewire::test(ListOrdersReorderableColumns::class)->call('applyTableView', $view->id);
@@ -345,7 +345,7 @@ describe('switches', function () {
     });
 
     it('is turned off by config too', function () {
-        config(['table-views.column_reordering.enabled' => false]);
+        config(['tablekit.column_reordering.enabled' => false]);
 
         $source = reorderColumns(Livewire::test(ListOrdersReorderableColumns::class), ['amount', 'reference', 'notes', 'status']);
 

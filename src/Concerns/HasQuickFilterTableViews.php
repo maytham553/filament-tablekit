@@ -1,15 +1,15 @@
 <?php
 
-namespace Elite\TableViews\Concerns;
+namespace TableKit\Concerns;
 
-use Elite\TableViews\Support\FavoriteFilters;
-use Elite\TableViews\Support\TableViewsOptions;
 use Filament\Schemas\Schema;
 use Filament\Tables\Filters\BaseFilter;
 use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Arr;
 use Livewire\Attributes\Locked;
+use TableKit\Support\FavoriteFilters;
+use TableKit\Support\TableKitOptions;
 
 /**
  * Clickable filter chips. Filament's own indicator bar is hidden and the chip bar renders instead:
@@ -38,7 +38,7 @@ trait HasQuickFilterTableViews
     protected function isTableViewQuickFiltersEnabled(): bool
     {
         return static::quickFiltersTableViews()
-            && TableViewsOptions::resolve()->quickFiltersEnabled()
+            && TableKitOptions::resolve()->quickFiltersEnabled()
             && count($this->getTable()->getFilters()) > 0;
     }
 
@@ -55,7 +55,7 @@ trait HasQuickFilterTableViews
             $this->cacheTableViewQuickFilterForm();
         }
 
-        if (! $this->shouldMountHasTableViews) {
+        if (! $this->shouldMountHasTableKit) {
             return;
         }
 
@@ -389,7 +389,7 @@ trait HasQuickFilterTableViews
      */
     protected function shortenTableViewIndicatorLabel(string $name, BaseFilter $filter, mixed $label): mixed
     {
-        $limit = TableViewsOptions::resolve()->limitIndicatorLabels();
+        $limit = TableKitOptions::resolve()->limitIndicatorLabels();
         $values = $this->getTableFilterState($name)['values'] ?? null;
 
         if ($limit === null || ! is_string($label) || ! $filter instanceof SelectFilter || ! $filter->isMultiple() || ! is_array($values) || count($values) <= $limit || ! str_contains($label, ': ')) {
@@ -403,6 +403,6 @@ trait HasQuickFilterTableViews
             return $label;
         }
 
-        return $head.': '.implode(', ', array_slice($items, 0, $limit)).' '.__('table-views::quick-filters.more', ['count' => count($items) - $limit]);
+        return $head.': '.implode(', ', array_slice($items, 0, $limit)).' '.__('tablekit::quick-filters.more', ['count' => count($items) - $limit]);
     }
 }

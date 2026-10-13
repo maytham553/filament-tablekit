@@ -1,14 +1,14 @@
 <?php
 
-namespace Elite\TableViews\Tests\Fixtures\Pages;
+namespace TableKit\Tests\Fixtures\Pages;
 
-use Elite\TableViews\Concerns\HasTableViews;
-use Elite\TableViews\Tests\Fixtures\TeamOrderResource;
 use Filament\Resources\Pages\ListRecords;
+use TableKit\Concerns\HasTableKit;
+use TableKit\Tests\Fixtures\TeamOrderResource;
 
 class ListTeamOrders extends ListRecords
 {
-    use HasTableViews;
+    use HasTableKit;
 
     protected static string $resource = TeamOrderResource::class;
 

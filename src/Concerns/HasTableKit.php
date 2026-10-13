@@ -1,20 +1,8 @@
 <?php
 
-namespace Elite\TableViews\Concerns;
+namespace TableKit\Concerns;
 
 use Closure;
-use Elite\TableViews\Actions\DeleteTableViewAction;
-use Elite\TableViews\Actions\EditTableViewAction;
-use Elite\TableViews\Actions\ManageTableViewsAction;
-use Elite\TableViews\Actions\QuickSaveTableViewAction;
-use Elite\TableViews\Models\TablePreference;
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Support\CurrentContext;
-use Elite\TableViews\Support\TableViewCatalog;
-use Elite\TableViews\Support\TableViewPreferences;
-use Elite\TableViews\Support\TableViewsOptions;
-use Elite\TableViews\Support\TableViewState;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Exceptions\Halt;
@@ -26,12 +14,24 @@ use InvalidArgumentException;
 use Livewire\Attributes\Locked;
 use Livewire\Features\SupportAttributes\AttributeLevel;
 use Livewire\Features\SupportQueryString\BaseUrl;
+use TableKit\Actions\DeleteTableViewAction;
+use TableKit\Actions\EditTableViewAction;
+use TableKit\Actions\ManageTableViewsAction;
+use TableKit\Actions\QuickSaveTableViewAction;
+use TableKit\Models\TablePreference;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
+use TableKit\Support\CurrentContext;
+use TableKit\Support\TableKitOptions;
+use TableKit\Support\TableViewCatalog;
+use TableKit\Support\TableViewPreferences;
+use TableKit\Support\TableViewState;
 
 /**
  * Add to a ListRecords / ManageRelatedRecords page, relation manager or table widget.
  * Every member contains "TableView" or "TablePreset" to stay clear of Filament's own table concerns.
  */
-trait HasTableViews
+trait HasTableKit
 {
     use HasColumnOrderTableViews;
     use HasMultiSortTableViews;
@@ -58,7 +58,7 @@ trait HasTableViews
     #[Locked]
     public bool $tableViewsManagerLoaded = false;
 
-    protected bool $shouldMountHasTableViews = false;
+    protected bool $shouldMountHasTableKit = false;
 
     /** @var array<string, PresetTableView>|null */
     protected ?array $cachedTablePresets = null;
@@ -68,15 +68,15 @@ trait HasTableViews
     /**
      * Livewire lets the browser call any public method except a few lifecycle names, so the trait hooks, which must be public, are refused here.
      */
-    public function callHasTableViews(string $methodName, array $params, Closure $returnEarly): void
+    public function callHasTableKit(string $methodName, array $params, Closure $returnEarly): void
     {
-        if (in_array($methodName, ['mountHasTableViews', 'bootedHasTableViews', 'renderingHasTableViews', 'callHasTableViews'], true)) {
+        if (in_array($methodName, ['mountHasTableKit', 'bootedHasTableKit', 'renderingHasTableKit', 'callHasTableKit'], true)) {
             $returnEarly();
         }
     }
 
     /** The table can be rebuilt in the middle of a request (`resetTable()`), so what this plugin changes on it is put back before it renders. */
-    public function renderingHasTableViews(): void
+    public function renderingHasTableKit(): void
     {
         if (! isset($this->table)) {
             return;
@@ -89,12 +89,12 @@ trait HasTableViews
         }
     }
 
-    public function mountHasTableViews(): void
+    public function mountHasTableKit(): void
     {
-        $this->shouldMountHasTableViews = true;
+        $this->shouldMountHasTableKit = true;
     }
 
-    public function bootedHasTableViews(): void
+    public function bootedHasTableKit(): void
     {
         if (! isset($this->table)) {
             return;
@@ -103,11 +103,11 @@ trait HasTableViews
         $this->bootTableViewSorts();
         $this->bootTableViewQuickFilters();
 
-        if (! $this->shouldMountHasTableViews) {
+        if (! $this->shouldMountHasTableKit) {
             return;
         }
 
-        $this->shouldMountHasTableViews = false;
+        $this->shouldMountHasTableKit = false;
 
         $requested = $this->tableViewUrl;
         $this->tableViewUrl = null;
@@ -119,14 +119,14 @@ trait HasTableViews
             return;
         }
 
-        if ($this->requestHasTableViewsQueryState()) {
+        if ($this->requestHasTableKitQueryState()) {
             return;
         }
 
         $before = $this->snapshotTableViewUrlProperties();
         $persisted = $this->snapshotPersistedTableViewParts();
 
-        if (TableViewsOptions::resolve()->persistActiveViewInSession()) {
+        if (TableKitOptions::resolve()->persistActiveViewInSession()) {
             $remembered = session()->get($this->getActiveTableViewSessionKey());
 
             if (filled($remembered) && $this->restoreRememberedTableView($remembered)) {
@@ -199,7 +199,7 @@ trait HasTableViews
 
     protected function getTableViewWrittenSessionKey(): string
     {
-        return $this->getTableSessionKey('table_views_applied');
+        return $this->getTableSessionKey('tablekit_views_applied');
     }
 
     /**
@@ -366,7 +366,7 @@ trait HasTableViews
      * The parameter names are read from the #[Url] attributes, because Filament 4 and 5 renamed them (filters, search, sort, grouping, tab, reordering).
      * An empty `view=` means "no view, no startup view" (the user pressed Default); a non-empty one is validated by the restore, not counted here.
      */
-    protected function requestHasTableViewsQueryState(): bool
+    protected function requestHasTableKitQueryState(): bool
     {
         foreach ($this->getTableViewUrlAttributes() as $name => $attribute) {
             if ($name === 'tableViewUrl') {
@@ -390,14 +390,14 @@ trait HasTableViews
      *
      * @return array<string, array<string, mixed>>
      */
-    protected function queryStringHasTableViews(): array
+    protected function queryStringHasTableKit(): array
     {
         return $this->hasUrlBoundTableState()
             ? ['tableViewUrl' => ['as' => 'view', 'history' => false], 'tableViewSortsUrl' => ['as' => 'sorts', 'history' => false]]
             : [];
     }
 
-    public function dehydrateHasTableViews(): void
+    public function dehydrateHasTableKit(): void
     {
         if (isset($this->table)) {
             // A sort list that no longer starts with the current sort is dead: forget it so it cannot come back when that sort is chosen again.
@@ -547,7 +547,7 @@ trait HasTableViews
         $this->activeTablePresetKey = null;
         session()->forget($this->getTableViewWrittenSessionKey());
 
-        $options = TableViewsOptions::resolve();
+        $options = TableKitOptions::resolve();
 
         if ($options->persistActiveViewInSession() && $options->managedDefaultViews()) {
             session()->put($this->getActiveTableViewSessionKey(), 'none');
@@ -558,7 +558,7 @@ trait HasTableViews
 
     public function openTableViewsManager(): void
     {
-        if (! TableViewsOptions::resolve()->viewManagerEnabled() || $this->tableViewsManagerLoaded) {
+        if (! TableKitOptions::resolve()->viewManagerEnabled() || $this->tableViewsManagerLoaded) {
             return;
         }
 
@@ -578,7 +578,7 @@ trait HasTableViews
      */
     public function reorderTableViews(mixed $type, mixed $favorite, mixed $keys): void
     {
-        if (! TableViewsOptions::resolve()->viewManagerEnabled() || ! is_string($type) || ! is_bool($favorite)) {
+        if (! TableKitOptions::resolve()->viewManagerEnabled() || ! is_string($type) || ! is_bool($favorite)) {
             return;
         }
 
@@ -594,7 +594,7 @@ trait HasTableViews
 
     public function toggleTableViewDefault(mixed $type, mixed $key): void
     {
-        if (! TableViewsOptions::resolve()->managedDefaultViews()) {
+        if (! TableKitOptions::resolve()->managedDefaultViews()) {
             return;
         }
 
@@ -678,7 +678,7 @@ trait HasTableViews
 
     protected function buildTableViewCatalog(bool $withPreferences = false): TableViewCatalog
     {
-        $options = TableViewsOptions::resolve();
+        $options = TableKitOptions::resolve();
         $presets = $this->resolveTablePresets();
 
         $needsPreferences = $withPreferences
@@ -755,7 +755,7 @@ trait HasTableViews
 
     protected function isTableViewSaveBlockedByPreset(): bool
     {
-        if ($this->activeTablePresetKey === null || TableViewsOptions::resolve()->createFromPresetWithQuery()) {
+        if ($this->activeTablePresetKey === null || TableKitOptions::resolve()->createFromPresetWithQuery()) {
             return false;
         }
 
@@ -1000,8 +1000,8 @@ trait HasTableViews
 
         if ($this->isTableViewSaveBlockedByPreset()) {
             Notification::make()
-                ->title(__('table-views::quick-save.preset_with_query_title'))
-                ->body(__('table-views::quick-save.preset_with_query_body'))
+                ->title(__('tablekit::quick-save.preset_with_query_title'))
+                ->body(__('tablekit::quick-save.preset_with_query_body'))
                 ->warning()
                 ->send();
 
@@ -1009,11 +1009,11 @@ trait HasTableViews
         }
 
         $state = $this->captureTableViewState();
-        $options = TableViewsOptions::resolve();
+        $options = TableKitOptions::resolve();
 
         if (strlen($state->toJson()) > $options->maxStateBytes()) {
             throw ValidationException::withMessages([
-                'mountedActions.'.array_key_last($this->mountedActions).'.data.name' => __('table-views::validation.state_too_large'),
+                'mountedActions.'.array_key_last($this->mountedActions).'.data.name' => __('tablekit::validation.state_too_large'),
             ]);
         }
 
@@ -1064,7 +1064,7 @@ trait HasTableViews
      */
     protected function applyStartupTableView(): void
     {
-        $options = TableViewsOptions::resolve();
+        $options = TableKitOptions::resolve();
 
         if ($options->managedDefaultViews() && $this->applyManagedDefaultTableView()) {
             return;
@@ -1140,7 +1140,7 @@ trait HasTableViews
 
     protected function rememberActiveTableView(string $value): void
     {
-        if (TableViewsOptions::resolve()->persistActiveViewInSession()) {
+        if (TableKitOptions::resolve()->persistActiveViewInSession()) {
             session()->put($this->getActiveTableViewSessionKey(), ctype_digit($value) ? (int) $value : $value);
         }
     }
@@ -1152,7 +1152,7 @@ trait HasTableViews
 
     protected function getTableViewSessionKey(string $name): string
     {
-        return 'table-views.'.md5($this->getTableViewsResourceKey().'|'.CurrentContext::tenantType().'|'.CurrentContext::tenantId()).'.'.$name;
+        return 'tablekit.'.md5($this->getTableViewsResourceKey().'|'.CurrentContext::tenantType().'|'.CurrentContext::tenantId()).'.'.$name;
     }
 
     protected function forgetActiveTableView(): void
@@ -1184,7 +1184,7 @@ trait HasTableViews
      */
     protected function normalizeTableViewTarget(mixed $type, mixed $key): ?array
     {
-        if (! TableViewsOptions::resolve()->viewManagerEnabled()) {
+        if (! TableKitOptions::resolve()->viewManagerEnabled()) {
             return null;
         }
 
@@ -1213,7 +1213,7 @@ trait HasTableViews
         $change(new TableViewPreferences(
             $this->getTableViewsResourceKey(),
             $this->buildTableViewCatalog(withPreferences: true),
-            TableViewsOptions::resolve(),
+            TableKitOptions::resolve(),
         ));
 
         $this->refreshTableViews();
@@ -1233,7 +1233,7 @@ trait HasTableViews
 
     protected function shouldTrackTableViewTab(): bool
     {
-        return TableViewsOptions::resolve()->captureTab()
+        return TableKitOptions::resolve()->captureTab()
             && property_exists($this, 'activeTab')
             && method_exists($this, 'getCachedTabs');
     }

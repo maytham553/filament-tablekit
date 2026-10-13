@@ -1,11 +1,11 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\HtmlString;
 use Livewire\Livewire;
+use TableKit\Models\TableView;
+use TableKit\Tests\Fixtures\Pages\ListOrders;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -17,21 +17,21 @@ const MANAGER_ICON_ALIASES = [
 
 it('registers a heroicon default for every manager alias', function () {
     foreach (MANAGER_ICON_ALIASES as $name) {
-        expect(FilamentIcon::resolve("table-views::manager.{$name}"))->toBeInstanceOf(Heroicon::class, $name);
+        expect(FilamentIcon::resolve("tablekit::manager.{$name}"))->toBeInstanceOf(Heroicon::class, $name);
     }
 
-    expect(FilamentIcon::resolve('table-views::reorder.handle'))->toBeInstanceOf(Heroicon::class)
-        ->and(FilamentIcon::resolve('table-views::manager.move-up'))->toBeNull()
-        ->and(FilamentIcon::resolve('table-views::sort.move-down'))->toBeNull()
-        ->and(FilamentIcon::resolve('table-views::columns.move-up'))->toBeNull();
+    expect(FilamentIcon::resolve('tablekit::reorder.handle'))->toBeInstanceOf(Heroicon::class)
+        ->and(FilamentIcon::resolve('tablekit::manager.move-up'))->toBeNull()
+        ->and(FilamentIcon::resolve('tablekit::sort.move-down'))->toBeNull()
+        ->and(FilamentIcon::resolve('tablekit::columns.move-up'))->toBeNull();
 });
 
 it('registers aliases for the preset only icon keys', function () {
     foreach (['truck', 'calendar', 'shopping-cart', 'archive', 'document', 'bell', 'home', 'globe'] as $key) {
-        expect(FilamentIcon::resolve("table-views::icons.{$key}"))->toBeInstanceOf(Heroicon::class, $key);
+        expect(FilamentIcon::resolve("tablekit::icons.{$key}"))->toBeInstanceOf(Heroicon::class, $key);
     }
 
-    expect(FilamentIcon::resolve('table-views::icons.not-a-real-key'))->toBeNull();
+    expect(FilamentIcon::resolve('tablekit::icons.not-a-real-key'))->toBeNull();
 });
 
 it('never hard codes a heroicon in a view or outside the provider defaults', function () {
@@ -42,7 +42,7 @@ it('never hard codes a heroicon in a view or outside the provider defaults', fun
     $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__.'/../../src'));
 
     foreach ($files as $file) {
-        if ($file->isFile() && $file->getFilename() !== 'TableViewsServiceProvider.php') {
+        if ($file->isFile() && $file->getFilename() !== 'TableKitServiceProvider.php') {
             expect(file_get_contents($file->getPathname()))->not->toContain('heroicon-', $file->getFilename());
         }
     }
@@ -52,9 +52,9 @@ it('renders remapped manager icons from the aliases', function () {
     $this->seedOrders();
 
     FilamentIcon::register([
-        'table-views::manager.edit' => new HtmlString('<svg data-test="remapped-edit"></svg>'),
-        'table-views::manager.open' => new HtmlString('<svg data-test="remapped-open"></svg>'),
-        'table-views::reorder.handle' => new HtmlString('<svg data-test="remapped-handle"></svg>'),
+        'tablekit::manager.edit' => new HtmlString('<svg data-test="remapped-edit"></svg>'),
+        'tablekit::manager.open' => new HtmlString('<svg data-test="remapped-open"></svg>'),
+        'tablekit::reorder.handle' => new HtmlString('<svg data-test="remapped-handle"></svg>'),
     ]);
 
     TableView::create(['user_id' => $this->user->id, 'name' => 'Mine', 'resource' => ListOrders::class, 'state' => []]);

@@ -1,8 +1,8 @@
 <?php
 
-use Elite\TableViews\Models\TableView;
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Support\TableViewState;
+use TableKit\Models\TableView;
+use TableKit\Presets\PresetTableView;
+use TableKit\Support\TableViewState;
 
 const OLD_PHASE_ONE_JSON = '{"v":1,"filters":{"status":{"value":"paid"}},"search":"acme","columnSearches":{},"sort":{"column":"amount","direction":"desc"},"toggledColumns":{"notes":false},"grouping":{"column":"status","direction":"asc"}}';
 

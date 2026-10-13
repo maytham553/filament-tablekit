@@ -1,11 +1,11 @@
 <?php
 
-use Elite\TableViews\Presets\PresetTableView;
-use Elite\TableViews\Tests\Fixtures\Order;
-use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
+use TableKit\Presets\PresetTableView;
+use TableKit\Tests\Fixtures\Order;
+use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
 
 function reloadStartupOrders(array $query): Testable
 {
@@ -32,7 +32,7 @@ beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
 
-    config(['table-views.managed_default_views' => true]);
+    config(['tablekit.managed_default_views' => true]);
 
     presets(fn () => [
         'high' => PresetTableView::make()
@@ -235,7 +235,7 @@ describe('reload reproduces what the user saw', function () {
     });
 
     it('keeps the remembered view the session brings back on a fresh load', function () {
-        config(['table-views.persist_active_view_in_session' => true]);
+        config(['tablekit.persist_active_view_in_session' => true]);
 
         Livewire::test(ListOrdersWithPresets::class)->call('applyTablePresetView', 'high');
 
