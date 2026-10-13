@@ -13,6 +13,7 @@ use TableKit\Support\TableViewStateCast;
 
 /**
  * @property int $id
+ * @property ?string $user_type
  * @property string $user_id
  * @property string $name
  * @property ?string $icon
@@ -27,6 +28,7 @@ use TableKit\Support\TableViewStateCast;
 class TableView extends Model
 {
     protected $fillable = [
+        'user_type',
         'user_id',
         'name',
         'icon',
@@ -79,9 +81,11 @@ class TableView extends Model
         return filled($this->color) && array_key_exists($this->color, FilamentColor::getColors()) ? $this->color : 'primary';
     }
 
-    public function scopeOwnedBy(Builder $query, int|string $userId, ?Model $tenant = null): Builder
+    public function scopeOwnedBy(Builder $query, ?string $userType, int|string $userId, ?Model $tenant = null): Builder
     {
         $query->where('user_id', (string) $userId);
+
+        $userType === null ? $query->whereNull('user_type') : $query->where('user_type', $userType);
 
         if ($tenant === null) {
             return $query->whereNull('tenant_type')->whereNull('tenant_id');
@@ -124,7 +128,7 @@ class TableView extends Model
         }
 
         return static::query()
-            ->ownedBy($userId, CurrentContext::tenant())
+            ->ownedBy(CurrentContext::userType(), $userId, CurrentContext::tenant())
             ->forResource($resourceKey);
     }
 

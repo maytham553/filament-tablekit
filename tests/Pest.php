@@ -8,6 +8,7 @@ use TableKit\Tests\Fixtures\Order;
 use TableKit\Tests\Fixtures\Pages\ListOrders;
 use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
 use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\User;
 use TableKit\Tests\TestCase;
 
 uses(TestCase::class)->in('Unit', 'Feature');
@@ -25,11 +26,20 @@ function quickSave(Testable $component, string $name = 'My view', array $data = 
 }
 
 /**
+ * Quick Save with raw form data, for the cases that must fail validation.
+ */
+function saveAttempt(Testable $component, array $data)
+{
+    return $component->callAction('quickSaveTableView', $data);
+}
+
+/**
  * Creates a stored view directly, independent of the capture code path.
  */
 function storeView(int|string $userId, array $state, array $attributes = []): TableView
 {
     return TableView::create([
+        'user_type' => User::class,
         'user_id' => $userId,
         'name' => 'Stored '.uniqid(),
         'resource' => ListOrders::class,
@@ -70,6 +80,7 @@ function phase3Presets(array|Closure $presets): void
 function storePreference(int|string $userId, string $type, string $key, array $attributes = []): TablePreference
 {
     return TablePreference::create([
+        'user_type' => User::class,
         'user_id' => $userId,
         'resource' => ListOrdersWithPresets::class,
         'view_type' => $type,

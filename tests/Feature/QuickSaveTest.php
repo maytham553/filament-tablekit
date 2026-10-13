@@ -1,7 +1,6 @@
 <?php
 
 use Filament\Facades\Filament;
-use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
 use TableKit\Models\TableView;
 use TableKit\TableKitPlugin;
@@ -14,11 +13,6 @@ beforeEach(function () {
     $this->user = $this->signIn();
     $this->seedOrders();
 });
-
-function saveAttempt(Testable $component, array $data)
-{
-    return $component->callAction('quickSaveTableView', $data);
-}
 
 it('requires a name', function () {
     saveAttempt(Livewire::test(ListOrders::class), ['name' => '', 'color' => 'primary'])

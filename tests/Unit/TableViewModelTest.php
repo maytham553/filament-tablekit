@@ -8,6 +8,7 @@ use TableKit\Tests\Fixtures\User;
 function makeView(array $attributes = []): TableView
 {
     return TableView::create([
+        'user_type' => User::class,
         'user_id' => 1,
         'name' => 'View',
         'resource' => 'res',
@@ -21,9 +22,9 @@ it('scopes by owner without a tenant', function () {
     $b = User::create(['name' => 'B', 'email' => 'b@example.test', 'password' => 'x']);
     $team = Team::create(['name' => 'T']);
 
-    makeView(['user_id' => $a->id, 'name' => 'mine']);
-    makeView(['user_id' => $b->id, 'name' => 'theirs']);
-    makeView(['user_id' => $a->id, 'name' => 'tenant', 'tenant_type' => $team->getMorphClass(), 'tenant_id' => $team->id]);
+    makeView(['user_type' => User::class, 'user_id' => $a->id, 'name' => 'mine']);
+    makeView(['user_type' => User::class, 'user_id' => $b->id, 'name' => 'theirs']);
+    makeView(['user_type' => User::class, 'user_id' => $a->id, 'name' => 'tenant', 'tenant_type' => $team->getMorphClass(), 'tenant_id' => $team->id]);
 
     expect(TableView::forCurrentContext('res')->pluck('name')->all())->toBe(['mine']);
 });
@@ -35,6 +36,7 @@ it('scopes by tenant', function () {
 
     foreach ([$x, $y, null] as $tenant) {
         makeView([
+            'user_type' => User::class,
             'user_id' => $user->id,
             'name' => $tenant?->name ?? 'none',
             'tenant_type' => $tenant?->getMorphClass(),
@@ -42,13 +44,13 @@ it('scopes by tenant', function () {
         ]);
     }
 
-    expect(TableView::query()->ownedBy($user->id, $x)->pluck('name')->all())->toBe(['X'])
-        ->and(TableView::query()->ownedBy($user->id, $y)->pluck('name')->all())->toBe(['Y'])
-        ->and(TableView::query()->ownedBy($user->id, null)->pluck('name')->all())->toBe(['none']);
+    expect(TableView::query()->ownedBy(User::class, $user->id, $x)->pluck('name')->all())->toBe(['X'])
+        ->and(TableView::query()->ownedBy(User::class, $user->id, $y)->pluck('name')->all())->toBe(['Y'])
+        ->and(TableView::query()->ownedBy(User::class, $user->id, null)->pluck('name')->all())->toBe(['none']);
 });
 
 it('returns nothing when nobody is signed in', function () {
-    makeView(['user_id' => 1]);
+    makeView(['user_type' => User::class, 'user_id' => 1]);
 
     expect(TableView::forCurrentContext('res')->count())->toBe(0)
         ->and(TableView::nameTaken('View', 'res'))->toBeFalse();
@@ -57,11 +59,11 @@ it('returns nothing when nobody is signed in', function () {
 it('filters by resource, favorites and orders by sort then id', function () {
     $user = $this->signIn();
 
-    makeView(['user_id' => $user->id, 'name' => 'c', 'sort' => 2]);
-    makeView(['user_id' => $user->id, 'name' => 'a', 'sort' => 1]);
-    makeView(['user_id' => $user->id, 'name' => 'b', 'sort' => 1]);
-    makeView(['user_id' => $user->id, 'name' => 'hidden', 'sort' => 0, 'is_favorite' => false]);
-    makeView(['user_id' => $user->id, 'name' => 'other', 'resource' => 'other']);
+    makeView(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'c', 'sort' => 2]);
+    makeView(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'a', 'sort' => 1]);
+    makeView(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'b', 'sort' => 1]);
+    makeView(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'hidden', 'sort' => 0, 'is_favorite' => false]);
+    makeView(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'other', 'resource' => 'other']);
 
     expect(TableView::forCurrentContext('res')->favorites()->ordered()->pluck('name')->all())->toBe(['a', 'b', 'c'])
         ->and(TableView::forCurrentContext('res')->ordered()->pluck('name')->all())->toBe(['hidden', 'a', 'b', 'c'])
@@ -73,9 +75,9 @@ it('computes the next sort per user and resource', function () {
 
     expect(TableView::nextSort('res'))->toBe(1);
 
-    makeView(['user_id' => $user->id, 'sort' => 4]);
-    makeView(['user_id' => 999, 'sort' => 50]);
-    makeView(['user_id' => $user->id, 'sort' => 90, 'resource' => 'other']);
+    makeView(['user_type' => User::class, 'user_id' => $user->id, 'sort' => 4]);
+    makeView(['user_type' => User::class, 'user_id' => 999, 'sort' => 50]);
+    makeView(['user_type' => User::class, 'user_id' => $user->id, 'sort' => 90, 'resource' => 'other']);
 
     expect(TableView::nextSort('res'))->toBe(5);
 });
@@ -84,9 +86,9 @@ it('detects taken names case-insensitively inside the current scope only', funct
     $user = $this->signIn();
     $team = Team::create(['name' => 'T']);
 
-    makeView(['user_id' => $user->id, 'name' => 'My View']);
-    makeView(['user_id' => 999, 'name' => 'Theirs']);
-    makeView(['user_id' => $user->id, 'name' => 'Tenant only', 'tenant_type' => $team->getMorphClass(), 'tenant_id' => $team->id]);
+    makeView(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'My View']);
+    makeView(['user_type' => User::class, 'user_id' => 999, 'name' => 'Theirs']);
+    makeView(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'Tenant only', 'tenant_type' => $team->getMorphClass(), 'tenant_id' => $team->id]);
 
     expect(TableView::nameTaken('my view', 'res'))->toBeTrue()
         ->and(TableView::nameTaken('  MY VIEW ', 'res'))->toBeTrue()
@@ -108,5 +110,5 @@ it('uses the configured table name', function () {
 it('resolves the user relation', function () {
     $user = $this->signIn();
 
-    expect(makeView(['user_id' => $user->id])->user->is($user))->toBeTrue();
+    expect(makeView(['user_type' => User::class, 'user_id' => $user->id])->user->is($user))->toBeTrue();
 });

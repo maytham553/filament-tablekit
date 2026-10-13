@@ -36,6 +36,7 @@ $panel->plugin(
         ->userModel(App\Models\User::class) // only used by TableView::user()
         ->persistActiveViewInSession()
         ->connection('kyc')                  // wins over config('tablekit.connection')
+        ->maxViewsPerTable(100)              // most views one user can save per table (and tenant)
 );
 ```
 
@@ -68,7 +69,9 @@ The table name is config only (`tablekit.table`) because the migration reads it 
 
 ## User key
 
-`user_id` is a string column (64 chars), so integer, ULID and UUID user keys all work with no setting. Views are scoped by the auth identifier (`Filament::auth()->id()`) compared as a string. There is no foreign key to the users table.
+A view belongs to a user type plus a user id. `user_type` is the auth user's morph class (`getMorphClass()`), `user_id` is a string column (64 chars), so integer, ULID and UUID user keys all work with no setting. Views and preferences are scoped by both (the auth identifier, `Filament::auth()->id()`, compared as a string), so two panels or guards with their own user models and the same ids never see each other's views. There is no foreign key to the users table.
+
+Views are not deleted when a user is deleted (no foreign key, by design, so any key type works). A view stores the table's search text and filter values, which can contain personal data a user typed. Delete the user's views and preferences when the app deletes the account, for example in the user's `deleted` event: `TableView::query()->where('user_type', $user->getMorphClass())->where('user_id', (string) $user->getKey())->delete()` (the same for `TablePreference`).
 
 ## Database connection
 
@@ -243,11 +246,11 @@ A deleted view, or a preset that is hidden or removed, falls through silently. T
 
 ## Config
 
-See `config/tablekit.php`: table, preferences table and connection, `load_migrations`, user model, bar on/off and divider, `view_manager.*`, `preset_views.*`, `managed_default_views`, `multi_sort.*`, `quick_filters.*`, `column_reordering.enabled`, slide-over, max name length, colors, icons, `persist_active_view_in_session`, `state.tab` (also save the ListRecords `activeTab`, off by default) and `state.max_bytes`.
+See `config/tablekit.php`: table, preferences table and connection, `load_migrations`, user model, bar on/off and divider, `view_manager.*`, `preset_views.*`, `managed_default_views`, `multi_sort.*`, `quick_filters.*`, `column_reordering.enabled`, slide-over, max name length, `max_views_per_table`, colors, icons, `persist_active_view_in_session`, `state.tab` (also save the ListRecords `activeTab`, off by default) and `state.max_bytes`.
 
 ## Upgrading from Phase 1 (portal note)
 
-Run the new migration (`tablekit_preferences`) before deploying code that defines presets or turns on managed defaults. When the portal owns migrations, publish with `--tag=tablekit-migrations` and copy the new file. It uses the same `tablekit.connection` rule as `tablekit_views`, so run it on the pinned connection (`php artisan migrate --database=<connection>`). It adds a unique index through raw SQL on Postgres and SQLite only.
+Run the new migration (`tablekit_preferences`) before deploying code that defines presets or turns on managed defaults. When the portal owns migrations, publish with `--tag=tablekit-migrations` and copy the new file. It uses the same `tablekit.connection` rule as `tablekit_views`, so run it on the pinned connection (`php artisan migrate --database=<connection>`). Both tables have a nullable `user_type` column next to `user_id`, part of the lookup and unique indexes. It adds a unique index through raw SQL on Postgres and SQLite only.
 
 Remap the new icon aliases to Tabler in the appearance config (see Icons). Components without presets behave as in Phase 1 and run no preferences query.
 
@@ -274,7 +277,7 @@ The `icon` column stores the key (`star`, `chart-bar`, ...), resolved through th
 
 Quick Save and the Edit view form use two grid pickers instead of selects: `TableKit\Forms\ColorGridPicker` (round swatches, a check and a ring on the selected one) and `TableKit\Forms\IconGridPicker` (a scrollable grid of rendered icons, "No icon" first, a search box). Both are radio groups: arrow keys move and select (they follow the visual direction in RTL, up/down move by row), Home/End jump, Enter and Space select. Every cell has a tooltip and an accessible label. The styles are inline in the field view (logical properties, light and dark), so they do not depend on the panel theme. The fields are normal Filament fields and can be used in your own forms: `ColorGridPicker::make('color')->colors([...])`, `IconGridPicker::make('icon')->icons([...])`.
 
-**Colors** (`config('tablekit.colors')` or `->colors([...])` on the plugin): Filament's own names (`primary gray success warning danger info`) plus the Tailwind palettes `red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate`. The plugin registers the extra palettes with `FilamentColor` before the app boots, so a color the app or a panel registers under the same name replaces it. The stored value is the name; a stored name Filament does not know falls back to `primary`, as before. A configured name Filament has no color for is not offered and not accepted. If you register your own colors, add their names to the list and give them a label in `tablekit::colors.<name>` (the name is capitalized when there is none).
+**Colors** (`config('tablekit.colors')` or `->colors([...])` on the plugin): Filament's own names (`primary gray success warning danger info`) plus the Tailwind palettes `red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate`. The plugin registers only the extra palettes the app has not registered yet, so a color the app or a panel registers under the same name is never replaced, in whatever order it is registered. The stored value is the name; a stored name Filament does not know falls back to `primary`, as before. A configured name Filament has no color for is not offered and not accepted. If you register your own colors, add their names to the list and give them a label in `tablekit::colors.<name>` (the name is capitalized when there is none).
 
 **Icons** (`config('tablekit.icons')` or `->icons([...])`): about 120 keys ordered by topic (status, people, commerce and finance, time, documents, communication, places, charts, organize, arrows, tools). Each key is the alias `tablekit::icons.<key>` with a heroicon default, registered only when nobody registered it first, so an app remaps any of them (Tabler, ...). The stored value is the key. Add your own: `FilamentIcon::register(['tablekit::icons.rocket-x' => '...'])`, add the key to the list, and optionally the label (`tablekit::icons.<key>`) and search words (`tablekit::icon-keywords.<key>`, space separated). A key without an alias is not offered and not accepted. The search box matches the key, the label and the keywords in the current language and in English; it filters in the browser.
 
@@ -314,6 +317,7 @@ Phase 3 adds three optional keys. They are written only when they differ from th
 - The active view is restored on reload only where the table state is URL-bound (a `ListRecords` page). Relation managers, table widgets and custom Livewire classes without `#[Url]` table state have no URL for it, so a reload there starts from the usual start view (session, managed default, developer default).
 - On a many-to-many relation manager, Filament resolves a row action's record (`getTableRecord`) straight from the relationship, not through the table query, so an active preset's hidden query does not limit which related record a row action can reach; the same holds for bulk actions when the relation allows duplicate pivot rows. Listing, counts, exports, summaries and other bulk actions do honor it. A plugin trait cannot scope that path without overriding Filament's own method (which collides with `InteractsWithTable`), and the hidden query is a filter, not access control anyway.
 - Two tabs setting a default at the same instant can leave two default rows for a user (the earliest wins at startup); preference rows of presets removed from the code stay until the user's rows are deleted. Both are harmless and not cleaned up.
+- A user can save at most `max_views_per_table` views (default 100, or `->maxViewsPerTable()`) per table and tenant. Quick Save past the limit is refused with an error on the name field; editing, deleting and applying are never blocked. Each view can hold up to `state.max_bytes` (64 KB by default).
 - Name uniqueness (per user, table and tenant, case-insensitive) is validated, not enforced by a database index. Case folding uses the database's `lower()` on both sides, so it follows the database collation.
 - The bar's utility classes must be covered by the panel theme (the default Filament theme is enough). The color and icon pickers bring their own inline styles.
 - Porting the pickers to Filament v4/v5: the Filament specific parts are the `Field` base and `$view` property in `src/Forms/GridPicker.php` and `resources/views/forms/grid-picker.blade.php` (field wrapper, `$wire.$entangle` binding, `x-filament::input`, and the `rgb(var(--c-500))` / `rgb(var(--gray-200))` color variables at the top of the style block, which are `var(--...)` colors in v4).

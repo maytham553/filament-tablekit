@@ -192,6 +192,11 @@ class TableKitOptions
         return min(100, max(1, (int) config('tablekit.quick_save.max_name_length', 100)));
     }
 
+    public function maxViewsPerTable(): int
+    {
+        return max(1, $this->plugin?->getMaxViewsPerTable() ?? (int) config('tablekit.max_views_per_table', 100));
+    }
+
     public function captureTab(): bool
     {
         return (bool) config('tablekit.state.tab', false);

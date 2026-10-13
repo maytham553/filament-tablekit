@@ -56,6 +56,8 @@ class TableKitPlugin implements Plugin
 
     protected bool|Closure|null $columnReordering = null;
 
+    protected ?int $maxViewsPerTable = null;
+
     public static function make(): static
     {
         return app(static::class);
@@ -231,6 +233,21 @@ class TableKitPlugin implements Plugin
         $this->columnReordering = $enabled;
 
         return $this;
+    }
+
+    /**
+     * Most views one user can save per table (and tenant). Quick Save is refused at the limit.
+     */
+    public function maxViewsPerTable(int $max): static
+    {
+        $this->maxViewsPerTable = $max;
+
+        return $this;
+    }
+
+    public function getMaxViewsPerTable(): ?int
+    {
+        return $this->maxViewsPerTable;
     }
 
     public function isMultiSortEnabled(): ?bool

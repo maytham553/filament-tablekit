@@ -596,8 +596,8 @@ describe('default', function () {
     });
 
     it('does not touch the default of another user, table or tenant', function () {
-        $theirs = TablePreference::create(['user_id' => $this->other->id, 'resource' => ListOrdersWithPresets::class, 'view_type' => 'preset', 'view_key' => 'c', 'is_default' => true]);
-        $elsewhere = TablePreference::create(['user_id' => $this->user->id, 'resource' => ListOrders::class, 'view_type' => 'preset', 'view_key' => 'c', 'is_default' => true]);
+        $theirs = TablePreference::create(['user_type' => User::class, 'user_id' => $this->other->id, 'resource' => ListOrdersWithPresets::class, 'view_type' => 'preset', 'view_key' => 'c', 'is_default' => true]);
+        $elsewhere = TablePreference::create(['user_type' => User::class, 'user_id' => $this->user->id, 'resource' => ListOrders::class, 'view_type' => 'preset', 'view_key' => 'c', 'is_default' => true]);
 
         manager()->call('toggleTableViewDefault', 'preset', 'a');
 

@@ -5,6 +5,7 @@ use Livewire\Livewire;
 use TableKit\Models\TablePreference;
 use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3;
 use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Persistent;
+use TableKit\Tests\Fixtures\User;
 
 function reloadWithUrl(Testable $mounted, Closure $url, string $page = ListOrdersPhase3::class): Testable
 {
@@ -34,6 +35,7 @@ beforeEach(function () {
     ], ['name' => 'Rich', 'resource' => ListOrdersPhase3::class]);
 
     $this->makeDefault = fn (int $id) => TablePreference::create([
+        'user_type' => User::class,
         'user_id' => $this->user->id,
         'resource' => ListOrdersPhase3::class,
         'view_type' => 'user',
@@ -155,7 +157,7 @@ describe('a fresh load that applies a view by itself keeps the session state', f
     it('keeps the persisted sorts over the startup view', function () {
         config(['tablekit.managed_default_views' => true]);
         $default = storeView($this->user->id, ['sort' => ['column' => 'reference', 'direction' => 'asc']], ['resource' => ListOrdersPhase3Persistent::class]);
-        TablePreference::create(['user_id' => $this->user->id, 'resource' => ListOrdersPhase3Persistent::class, 'view_type' => 'user', 'view_key' => (string) $default->id, 'is_default' => true]);
+        TablePreference::create(['user_type' => User::class, 'user_id' => $this->user->id, 'resource' => ListOrdersPhase3Persistent::class, 'view_type' => 'user', 'view_key' => (string) $default->id, 'is_default' => true]);
 
         $first = startWithoutUrl(ListOrdersPhase3Persistent::class);
 

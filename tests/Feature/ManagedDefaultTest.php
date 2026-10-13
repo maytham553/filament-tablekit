@@ -152,8 +152,8 @@ describe('fallbacks', function () {
     });
 
     it('never uses the default of another user, table or tenant', function () {
-        TablePreference::create(['user_id' => $this->other->id, 'resource' => ListOrdersWithPresets::class, 'view_type' => 'preset', 'view_key' => 'big', 'is_default' => true]);
-        TablePreference::create(['user_id' => $this->user->id, 'resource' => ListOrders::class, 'view_type' => 'preset', 'view_key' => 'big', 'is_default' => true]);
+        TablePreference::create(['user_type' => User::class, 'user_id' => $this->other->id, 'resource' => ListOrdersWithPresets::class, 'view_type' => 'preset', 'view_key' => 'big', 'is_default' => true]);
+        TablePreference::create(['user_type' => User::class, 'user_id' => $this->user->id, 'resource' => ListOrders::class, 'view_type' => 'preset', 'view_key' => 'big', 'is_default' => true]);
 
         Livewire::test(ListOrdersWithPresets::class)->assertSet('activeTablePresetKey', 'dev');
     });

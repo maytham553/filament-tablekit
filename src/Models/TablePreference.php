@@ -10,6 +10,7 @@ use TableKit\Support\TableKitOptions;
 
 /**
  * @property int $id
+ * @property ?string $user_type
  * @property string $user_id
  * @property ?string $tenant_type
  * @property ?string $tenant_id
@@ -28,6 +29,7 @@ class TablePreference extends Model
     public const TYPE_USER = 'user';
 
     protected $fillable = [
+        'user_type',
         'user_id',
         'tenant_type',
         'tenant_id',
@@ -59,9 +61,11 @@ class TablePreference extends Model
         return TableKitOptions::resolve()->connection();
     }
 
-    public function scopeOwnedBy(Builder $query, int|string $userId, ?Model $tenant = null): Builder
+    public function scopeOwnedBy(Builder $query, ?string $userType, int|string $userId, ?Model $tenant = null): Builder
     {
         $query->where('user_id', (string) $userId);
+
+        $userType === null ? $query->whereNull('user_type') : $query->where('user_type', $userType);
 
         if ($tenant === null) {
             return $query->whereNull('tenant_type')->whereNull('tenant_id');
@@ -94,7 +98,7 @@ class TablePreference extends Model
         }
 
         return static::query()
-            ->ownedBy($userId, CurrentContext::tenant())
+            ->ownedBy(CurrentContext::userType(), $userId, CurrentContext::tenant())
             ->forResource($resourceKey);
     }
 
@@ -115,6 +119,7 @@ class TablePreference extends Model
         for ($attempt = 0; $attempt < 2; $attempt++) {
             $row = static::forCurrentContext($resourceKey)->ofType($type)->where('view_key', $key)->first()
                 ?? new static([
+                    'user_type' => CurrentContext::userType(),
                     'user_id' => (string) $userId,
                     'tenant_type' => CurrentContext::tenantType(),
                     'tenant_id' => CurrentContext::tenantId(),

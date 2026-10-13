@@ -387,7 +387,7 @@ class PresetTableView
             }
 
             $cached = Cache::remember(
-                'tablekit.badge.'.md5($this->cacheScope.'|'.CurrentContext::userId().'|'.CurrentContext::tenantType().'|'.CurrentContext::tenantId().'|'.$this->key),
+                'tablekit.badge.'.md5($this->cacheScope.'|'.CurrentContext::userType().'|'.CurrentContext::userId().'|'.CurrentContext::tenantType().'|'.CurrentContext::tenantId().'|'.$this->key),
                 $this->badgeCacheSeconds,
                 fn (): array => ['value' => $this->resolveBadge()],
             );

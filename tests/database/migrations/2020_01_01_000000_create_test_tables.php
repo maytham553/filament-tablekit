@@ -16,6 +16,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('admin_users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->timestamps();
+        });
+
         Schema::create('ulid_users', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('name');

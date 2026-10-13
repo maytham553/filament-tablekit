@@ -21,6 +21,7 @@ beforeEach(function () {
 function preference(array $attributes = []): array
 {
     return [
+        'user_type' => User::class,
         'user_id' => test()->user->id,
         'resource' => 'res',
         'view_type' => 'preset',
@@ -52,7 +53,7 @@ it('scopes every read to the user, tenant and table', function () {
 
     TablePreference::create(preference(['tenant_type' => $x->getMorphClass(), 'tenant_id' => $x->id, 'view_key' => 'mine']));
     TablePreference::create(preference(['tenant_type' => $x->getMorphClass(), 'tenant_id' => $x->id, 'resource' => 'other-table', 'view_key' => 'elsewhere']));
-    TablePreference::create(preference(['tenant_type' => $x->getMorphClass(), 'tenant_id' => $x->id, 'user_id' => $this->other->id, 'view_key' => 'theirs']));
+    TablePreference::create(preference(['tenant_type' => $x->getMorphClass(), 'tenant_id' => $x->id, 'user_type' => User::class, 'user_id' => $this->other->id, 'view_key' => 'theirs']));
     TablePreference::create(preference(['view_key' => 'no-tenant']));
     TablePreference::create(preference(['tenant_type' => $x->getMorphClass(), 'tenant_id' => 'another', 'view_key' => 'other-tenant']));
 
@@ -103,6 +104,7 @@ describe('upsert', function () {
                 $raced = true;
 
                 DB::table('tablekit_preferences')->insert([
+                    'user_type' => User::class,
                     'user_id' => (string) $this->user->id, 'resource' => 'res', 'view_type' => 'preset', 'view_key' => 'a',
                     'is_hidden' => false, 'is_default' => false, 'sort' => 9,
                 ]);
@@ -132,7 +134,7 @@ describe('unique index', function () {
 
     it('allows the same key for another user, tenant, table or type', function () {
         TablePreference::create(preference());
-        TablePreference::create(preference(['user_id' => $this->other->id]));
+        TablePreference::create(preference(['user_type' => User::class, 'user_id' => $this->other->id]));
         TablePreference::create(preference(['tenant_type' => 'team', 'tenant_id' => '1']));
         TablePreference::create(preference(['tenant_type' => 'team', 'tenant_id' => '2']));
         TablePreference::create(preference(['resource' => 'other']));

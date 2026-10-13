@@ -5,6 +5,7 @@ use Illuminate\Support\HtmlString;
 use Livewire\Livewire;
 use TableKit\Models\TableView;
 use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\User;
 
 beforeEach(function () {
     $this->user = $this->signIn();
@@ -56,8 +57,8 @@ it('renders remapped manager icons from the aliases', function () {
         'tablekit::reorder.handle' => new HtmlString('<svg data-test="remapped-handle"></svg>'),
     ]);
 
-    TableView::create(['user_id' => $this->user->id, 'name' => 'Mine', 'resource' => ListOrders::class, 'state' => []]);
-    TableView::create(['user_id' => $this->user->id, 'name' => 'Mine two', 'resource' => ListOrders::class, 'state' => []]);
+    TableView::create(['user_type' => User::class, 'user_id' => $this->user->id, 'name' => 'Mine', 'resource' => ListOrders::class, 'state' => []]);
+    TableView::create(['user_type' => User::class, 'user_id' => $this->user->id, 'name' => 'Mine two', 'resource' => ListOrders::class, 'state' => []]);
 
     Livewire::test(ListOrders::class)
         ->assertSeeHtml('data-test="remapped-open"')

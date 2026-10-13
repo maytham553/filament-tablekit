@@ -27,6 +27,7 @@ class TableViewForm
             TextInput::make('name')
                 ->label(__('tablekit::quick-save.fields.name'))
                 ->required()
+                ->rule('string')
                 ->maxLength($options->maxNameLength())
                 ->rule(fn (): Closure => function (string $attribute, mixed $value, Closure $fail) use ($resourceKey, $exceptId): void {
                     if (is_string($value) && TableView::nameTaken($value, $resourceKey, $exceptId ? $exceptId() : null)) {
