@@ -28,7 +28,7 @@ $panel->plugin(
         ->icons(['star', 'flag'])
         ->userModel(App\Models\User::class)
         ->persistActiveViewInSession()
-        ->connection('kyc')
+        ->connection('reporting')
         ->maxViewsPerTable(100)
         ->viewManager(enabled: true, slideOver: false, position: 'end')
         ->presetViewsManageable(true)
