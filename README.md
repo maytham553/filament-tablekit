@@ -36,6 +36,7 @@ $panel->plugin(
         ->userModel(App\Models\User::class) // only used by TableView::user()
         ->persistActiveViewInSession()
         ->connection('kyc')                  // wins over config('tablekit.connection')
+        ->maxViewsPerTable(100)              // most views one user can save per table (and tenant)
 );
 ```
 
@@ -66,7 +67,9 @@ Every option is optional and falls back to `config/tablekit.php`. The favorites 
 
 ## User key
 
-`user_id` is a string column (64 chars), so integer, ULID and UUID user keys all work with no setting. Views are scoped by the auth identifier (`Filament::auth()->id()`) compared as a string. There is no foreign key to the users table.
+`user_id` is a string column (64 chars), so integer, ULID and UUID user keys all work with no setting. Views and preferences belong to a user **type and id**: `user_type` is the auth user's morph class (`getMorphClass()`, so a morph map alias works) and `user_id` is the auth identifier (`Filament::auth()->id()`) compared as a string. Two panels or guards with their own user models that share the same ids therefore never see each other's views. There is no foreign key to the users table.
+
+Views are not deleted when a user is deleted. A view stores the table's search text and filter values, which can hold personal data the user typed, so delete the user's rows when you delete the account: `TableView::where('user_type', $user->getMorphClass())->where('user_id', (string) $user->getKey())->delete()`, and the same on `TablePreference`.
 
 ## Database connection
 
@@ -265,7 +268,7 @@ When the remembered view is applied on load, the plugin asks the browser to alwa
 
 ## Config
 
-See `config/tablekit.php`: table, preferences table and connection, `load_migrations`, user model, bar on/off and divider, `view_manager.*`, `preset_views.*`, `managed_default_views`, `multi_sort.*`, `quick_filters.*`, `column_reordering.enabled`, quick save slide-over, max name length, colors, icons, `persist_active_view_in_session`, `state.tab` (also save the ListRecords `activeTab`, off by default) and `state.max_bytes`.
+See `config/tablekit.php`: table, preferences table and connection, `load_migrations`, user model, bar on/off and divider, `view_manager.*`, `preset_views.*`, `managed_default_views`, `multi_sort.*`, `quick_filters.*`, `column_reordering.enabled`, quick save slide-over, max name length, `max_views_per_table` (default 100), colors, icons, `persist_active_view_in_session`, `state.tab` (also save the ListRecords `activeTab`, off by default) and `state.max_bytes`.
 
 ## Upgrading from Phase 1
 
@@ -291,7 +294,7 @@ The `icon` column stores the key (`star`, `chart-bar`, ...), resolved through th
 
 Quick Save and the Edit view form use two grid pickers instead of selects: `TableKit\Forms\ColorGridPicker` (round swatches, a check and a ring on the selected one) and `TableKit\Forms\IconGridPicker` (a scrollable grid of rendered icons, "No icon" first, a search box). Both are radio groups: arrow keys move and select (they follow the visual direction in RTL, up/down move by row), Home/End jump, Enter and Space select. Every cell has a tooltip and an accessible label. The styles are inline in the field view (logical properties, light and dark), so they do not depend on the panel theme. The fields are normal Filament fields and can be used in your own forms: `ColorGridPicker::make('color')->colors([...])`, `IconGridPicker::make('icon')->icons([...])`.
 
-**Colors** (`config('tablekit.colors')` or `->colors([...])` on the plugin): Filament's own names (`primary gray success warning danger info`) plus the Tailwind palettes `red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate`. The plugin registers the extra palettes with `FilamentColor` before the app boots, so a color the app or a panel registers under the same name replaces it. The stored value is the name; a stored name Filament does not know falls back to `primary`, as before. A configured name Filament has no color for is not offered and not accepted. If you register your own colors, add their names to the list and give them a label in `tablekit::colors.<name>` (the name is capitalized when there is none).
+**Colors** (`config('tablekit.colors')` or `->colors([...])` on the plugin): Filament's own names (`primary gray success warning danger info`) plus the Tailwind palettes `red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate`. The plugin registers the extra palettes at the front of Filament's color list, so a color the app or a panel registers under the same name always wins, whether it registers before or after the plugin. The stored value is the name; a stored name Filament does not know falls back to `primary`, as before. A configured name Filament has no color for is not offered and not accepted. If you register your own colors, add their names to the list and give them a label in `tablekit::colors.<name>` (the name is capitalized when there is none).
 
 **Icons** (`config('tablekit.icons')` or `->icons([...])`): about 120 keys ordered by topic (status, people, commerce and finance, time, documents, communication, places, charts, organize, arrows, tools). Each key is the alias `tablekit::icons.<key>` with a `Heroicon` default, registered only when nobody registered it first, so an app remaps any of them (Tabler, ...). The stored value is the key. Add your own: `FilamentIcon::register(['tablekit::icons.rocket-x' => '...'])`, add the key to the list, and optionally the label (`tablekit::icons.<key>`) and search words (`tablekit::icon-keywords.<key>`, space separated). A key without an alias is not offered and not accepted. The search box matches the key, the label and the keywords in the current language and in English; it filters in the browser.
 
@@ -326,6 +329,7 @@ Phase 3 adds three optional keys. They are written only when they differ from th
 - Records per page and the `isTableReordering` flag are not saved. Applying a view turns reordering off.
 - A column added after a view was saved is shown or hidden by its own default. Names that are no longer toggleable columns are dropped.
 - The remembered view is restored on reload only where the table state is URL-bound (a `ListRecords` page). Elsewhere (relation managers, table widgets) there is no URL, so the session alone decides.
+- At most `max_views_per_table` views (default 100, `->maxViewsPerTable()`) per user, table and tenant. Quick Save past the limit is refused with an error on the name field; editing an existing view never is. The count and the insert are not one atomic step, so two saves at the same instant can pass the limit by one.
 - Name uniqueness (per user, table and tenant, case-insensitive) is validated, not enforced by a database index. Case folding uses the database's `lower()` on both sides, so it follows the database collation.
 - The Alpine behavior (the dropdown, drag and drop, keyboard reorder, the slide-over) is covered by server-side tests; it was exercised once by hand in a browser (dropdown, apply, keyboard and mouse reorder) but there is no browser test.
 - A saved view never contains a preset's hidden query.

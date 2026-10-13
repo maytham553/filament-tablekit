@@ -2,6 +2,7 @@
 
 use TableKit\Models\TableView;
 use TableKit\Support\TableViewState;
+use TableKit\Tests\Fixtures\User;
 
 function sampleState(): TableViewState
 {
@@ -112,6 +113,7 @@ it('round trips through the model cast including empty maps', function () {
     $user = $this->signIn();
 
     $view = TableView::create([
+        'user_type' => User::class,
         'user_id' => $user->id,
         'name' => 'Empty',
         'resource' => 'x',
@@ -134,8 +136,8 @@ it('stores a full state exactly and accepts a plain array', function () {
     $user = $this->signIn();
     $state = sampleState();
 
-    $a = TableView::create(['user_id' => $user->id, 'name' => 'A', 'resource' => 'x', 'state' => $state]);
-    $b = TableView::create(['user_id' => $user->id, 'name' => 'B', 'resource' => 'x', 'state' => $state->toArray()]);
+    $a = TableView::create(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'A', 'resource' => 'x', 'state' => $state]);
+    $b = TableView::create(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'B', 'resource' => 'x', 'state' => $state->toArray()]);
 
     expect(TableView::find($a->id)->state->toArray())->toBe($state->toArray())
         ->and(TableView::find($b->id)->state->toArray())->toBe($state->toArray())
@@ -145,12 +147,12 @@ it('stores a full state exactly and accepts a plain array', function () {
 it('rejects a state of the wrong type', function () {
     $user = $this->signIn();
 
-    TableView::create(['user_id' => $user->id, 'name' => 'A', 'resource' => 'x', 'state' => 'nope']);
+    TableView::create(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'A', 'resource' => 'x', 'state' => 'nope']);
 })->throws(InvalidArgumentException::class);
 
 it('reads a null or empty stored state as an empty state', function () {
     $user = $this->signIn();
-    $view = TableView::create(['user_id' => $user->id, 'name' => 'A', 'resource' => 'x', 'state' => new TableViewState]);
+    $view = TableView::create(['user_type' => User::class, 'user_id' => $user->id, 'name' => 'A', 'resource' => 'x', 'state' => new TableViewState]);
 
     $view->setRawAttributes(['state' => '']);
 

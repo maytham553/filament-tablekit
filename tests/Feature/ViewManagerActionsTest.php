@@ -411,6 +411,25 @@ describe('edit', function () {
             ->assertActionDataSet(['name' => 'Mine one', 'color' => 'success', 'icon' => 'bolt']);
     });
 
+    it('rejects a name that is not a string', function () {
+        manager()
+            ->callAction('editTableView', ['name' => ['a'], 'color' => 'primary'], ['viewId' => $this->v1->id])
+            ->assertHasActionErrors(['name'])
+            ->assertSuccessful();
+
+        expect($this->v1->fresh()->name)->toBe('Mine one');
+    });
+
+    it('is not blocked by the view limit', function () {
+        config(['tablekit.max_views_per_table' => 1]);
+
+        manager()
+            ->callAction('editTableView', ['name' => 'Renamed at limit', 'color' => 'primary'], ['viewId' => $this->v1->id])
+            ->assertHasNoActionErrors();
+
+        expect($this->v1->fresh()->name)->toBe('Renamed at limit');
+    });
+
     it('validates like quick save', function (array $data, string $error) {
         manager()
             ->callAction('editTableView', ['color' => 'primary', ...$data], ['viewId' => $this->v1->id])
@@ -596,8 +615,8 @@ describe('default', function () {
     });
 
     it('does not touch the default of another user, table or tenant', function () {
-        $theirs = TablePreference::create(['user_id' => $this->other->id, 'resource' => ListOrdersWithPresets::class, 'view_type' => 'preset', 'view_key' => 'c', 'is_default' => true]);
-        $elsewhere = TablePreference::create(['user_id' => $this->user->id, 'resource' => ListOrders::class, 'view_type' => 'preset', 'view_key' => 'c', 'is_default' => true]);
+        $theirs = TablePreference::create(['user_type' => User::class, 'user_id' => $this->other->id, 'resource' => ListOrdersWithPresets::class, 'view_type' => 'preset', 'view_key' => 'c', 'is_default' => true]);
+        $elsewhere = TablePreference::create(['user_type' => User::class, 'user_id' => $this->user->id, 'resource' => ListOrders::class, 'view_type' => 'preset', 'view_key' => 'c', 'is_default' => true]);
 
         manager()->call('toggleTableViewDefault', 'preset', 'a');
 

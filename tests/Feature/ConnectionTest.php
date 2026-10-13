@@ -5,6 +5,7 @@ use Livewire\Livewire;
 use TableKit\Models\TableView;
 use TableKit\TableKitPlugin;
 use TableKit\Tests\Fixtures\Pages\ListOrders;
+use TableKit\Tests\Fixtures\User;
 
 function sqliteConnections(string ...$names): void
 {
@@ -25,12 +26,12 @@ it('keeps the model on the configured connection while the default is another on
 
     DB::setDefaultConnection('elsewhere');
 
-    $view = TableView::create(['user_id' => '1', 'name' => 'Pinned', 'resource' => 'res', 'state' => []]);
+    $view = TableView::create(['user_type' => User::class, 'user_id' => '1', 'name' => 'Pinned', 'resource' => 'res', 'state' => []]);
 
     expect($view->getConnectionName())->toBe('views')
         ->and(DB::connection('views')->table('tablekit_views')->count())->toBe(1)
         ->and(DB::connection('testing')->table('tablekit_views')->count())->toBe(0)
-        ->and(TableView::query()->ownedBy('1')->count())->toBe(1);
+        ->and(TableView::query()->ownedBy(User::class, '1')->count())->toBe(1);
 });
 
 it('saves and applies through the page on the configured connection', function () {
@@ -61,7 +62,7 @@ it('lets the plugin connection win over the config connection', function () {
 
     TableKitPlugin::get()->connection('plugin');
 
-    $view = TableView::create(['user_id' => '1', 'name' => 'Plugin', 'resource' => 'res', 'state' => []]);
+    $view = TableView::create(['user_type' => User::class, 'user_id' => '1', 'name' => 'Plugin', 'resource' => 'res', 'state' => []]);
 
     expect($view->getConnectionName())->toBe('plugin')
         ->and(DB::connection('plugin')->table('tablekit_views')->count())->toBe(1);

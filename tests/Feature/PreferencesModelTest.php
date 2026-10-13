@@ -21,6 +21,7 @@ beforeEach(function () {
 function preference(array $attributes = []): array
 {
     return [
+        'user_type' => User::class,
         'user_id' => test()->user->id,
         'resource' => 'res',
         'view_type' => 'preset',
@@ -103,6 +104,7 @@ describe('upsert', function () {
                 $raced = true;
 
                 DB::table('tablekit_preferences')->insert([
+                    'user_type' => User::class,
                     'user_id' => (string) $this->user->id, 'resource' => 'res', 'view_type' => 'preset', 'view_key' => 'a',
                     'is_hidden' => false, 'is_default' => false, 'sort' => 9,
                 ]);

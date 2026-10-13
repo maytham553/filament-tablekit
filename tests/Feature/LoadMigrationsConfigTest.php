@@ -19,7 +19,7 @@ class LoadMigrationsConfigTest extends TestCase
     {
         $this->assertTrue(Schema::hasTable('tablekit_views'));
         $this->assertTrue(Schema::hasColumns('tablekit_views', [
-            'id', 'user_id', 'name', 'icon', 'color', 'resource', 'state', 'is_favorite', 'sort', 'tenant_type', 'tenant_id', 'created_at', 'updated_at',
+            'id', 'user_type', 'user_id', 'name', 'icon', 'color', 'resource', 'state', 'is_favorite', 'sort', 'tenant_type', 'tenant_id', 'created_at', 'updated_at',
         ]));
     }
 
@@ -35,7 +35,7 @@ class LoadMigrationsConfigTest extends TestCase
     {
         $this->assertTrue(Schema::hasTable('tablekit_preferences'));
         $this->assertTrue(Schema::hasColumns('tablekit_preferences', [
-            'id', 'user_id', 'tenant_type', 'tenant_id', 'resource', 'view_type', 'view_key', 'is_favorite', 'is_hidden', 'sort', 'is_default', 'created_at', 'updated_at',
+            'id', 'user_type', 'user_id', 'tenant_type', 'tenant_id', 'resource', 'view_type', 'view_key', 'is_favorite', 'is_hidden', 'sort', 'is_default', 'created_at', 'updated_at',
         ]));
     }
 

@@ -15,7 +15,8 @@ return [
     // Set to false when the host app owns the migration (publish tag: tablekit-migrations).
     'load_migrations' => true,
 
-    // user_id is stored as a string, so integer, ULID and UUID keys all work. Used only by the user() relation.
+    // user_id is stored as a string, so integer, ULID and UUID keys all work, and user_type (the user's morph class) keeps
+    // two user models with the same ids apart. `model` is used only by the user() relation.
     'user' => [
         'model' => null,
     ],
@@ -71,6 +72,9 @@ return [
         'slide_over' => false,
         'max_name_length' => 100,
     ],
+
+    // Most views one user can save per table (and tenant). Quick Save is refused at the limit; editing is not.
+    'max_views_per_table' => 100,
 
     // Swatches offered in the color picker, in this order. Filament's own names plus Tailwind palettes the plugin registers
     // (unless the app already registered the same name). A color Filament does not know is not offered.

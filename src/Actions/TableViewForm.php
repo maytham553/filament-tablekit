@@ -3,8 +3,8 @@
 namespace TableKit\Actions;
 
 use Closure;
+use Filament\Forms\Components\Component;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Component;
 use TableKit\Forms\ColorGridPicker;
 use TableKit\Forms\IconGridPicker;
 use TableKit\Models\TableView;
@@ -27,6 +27,7 @@ class TableViewForm
             TextInput::make('name')
                 ->label(__('tablekit::quick-save.fields.name'))
                 ->required()
+                ->rule('string')
                 ->maxLength($options->maxNameLength())
                 ->rule(fn (): Closure => function (string $attribute, mixed $value, Closure $fail) use ($resourceKey, $exceptId): void {
                     if (is_string($value) && TableView::nameTaken($value, $resourceKey, $exceptId ? $exceptId() : null)) {

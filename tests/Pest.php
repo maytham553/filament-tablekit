@@ -8,6 +8,7 @@ use TableKit\Tests\Fixtures\Order;
 use TableKit\Tests\Fixtures\Pages\ListOrders;
 use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Presets;
 use TableKit\Tests\Fixtures\Pages\ListOrdersWithPresets;
+use TableKit\Tests\Fixtures\User;
 use TableKit\Tests\TestCase;
 
 uses(TestCase::class)->in('Unit', 'Feature');
@@ -49,6 +50,7 @@ function renderedHtml(Testable $component): string
 function storeView(int|string $userId, array $state, array $attributes = []): TableView
 {
     return TableView::create([
+        'user_type' => User::class,
         'user_id' => $userId,
         'name' => 'Stored '.uniqid(),
         'resource' => ListOrders::class,
@@ -81,6 +83,7 @@ function presets(array|Closure $presets): void
 function storePreference(int|string $userId, string $type, string $key, array $attributes = []): TablePreference
 {
     return TablePreference::create([
+        'user_type' => User::class,
         'user_id' => $userId,
         'resource' => ListOrdersWithPresets::class,
         'view_type' => $type,

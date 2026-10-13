@@ -7,6 +7,7 @@ use TableKit\Presets\PresetTableView;
 use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3Columns;
 use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3ColumnsPersistent;
 use TableKit\Tests\Fixtures\Pages\ListOrdersPhase3ColumnsPresets;
+use TableKit\Tests\Fixtures\User;
 
 function reloadColumnsWithUrl(Testable $mounted, Closure $url, string $page = ListOrdersPhase3Columns::class): Testable
 {
@@ -41,6 +42,7 @@ beforeEach(function () {
     ], ['name' => 'Rich', 'resource' => ListOrdersPhase3Columns::class]);
 
     $this->makeDefault = fn (int $id, string $page = ListOrdersPhase3Columns::class) => TablePreference::create([
+        'user_type' => User::class,
         'user_id' => $this->user->id,
         'resource' => $page,
         'view_type' => 'user',

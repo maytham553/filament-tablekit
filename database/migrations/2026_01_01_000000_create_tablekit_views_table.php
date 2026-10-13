@@ -12,6 +12,7 @@ return new class extends Migration
 
         $schema->create(config('tablekit.table', 'tablekit_views'), function (Blueprint $table) {
             $table->id();
+            $table->string('user_type', 100)->nullable();
             $table->string('user_id', 64);
             $table->string('name', 100);
             $table->string('icon', 64)->nullable();
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(
-                ['user_id', 'resource', 'tenant_type', 'tenant_id', 'is_favorite', 'sort'],
+                ['user_type', 'user_id', 'resource', 'tenant_type', 'tenant_id', 'is_favorite', 'sort'],
                 'tablekit_views_lookup',
             );
         });

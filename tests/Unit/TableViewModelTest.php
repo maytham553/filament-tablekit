@@ -8,6 +8,7 @@ use TableKit\Tests\Fixtures\User;
 function makeView(array $attributes = []): TableView
 {
     return TableView::create([
+        'user_type' => User::class,
         'user_id' => 1,
         'name' => 'View',
         'resource' => 'res',
@@ -35,6 +36,7 @@ it('scopes by tenant', function () {
 
     foreach ([$x, $y, null] as $tenant) {
         makeView([
+            'user_type' => User::class,
             'user_id' => $user->id,
             'name' => $tenant?->name ?? 'none',
             'tenant_type' => $tenant?->getMorphClass(),
@@ -42,9 +44,9 @@ it('scopes by tenant', function () {
         ]);
     }
 
-    expect(TableView::query()->ownedBy($user->id, $x)->pluck('name')->all())->toBe(['X'])
-        ->and(TableView::query()->ownedBy($user->id, $y)->pluck('name')->all())->toBe(['Y'])
-        ->and(TableView::query()->ownedBy($user->id, null)->pluck('name')->all())->toBe(['none']);
+    expect(TableView::query()->ownedBy(User::class, $user->id, $x)->pluck('name')->all())->toBe(['X'])
+        ->and(TableView::query()->ownedBy(User::class, $user->id, $y)->pluck('name')->all())->toBe(['Y'])
+        ->and(TableView::query()->ownedBy(User::class, $user->id, null)->pluck('name')->all())->toBe(['none']);
 });
 
 it('returns nothing when nobody is signed in', function () {

@@ -13,6 +13,7 @@ return new class extends Migration
 
         $schema->create($name, function (Blueprint $table) {
             $table->id();
+            $table->string('user_type', 100)->nullable();
             $table->string('user_id', 64);
             $table->string('tenant_type', 255)->nullable();
             $table->string('tenant_id', 64)->nullable();
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->boolean('is_default')->default(false);
             $table->timestamps();
 
-            $table->index(['user_id', 'resource', 'tenant_type', 'tenant_id'], 'tablekit_preferences_lookup');
+            $table->index(['user_type', 'user_id', 'resource', 'tenant_type', 'tenant_id'], 'tablekit_preferences_lookup');
         });
 
         // coalesce makes rows without a tenant collide too (NULLs are distinct in a plain unique index).
@@ -35,7 +36,7 @@ return new class extends Migration
 
             $connection->statement(
                 "create unique index tablekit_preferences_unique on {$wrapped} "
-                ."(user_id, resource, view_type, view_key, coalesce(tenant_type, ''), coalesce(tenant_id, ''))"
+                ."(coalesce(user_type, ''), user_id, resource, view_type, view_key, coalesce(tenant_type, ''), coalesce(tenant_id, ''))"
             );
         }
     }

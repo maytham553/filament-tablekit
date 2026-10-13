@@ -3,6 +3,7 @@
 use TableKit\Models\TableView;
 use TableKit\Presets\PresetTableView;
 use TableKit\Support\TableViewState;
+use TableKit\Tests\Fixtures\User;
 
 const OLD_PHASE_ONE_JSON = '{"v":1,"filters":{"status":{"value":"paid"}},"search":"acme","columnSearches":{},"sort":{"column":"amount","direction":"desc"},"toggledColumns":{"notes":false},"grouping":{"column":"status","direction":"asc"}}';
 
@@ -119,6 +120,7 @@ it('goes through the model cast', function () {
     $user = $this->signIn();
 
     $view = TableView::create([
+        'user_type' => User::class,
         'user_id' => $user->id,
         'name' => 'Phase 3',
         'resource' => 'x',
