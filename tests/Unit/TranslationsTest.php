@@ -77,13 +77,17 @@ it('uses every translation key and every icon alias', function () {
     $root = __DIR__.'/../..';
     $source = '';
 
-    foreach (array_merge(glob("{$root}/src/*.php"), glob("{$root}/src/*/*.php"), glob("{$root}/resources/views/*.blade.php")) as $file) {
+    foreach (array_merge(glob("{$root}/src/*.php"), glob("{$root}/src/*/*.php"), glob("{$root}/resources/views/*.blade.php"), glob("{$root}/resources/views/components/*.blade.php")) as $file) {
         $source .= file_get_contents($file);
     }
 
-    foreach (['favorites-bar', 'quick-save', 'validation'] as $group) {
+    foreach (['favorites-bar', 'quick-save', 'validation', 'manager', 'reorder'] as $group) {
         foreach (flattenKeys(require "{$root}/resources/lang/en/{$group}.php") as $key) {
-            expect(str_contains($source, "table-views::{$group}.{$key}"))->toBeTrue("{$group}.{$key} is never used");
+            $parent = str_contains($key, '.') ? substr($key, 0, strrpos($key, '.')) : null;
+            $used = str_contains($source, "table-views::{$group}.{$key}")
+                || ($parent !== null && (str_contains($source, "table-views::{$group}.{$parent}.'") || str_contains($source, "table-views::{$group}.{$parent}.\"")));
+
+            expect($used)->toBeTrue("{$group}.{$key} is never used");
         }
     }
 

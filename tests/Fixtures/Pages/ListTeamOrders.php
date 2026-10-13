@@ -11,4 +11,9 @@ class ListTeamOrders extends ListRecords
     use HasTableViews;
 
     protected static string $resource = TeamOrderResource::class;
+
+    protected function getPresetTableViews(): array
+    {
+        return value(ListOrdersWithPresets::$presets) ?? [];
+    }
 }

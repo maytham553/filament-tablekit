@@ -28,6 +28,24 @@ class TableViewsPlugin implements Plugin
 
     protected ?string $connection = null;
 
+    protected bool|Closure|null $favoritesBarDivider = null;
+
+    protected bool|Closure|null $viewManager = null;
+
+    protected bool|Closure|null $viewManagerSlideOver = null;
+
+    protected ?string $viewManagerPosition = null;
+
+    protected bool|Closure|null $presetViewsManageable = null;
+
+    protected ?string $newPresetViewSortPosition = null;
+
+    protected bool|Closure|null $presetViewLockIcon = null;
+
+    protected bool|Closure|null $createFromPresetWithQuery = null;
+
+    protected bool|Closure|null $managedDefaultViews = null;
+
     public static function make(): static
     {
         return app(static::class);
@@ -107,6 +125,63 @@ class TableViewsPlugin implements Plugin
         return $this;
     }
 
+    public function favoritesBarDivider(bool|Closure $condition = true): static
+    {
+        $this->favoritesBarDivider = $condition;
+
+        return $this;
+    }
+
+    /**
+     * @param  'start'|'end'|null  $position
+     */
+    public function viewManager(bool|Closure $enabled = true, bool|Closure|null $slideOver = null, ?string $position = null): static
+    {
+        $this->viewManager = $enabled;
+        $this->viewManagerSlideOver = $slideOver;
+        $this->viewManagerPosition = $position;
+
+        return $this;
+    }
+
+    public function presetViewsManageable(bool|Closure $condition = true): static
+    {
+        $this->presetViewsManageable = $condition;
+
+        return $this;
+    }
+
+    /**
+     * @param  'before'|'after'  $position
+     */
+    public function newPresetViewSortPosition(string $position): static
+    {
+        $this->newPresetViewSortPosition = $position;
+
+        return $this;
+    }
+
+    public function presetViewLockIcon(bool|Closure $condition = true): static
+    {
+        $this->presetViewLockIcon = $condition;
+
+        return $this;
+    }
+
+    public function createFromPresetWithQuery(bool|Closure $condition = true): static
+    {
+        $this->createFromPresetWithQuery = $condition;
+
+        return $this;
+    }
+
+    public function managedDefaultViews(bool|Closure $condition = true): static
+    {
+        $this->managedDefaultViews = $condition;
+
+        return $this;
+    }
+
     public function isFavoritesBarEnabled(): ?bool
     {
         return $this->favoritesBar === null ? null : (bool) $this->evaluate($this->favoritesBar);
@@ -142,5 +217,55 @@ class TableViewsPlugin implements Plugin
     public function getConnection(): ?string
     {
         return $this->connection;
+    }
+
+    public function hasFavoritesBarDivider(): ?bool
+    {
+        return $this->evaluateNullableBool($this->favoritesBarDivider);
+    }
+
+    public function isViewManagerEnabled(): ?bool
+    {
+        return $this->evaluateNullableBool($this->viewManager);
+    }
+
+    public function isViewManagerSlideOver(): ?bool
+    {
+        return $this->evaluateNullableBool($this->viewManagerSlideOver);
+    }
+
+    public function getViewManagerPosition(): ?string
+    {
+        return $this->viewManagerPosition;
+    }
+
+    public function arePresetViewsManageable(): ?bool
+    {
+        return $this->evaluateNullableBool($this->presetViewsManageable);
+    }
+
+    public function getNewPresetViewSortPosition(): ?string
+    {
+        return $this->newPresetViewSortPosition;
+    }
+
+    public function hasPresetViewLockIcon(): ?bool
+    {
+        return $this->evaluateNullableBool($this->presetViewLockIcon);
+    }
+
+    public function shouldCreateFromPresetWithQuery(): ?bool
+    {
+        return $this->evaluateNullableBool($this->createFromPresetWithQuery);
+    }
+
+    public function hasManagedDefaultViews(): ?bool
+    {
+        return $this->evaluateNullableBool($this->managedDefaultViews);
+    }
+
+    protected function evaluateNullableBool(bool|Closure|null $value): ?bool
+    {
+        return $value === null ? null : (bool) $this->evaluate($value);
     }
 }

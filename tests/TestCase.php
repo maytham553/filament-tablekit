@@ -7,6 +7,7 @@ use BladeUI\Icons\BladeIconsServiceProvider;
 use Elite\TableViews\TableViewsServiceProvider;
 use Elite\TableViews\Tests\Fixtures\AdminPanelProvider;
 use Elite\TableViews\Tests\Fixtures\Order;
+use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Elite\TableViews\Tests\Fixtures\TeamPanelProvider;
 use Elite\TableViews\Tests\Fixtures\User;
 use Filament\Actions\ActionsServiceProvider;
@@ -32,6 +33,8 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
+        ListOrdersWithPresets::$presets = null;
+
         Filament::setCurrentPanel(Filament::getPanel('admin'));
         Filament::bootCurrentPanel();
     }
@@ -42,8 +45,8 @@ abstract class TestCase extends Orchestra
             BladeCaptureDirectiveServiceProvider::class,
             BladeHeroiconsServiceProvider::class,
             BladeIconsServiceProvider::class,
-            LivewireServiceProvider::class,
             SupportServiceProvider::class,
+            LivewireServiceProvider::class,
             ActionsServiceProvider::class,
             FormsServiceProvider::class,
             InfolistsServiceProvider::class,

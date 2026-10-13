@@ -1,8 +1,10 @@
 <?php
 
+use Elite\TableViews\Models\TablePreference;
 use Elite\TableViews\Models\TableView;
 use Elite\TableViews\Support\TableViewState;
 use Elite\TableViews\Tests\Fixtures\Pages\ListOrders;
+use Elite\TableViews\Tests\Fixtures\Pages\ListOrdersWithPresets;
 use Elite\TableViews\Tests\TestCase;
 use Livewire\Features\SupportTesting\Testable;
 
@@ -29,6 +31,17 @@ function closeOpenAction(Testable $component): Testable
 }
 
 /**
+ * What the browser would have after the last request: Filament sends only the changed action modal as a partial while an action is mounted,
+ * and the whole page otherwise.
+ */
+function renderedHtml(Testable $component): string
+{
+    $partials = $component->effects['partials'] ?? [];
+
+    return $partials === [] ? $component->html() : implode("\n", $partials);
+}
+
+/**
  * Creates a stored view directly, independent of the capture code path.
  */
 function storeView(int|string $userId, array $state, array $attributes = []): TableView
@@ -50,6 +63,28 @@ function callProtected(Testable $component, string $method, mixed ...$arguments)
     $instance = $component->instance();
 
     return (new ReflectionMethod($instance, $method))->invoke($instance, ...$arguments);
+}
+
+/**
+ * Sets the presets returned by the ListOrdersWithPresets fixture (and its defaults variant).
+ */
+function presets(array|Closure $presets): void
+{
+    ListOrdersWithPresets::$presets = $presets;
+}
+
+/**
+ * Creates a preference row directly, independent of the manager code path.
+ */
+function storePreference(int|string $userId, string $type, string $key, array $attributes = []): TablePreference
+{
+    return TablePreference::create([
+        'user_id' => $userId,
+        'resource' => ListOrdersWithPresets::class,
+        'view_type' => $type,
+        'view_key' => $key,
+        ...$attributes,
+    ]);
 }
 
 /**

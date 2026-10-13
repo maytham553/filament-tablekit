@@ -63,7 +63,7 @@ it('uses the resolved alias in the favorites bar', function () {
 });
 
 it('never hard-codes a heroicon in the views', function () {
-    $files = [...glob(__DIR__.'/../../resources/views/*.blade.php'), ...glob(__DIR__.'/../../src/*.php'), ...glob(__DIR__.'/../../src/*/*.php')];
+    $files = [...glob(__DIR__.'/../../resources/views/*.blade.php'), ...glob(__DIR__.'/../../resources/views/components/*.blade.php'), ...glob(__DIR__.'/../../src/*.php'), ...glob(__DIR__.'/../../src/*/*.php')];
 
     foreach ($files as $file) {
         expect(file_get_contents($file))->not->toContain('heroicon-', basename($file));
@@ -113,9 +113,11 @@ it('is registered under its id', function () {
 it('publishes the migration under the documented tag', function () {
     $paths = ServiceProvider::pathsToPublish(TableViewsServiceProvider::class, 'table-views-migrations');
 
-    expect($paths)->toHaveCount(1)
+    expect($paths)->toHaveCount(2)
         ->and(array_key_first($paths))->toEndWith('create_table_views_table.php')
-        ->and(array_values($paths)[0])->toContain('_create_table_views_table.php');
+        ->and(array_values($paths)[0])->toContain('_create_table_views_table.php')
+        ->and(array_keys($paths)[1])->toEndWith('create_table_view_preferences_table.php')
+        ->and(array_values($paths)[1])->toContain('_create_table_view_preferences_table.php');
 });
 
 it('reads the table name from config only, like the migration', function () {
