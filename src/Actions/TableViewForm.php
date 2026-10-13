@@ -3,9 +3,10 @@
 namespace Elite\TableViews\Actions;
 
 use Closure;
+use Elite\TableViews\Forms\ColorGridPicker;
+use Elite\TableViews\Forms\IconGridPicker;
 use Elite\TableViews\Models\TableView;
 use Elite\TableViews\Support\TableViewsOptions;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Component;
 
@@ -32,30 +33,15 @@ class TableViewForm
                         $fail(__('table-views::validation.name_taken'));
                     }
                 }),
-            Select::make('color')
+            ColorGridPicker::make('color')
                 ->label(__('table-views::quick-save.fields.color'))
-                ->options(fn (): array => collect($options->colors())
-                    ->mapWithKeys(fn (string $color): array => [$color => static::colorLabel($color)])
-                    ->all())
+                ->colors(fn (): array => $options->colors())
                 ->in(fn (): array => $options->colors())
-                ->required()
-                ->native(false),
-            Select::make('icon')
+                ->required(),
+            IconGridPicker::make('icon')
                 ->label(__('table-views::quick-save.fields.icon'))
-                ->options(fn (): array => collect($options->icons())
-                    ->mapWithKeys(fn (string $icon): array => [$icon => __("table-views::icons.{$icon}")])
-                    ->all())
-                ->in(fn (): array => $options->icons())
-                ->placeholder(__('table-views::quick-save.fields.no_icon'))
-                ->native(false),
+                ->icons(fn (): array => $options->icons())
+                ->in(fn (): array => $options->icons()),
         ];
-    }
-
-    protected static function colorLabel(string $color): string
-    {
-        $key = "table-views::colors.{$color}";
-        $label = __($key);
-
-        return $label === $key ? ucfirst($color) : $label;
     }
 }
